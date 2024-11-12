@@ -4,12 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPhoneNumberColumnToUsers extends Migration  // Nama class berbeda
+class AddPhoneNumberUniqueIndexToUsers extends Migration
 {
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('phone_number', 15)->nullable()->after('email');
+            $table->string('phone_number', 15)->nullable()->unique()->after('email');
         });
     }
 
