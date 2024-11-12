@@ -50,8 +50,4 @@ Route::post('/email/verification-notification', [EmailVerificationController::cl
 // PROTECTED ROUTE FOR VERIFIED USERS
 Route::get('/profile', function () {
     return view('profile');
-<<<<<<< Updated upstream
 })->middleware(['auth', 'verified']);
-=======
-})->middleware(['auth', 'verified']);
->>>>>>> Stashed changes
