@@ -4,28 +4,31 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/fabric.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fabric@latest/dist/fabric.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const canvasEl = document.getElementById('canvasEl');
             const canvas = new fabric.Canvas(canvasEl);
 
             fabric.Object.prototype.set({
-                cornerStyle: 'circle',
+                cornerStyle: 'rect',
                 cornerStrokeColor: 'blue',
                 cornerColor: 'lightblue',
                 padding: 10,
                 transparentCorners: false,
-                cornerDashArray: [2, 2],
-                borderColor: 'orange',
-                borderDashArray: [3, 1, 3],
+                cornerDashArray: null,
+                borderColor: 'blue',
+                borderDashArray: null,
                 borderScaleFactor: 2,
             });
 
-            const text = new fabric.Text('Fabric.JS');
-            const rect = new fabric.Rect({ width: 100, height: 100, fill: 'green' });
+            const text = new fabric.Text('Masukkan teks di sini', {
+                left: 100,
+                top: 100,
+                fill: 'black'
+            });
 
-            canvas.add(text, rect);
+            canvas.add(text);
             canvas.centerObject(text);
             canvas.setActiveObject(text);
         });
@@ -43,22 +46,7 @@
 <body>
     <h1>adijawdjiwaijdi</h1>
     @yield('content')
-    <script src="https://cdn.jsdelivr.net/npm/fabric@latest/dist/index.min.js"></script>
-    <script>
-        const { StaticCanvas, FabricText } = fabric;
-        const canvas = new StaticCanvas();
-        const helloWorld = new FabricText('Hello world!');
-        canvas.add(helloWorld);
-        canvas.centerObject(helloWorld);
-        const imageSrc = canvas.toDataURL();
-        // some download code down here
-        const a = document.createElement('a');
-        a.href = imageSrc;
-        a.download = 'image.png';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/fabric@latest/dist/fabric.min.js"></script>
+    @yield('scripts')
 </body>
-@yield('scripts')
 </html>
