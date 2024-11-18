@@ -10,7 +10,7 @@
   </div>
 </div>
 <div class="flex justify-center mb-2 min-h-8 bg-slate-100">
-  <canvas id="canvas-bg" width="1920" height="1080"></canvas>
+  <canvas id="canvas-bg" width="1300" height="1080"></canvas>
 </div>
 @endsection
 
