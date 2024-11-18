@@ -5,6 +5,7 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\MockupController;
 // use Illuminate\Foundation\Auth\EmailVerificationRequest;
 // use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,7 @@ Route::get('/register', [RegisterController::class, 'tampilRegister'])->name('re
 
 Route::post('/register/submit', [RegisterController::class, 'submitRegistrasi'])->name('registrasi-submit');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::get('/mockup', [MockupController::class, 'mockup'])->name('mockup');
 
 
 Route::get('/verify-email', function () {
