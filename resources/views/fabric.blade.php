@@ -46,7 +46,7 @@
 <body>
     <h1>adijawdjiwaijdi</h1>
     @yield('content')
-    
+    <h1>Rayhan</h1>
     <script src="https://cdn.jsdelivr.net/npm/fabric@latest/dist/fabric.min.js"></script>
     @yield('scripts')
 </body>
