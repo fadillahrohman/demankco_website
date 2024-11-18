@@ -19,14 +19,14 @@
     <script src="https://cdn.jsdelivr.net/npm/fabric@latest/dist/fabric.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Inisialisasi Canvas dengan ID "canvas-bg" dan tetapkan backgroundImage
+            // canvas-bg
             let canvas = new fabric.Canvas("canvas-bg", { 
                 backgroundImage: "{{ asset('images/base_mockup.png') }}",
                 backgroundImageOpacity: 1,
                 backgroundImageStretch: true
             });
 
-            // Set Properti Default untuk Semua Objek
+            // Editor objek
             fabric.Object.prototype.set({
                 cornerStyle: 'rect',
                 cornerStrokeColor: 'blue',
@@ -39,14 +39,14 @@
                 borderScaleFactor: 2,
             });
 
-            // Tambahkan Objek Teks ke Canvas
+            // Tambah teks
             const text = new fabric.Text('Rayhan Ganteng', {
                 left: 100,
                 top: 100,
                 fill: 'blue'
             });
 
-            // Menambahkan teks ke canvas
+            // Fungsi
             canvas.add(text);
             canvas.centerObject(text);
             canvas.setActiveObject(text);
