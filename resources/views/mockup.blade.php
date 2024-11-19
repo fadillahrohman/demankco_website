@@ -21,6 +21,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const canvas = new fabric.Canvas('canvas-bg');
+            // // Hapus
+            // hapusBtn = document.getElementById('hapusObjek');
+            // delBtn.style.display = 'none';
             // canvas-bg
             fabric.Image.fromURL("{{ asset('images/base_mockup.png') }}", function(img) {
             const scaleX = canvas.width / img.width;
@@ -32,18 +35,21 @@
         });
 
         // Upload gambar
-        // document.getElementById('gambarUpload').addEventListener("change", function (e) {
-        // var file = e.target.files[0];
-        // var reader = new FileReader();
-        // reader.onload = function (f) {
-        //   var data = f.target.result;                    
-        //   fabric.Image.fromURL(data, function (img) {
-        //     var oImg = img.set({left: 0, top: 0, angle: 0,width:100, height:100}).scale(0.9);
-        //     canvas.add(oImg).renderAll();
-        //     var a = canvas.setActiveObject(oImg);
-        //     var dataURL = canvas.toDataURL({format: 'png', quality: 0.8});
-        //   });
-        // };
+        document.getElementById('gambarUpload').addEventListener("change", function (e) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (f) {
+          var data = f.target.result;                    
+          fabric.Image.fromURL(data, function (img) {
+            var oImg = img.set({left: 0, top: 0, angle: 0,width:500, height:500}).scale(1);
+            canvas.add(oImg).renderAll();
+            var a = canvas.setActiveObject(oImg);
+            var dataURL = canvas.toDataURL({format: 'png', quality: 0.8});
+          });
+        };
+
+        reader.readAsDataURL(file);
+        });
 
             // Editor objek
             fabric.Object.prototype.set({
