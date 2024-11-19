@@ -28,7 +28,11 @@
         @yield('content')
     </div>
 
+
     <!-- Footer -->
     {{-- @include('footer') --}}
+
+    <!-- Scripts Fabric -->
+    @stack('fabric_scripts')
 </body>
 </html>
