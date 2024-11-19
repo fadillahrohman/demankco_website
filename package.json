@@ -13,14 +13,12 @@
         "postcss": "^8.4.47",
         "tailwindcss": "^3.4.14",
 
-        "vite": "^5.0"
-    },
-    "dependencies": {
-        "flowbite": "^2.5.2"
-
         "vite": "^5.4.11"
     },
     "dependencies": {
+        "flowbite": "^2.5.2",
         "fabric": "^6.4.3"
+
+        
     }
 }
