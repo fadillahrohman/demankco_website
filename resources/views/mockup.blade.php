@@ -9,22 +9,41 @@
     <p class="text-gray-600 mb-8">Buat Mockupmu di sini</p>
   </div>
 </div>
-<div class="flex justify-center mb-2 min-h-8 bg-slate-100">
-  <canvas id="canvas-bg" width="1300" height="1080"></canvas>
+<input type="file" id="gambarUpload"><br>
+<div class="flex justify-center items-center min-h-screen shadow-md rounded">
+  <canvas id="canvas-bg" width="720" height="720"></canvas>
 </div>
 @endsection
 
-@push('fabric_scripts') {{-- Fabric.js --}}
-    <!-- Muat Fabric.js dari CDN -->
+@push('fabric_scripts')
+    {{-- Fabric.js --}}
     <script src="https://cdn.jsdelivr.net/npm/fabric@latest/dist/fabric.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const canvas = new fabric.Canvas('canvas-bg');
             // canvas-bg
-            let canvas = new fabric.Canvas("canvas-bg", { 
-                backgroundImage: "{{ asset('images/base_mockup.png') }}",
-                backgroundImageOpacity: 1,
-                backgroundImageStretch: true
-            });
+            fabric.Image.fromURL("{{ asset('images/base_mockup.png') }}", function(img) {
+            const scaleX = canvas.width / img.width;
+            const scaleY = canvas.height / img.height;
+
+            img.scaleToWidth(canvas.width);
+            img.scaleToHeight(canvas.height);
+            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+        });
+
+        // Upload gambar
+        // document.getElementById('gambarUpload').addEventListener("change", function (e) {
+        // var file = e.target.files[0];
+        // var reader = new FileReader();
+        // reader.onload = function (f) {
+        //   var data = f.target.result;                    
+        //   fabric.Image.fromURL(data, function (img) {
+        //     var oImg = img.set({left: 0, top: 0, angle: 0,width:100, height:100}).scale(0.9);
+        //     canvas.add(oImg).renderAll();
+        //     var a = canvas.setActiveObject(oImg);
+        //     var dataURL = canvas.toDataURL({format: 'png', quality: 0.8});
+        //   });
+        // };
 
             // Editor objek
             fabric.Object.prototype.set({
@@ -39,8 +58,8 @@
                 borderScaleFactor: 2,
             });
 
-            // Tambah teks
-            const text = new fabric.Text('Rayhan Ganteng', {
+            // Teks
+            const text = new fabric.Textbox('Masukkan teks', {
                 left: 100,
                 top: 100,
                 fill: 'blue'
