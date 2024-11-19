@@ -19,6 +19,9 @@ Route::get('/catalog', function () {
 Route::get('/fabric', function () {
     return view('fabric');
 })->name('fabric');
+Route::get('/mockup', function () {
+    return view('mockup');
+})->name('mockup');
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 
