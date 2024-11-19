@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    public function tampilLogin()
+    public function login()
     {
         if (Auth::check()) {
             return redirect('dashboard');
@@ -37,6 +37,7 @@ class LoginController extends Controller
             ])->onlyInput('email');
         }
 
+    
         // Jika email terdaftar, cek password
         if (!Hash::check($request->password, $user->password)) {
             // Jika password salah

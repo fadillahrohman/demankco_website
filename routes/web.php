@@ -20,38 +20,17 @@ Route::get('/fabric', function () {
     return view('fabric');
 })->name('fabric');
 
-Route::get('/login', [LoginController::class, 'tampilLogin'])->name('login');
+Route::get('/login', [LoginController::class, 'login'])->name('login');
+
 Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
-Route::get('/register', [RegisterController::class, 'tampilRegister'])->name('register');
+Route::get('/register', [RegisterController::class, 'register'])->name('register');
 
-Route::post('/register/submit', [RegisterController::class, 'submitRegistrasi'])->name('registrasi-submit');
+Route::post('/register/submit', [RegisterController::class, 'submitRegister'])->name('register-submit');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-
-Route::get('/verify-email', function () {
-    return view('auth.verify-email'); 
-})->name('verify-email');
-
-// EMAIL VERIFICATION
-Route::get('/email/verify', [EmailVerificationController::class, 'show'])
-    ->middleware('auth')
-    ->name('verification.notice');
-
-Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-    ->middleware(['auth', 'signed'])
-    ->name('verification.verify');
-
-Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
-    ->middleware(['auth', 'throttle:6,1'])
-    ->name('verification.send');
-
-// PROTECTED ROUTE FOR VERIFIED USERS
-Route::get('/profile', function () {
-    return view('profile');
-<<<<<<< Updated upstream
-})->middleware(['auth', 'verified']);
-=======
-})->middleware(['auth', 'verified']);
->>>>>>> Stashed changes
+// In routes/web.php
+Route::get('/verify-otp/{email}', [RegisterController::class, 'showVerifyOtp'])->name('verify.otp');
+Route::post('/verify-otp', [RegisterController::class, 'verifyOtp'])->name('verify.process');
+Route::post('/resend-otp', [RegisterController::class, 'resendOtp'])->name('resend.otp');

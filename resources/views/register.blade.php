@@ -9,7 +9,7 @@
                 <h2 class="text-4xl font-normal text-blue-400 text-center mb-12">
                     Daftar
                 </h2>
-                <form class="space-y-6" action={{ route('registrasi-submit') }} method="post">
+                <form class="space-y-6" action="{{ route('register-submit') }}" method="POST">
                     @csrf
                     {{-- FORM EMAIL --}}
                     <div class="relative">
@@ -58,6 +58,16 @@
                                 class="w-full px-4 py-3 pl-16 rounded-full border border-gray-200 focus:outline-none focus:border-blue-400" />
                         </div>
                     </div>
+                    {{-- FORM CONFIRM PASSWORD --}}
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                            <span class="text-gray-500"><i class="fa-solid fa-lock"></i></span>
+                        </div>
+                        <div>
+                            <input type="password" name="password_confirmation" required placeholder="Konfirmasi password"
+                                class="w-full px-4 py-3 pl-16 rounded-full border border-gray-200 focus:outline-none focus:border-blue-400" />
+                        </div>
+                    </div>
                     {{-- NOTIFIKASI VALIDASI (kesalahan) pegisian Password --}}
                     <div>
                         @error('password')
@@ -76,8 +86,8 @@
                     </div>
                 </form>
             </div>
-            <div class="w-1/2">
-                <img src="/images/dmco.png" alt="DMCO" />
+            <div class="w-1/2 flex items-center justify-center">
+                <img src="/images/dmco.png" alt="DMCO" class="object-cover w-full h-full" />
             </div>
         </div>
     </div>
