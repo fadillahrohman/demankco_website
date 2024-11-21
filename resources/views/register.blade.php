@@ -38,10 +38,9 @@
                             <input type="tel" name="phone_number" required placeholder="Masukkan nomor telepon"
                                 class="w-full px-4 py-3 pl-16 rounded-full border border-gray-200 focus:outline-none focus:border-blue-400"
                                 value="{{ old('phone_number') }}" maxlength="11" />
-
                         </div>
                     </div>
-                    {{-- NOTIFIKASI VALIDASI (kesalahan) pegisian No HP --}}
+                    {{-- NOTIFIKASI VALIDASI (kesalahan) pengisian No HP --}}
                     <div>
                         @error('phone_number')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
