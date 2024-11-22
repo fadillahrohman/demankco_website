@@ -6,95 +6,86 @@ use App\Models\User;
 use App\Models\Verifytoken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\ValidationException;
+
 
 class RegisterController extends Controller
 {
-    public function register()
+    function register()
     {
         return view('register');
     }
 
-    public function submitRegister(Request $request)
+    function submitRegister(Request $request)
     {
-        try {
-            // Validasi input
-            $request->validate([
-                'email' => 'required|email|unique:users,email',
-                'phone_number' => 'required|regex:/^8\d{10,}$/',
-                'password' => 'required|regex:/^.{8,}$/|confirmed',
-            ], [
-                'email.unique' => 'Email telah digunakan atau terdaftar.',
-                'phone_number.regex' => 'Nomor Telepon harus diawali dengan angka 8 dan minimal 11 digit tanpa menggunakan karakter huruf.',
-                'password.regex' => 'Password minimal 8 karakter.',
-                'password.confirmed' => 'Konfirmasi Password tidak cocok.',
-            ]);
+        $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'phone_number' => 'required|regex:/^8\d{10,}$/',
+            'password' => 'required|regex:/^.{8,}$/|confirmed',
+        ], [
+            'email.unique' => 'Email telah digunakan atau terdaftar.',
+            'phone_number.regex' => 'Nomor Telepon harus diawali dengan angka 8 dan minimal 11 digit.',
+            'password.regex' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi Password tidak cocok.',
+        ]);
 
-            // Jika validasi berhasil, lanjutkan proses pendaftaran
-            $name = explode('@', $request->email)[0];
+        $name = explode('@', $request->email)[0];
 
-            $user = new User();
-            $user->name = $name;
-            $user->email = $request->email;
-            $user->phone_number = '62' . $request->phone_number;
-            $user->password = bcrypt($request->password);
-            $user->save();
+        $user = new User();
+        $user->name = $name;
+        $user->email = $request->email;
+        $user->phone_number = '62' . $request->phone_number;
+        $user->password = bcrypt($request->password);
+        $user->save();
 
-            // Generate OTP dengan angka
-            $token = mt_rand(100000, 999999);
+        // Generate OTP dengan Number
+        $token = mt_rand(100000, 999999);
 
-            Verifytoken::create([
-                'email' => $request->email,
-                'token' => $token,
-                'is_activated' => false
-            ]);
+        Verifytoken::create([
+            'email' => $request->email,
+            'token' => $token,
+            'is_activated' => false
+        ]);
 
-            Mail::send('emails.verify-otp', ['token' => $token], function ($message) use ($request) {
-                $message->to($request->email)->subject('😎 Verifikasi Email - Kode OTP');
-            });
+        Mail::send('emails.verify-otp', ['token' => $token], function ($message) use ($request) {
+            $message->to($request->email)->subject('😎 Verifikasi Email - Kode OTP');
+        });
 
-            return redirect()->route('verify.otp', ['email' => $request->email]);
-        } catch (ValidationException $e) {
-            // Periksa apakah terdapat kesalahan pada field 'phone_number'
-            if ($e->validator->errors()->has('phone_number')) {
-                return back()
-                    ->withErrors(['phone_number' => 'Nomor Telepon tidak boleh menggunakan karakter huruf.'])
-                    ->withInput();
-            }
-
-            // Tangani kesalahan validasi lainnya
-            return back()->withErrors($e->errors())->withInput();
-        }
+        return redirect()->route('verify.otp', ['email' => $request->email]);
     }
 
-    public function showVerifyOtp($email)
+    function showVerifyOtp($email)
     {
         return view('verify-otp', compact('email'));
     }
 
-    public function verifyOtp(Request $request)
+    function verifyOtp(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
             'otp' => 'required|size:6'
         ]);
 
+
+
         $verifyToken = Verifytoken::where('email', $request->email)
             ->where('token', $request->otp)
             ->first();
 
         if ($verifyToken) {
+
             User::where('email', $request->email)->update(['email_verified_at' => now()]);
+
 
             $verifyToken->delete();
 
-            return redirect()->route('login')->with('success', 'Email berhasil diverifikasi! Silahkan Login');
+            return redirect()->route('login')->with('success', 'Email berhasil diverifikasi!
+            Silahkan Login');
         }
 
         return back()->withErrors(['otp' => 'Kode OTP tidak valid']);
     }
 
-    public function resendOtp(Request $request)
+    function resendOtp(Request $request)
     {
         $request->validate([
             'email' => 'required|email|exists:users,email'
