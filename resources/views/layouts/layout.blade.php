@@ -6,11 +6,6 @@
     <title>@yield('title', 'Default Title')</title>
     @vite('resources/css/app.css')
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Stack untuk script tambahan di head jika diperlukan -->
-    @stack('head_scripts')
-
     {{-- GOOGLE FONTS --}}
     {{-- POPPINS --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,8 +32,8 @@
 
     <!-- Footer -->
     {{-- @include('footer') --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.2/fabric.min.js"></script>
     <!-- Tes Load Fabric.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.6.0/fabric.min.js"></script>
     <!-- Scripts -->
     @stack('fabric_scripts')
 </body>

@@ -54,8 +54,8 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function mockups()
-    {
-        return $this->hasMany(Mockup::class);
-    }
+    // public function mockups()
+    // {
+    //     return $this->hasMany(Mockup::class);
+    // }
 }
