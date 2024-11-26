@@ -19,8 +19,8 @@
                 @endauth
             </div>
             <div class="flex items-center space-x-20">
-                <a href="{{ route('catalog') }}"
-                    class="text-lg {{ Route::currentRouteName() == 'catalog' ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-600 hover:text-gray-900 transition ' }}">
+                <a href="{{ route('catalogs.list') }}"
+                    class="text-lg {{ Route::currentRouteName() == 'catalogs.list' ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-600 hover:text-gray-900 transition ' }}">
                     Katalog
                 </a>
                 <a href="{{ route('dashboard') }}"
