@@ -15,7 +15,9 @@
         <input type="file" id="uploadImg"><br>
         <button id="newText" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tambah teks</button>
         <button id="downImg" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Download</button>
-        <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes2</button>
+        <button class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">
+            <a href="{{ route('orderCoy') }}">Pesan</a>
+        </button>
         <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes3</button>
         <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes4</button>
     </div>

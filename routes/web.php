@@ -19,11 +19,21 @@ Route::get('/fabric', function () {
     return view('fabric');
 })->name('fabric');
 
+// Mockup
+Route::get('/mockup/t-shirt', function () {
+    return view('mockup.t-shirt');
+})->name('mockT-shirt');
 Route::get('/mockup/crewneck', function () {
     return view('mockup.crewneck');
-})->name('mockup-crewneck');
+})->name('mockCrewneck');
+Route::get('/mockup/hoodie', function () {
+    return view('mockup.hoodie');
+})->name('mockHoodie');
 
-Route::get('/mockup', [MockupController::class, 'mockup'])->name('mockup')->middleware('auth');
+Route::get('/order', function () {
+    return view('order');
+})->name('orderCoy');
+
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 

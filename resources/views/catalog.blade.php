@@ -12,21 +12,21 @@
         <img src="/images/tshirt.png" alt="Kaos polos biru" class="w-full h-56 object-cover">
         <div class="p-4">
           <h2 class="text-lg  mb-2">T-shirt</h2>
-          <a href="{{ route('mockup') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">Mockup</a>
+          <a href="{{ route('mockT-shirt') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">Mockup</a>
         </div>
       </div>
       <div class="bg-white shadow-md rounded-lg overflow-hidden w-80 h-90">
         <img src="/images/crewneck.png" alt="Crewneck" class="w-full h-56 object-cover">
         <div class="p-4">
           <h2 class="text-lg  mb-2">Crewneck</h2>
-          <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">Mockup</a>
+          <a href="{{ route('mockCrewneck') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">Mockup</a>
         </div>
       </div>
       <div class="bg-white shadow-md rounded-lg overflow-hidden w-80 h-90">
         <img src="/images/hoodie.png" alt="Hoodie" class="w-full h-56 object-cover">
         <div class="p-4">
           <h2 class="text-lg  mb-2">Hoodie</h2>
-          <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">Mockup</a>
+          <a href="{{ route('mockHoodie') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">Mockup</a>
         </div>
       </div>
     </div>
