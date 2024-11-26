@@ -19,6 +19,10 @@ Route::get('/fabric', function () {
     return view('fabric');
 })->name('fabric');
 
+Route::get('/mockup/crewneck', function () {
+    return view('mockup.crewneck');
+})->name('mockup-crewneck');
+
 Route::get('/mockup', [MockupController::class, 'mockup'])->name('mockup')->middleware('auth');
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
