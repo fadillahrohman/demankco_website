@@ -18,7 +18,11 @@
         <button class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">
             <a href="{{ route('orderCrewneck') }}">Pesan</a>
         </button>
-        <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes3</button>
+        <div id="klik" class="flex right z-10 mb-2 min-h-6">
+            <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes4</button>
+            <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes4</button>
+            <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes4</button>
+        </div>
         <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes4</button>
     </div>
     <div>

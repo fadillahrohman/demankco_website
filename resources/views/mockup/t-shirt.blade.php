@@ -10,32 +10,46 @@
   </div>
 </div>
 
-<div class="flex left mb-2 min-h-6">
-    <div class="">
-        <input type="file" id="uploadImg"><br>
-        <button id="newText" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tambah teks</button>
-        <button id="downImg" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Download</button>
-        <button class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">
-            <a href="{{ route('orderTshirt') }}">Pesan</a>
-        </button>
-        <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes3</button>
-        <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes4</button>
+<div class="mb-2 flex h-auto w-auto grid-cols-2 gap-x-1 rounded-lg bg-white p-3 shadow-sm">
+    
+    <div id="kiri" class="grid-rows-auto h-auto w-auto justify-items-center divide-y divide-solid rounded-lg bg-white p-2 shadow-lg hover:divide-solid outline outline-1 outline-slate-50">
+      <form class="flex flex-col">
+        <label for="uploadImg" class="w-full cursor-pointer justify-items-center rounded-lg px-4 py-2 text-lg font-medium text-slate-700 hover:bg-blue-600 hover:text-white"> Upload Gambar </label>
+        <input type="file" id="uploadImg" class="hidden" onchange="showFileName(this)" />
+        <span id="fileName" class="text-black"></span>
+      </form>
+  
+      <button id="newText" class="flex w-full rounded-lg px-4 py-2 text-center text-lg font-medium text-slate-700 transition duration-300 hover:bg-blue-600 hover:text-white">Tambah teks</button>
+      <button id="downImg" class="flex w-full rounded-lg px-4 py-2 text-center text-lg font-medium text-slate-700 transition duration-300 hover:bg-blue-600 hover:text-white">Download</button>
+      <button class="items-center flex w-full rounded-lg bg-blue-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-blue-600 hover:text-white">
+        <a href="{{ route('orderTshirt') }}">Pesan</a>
+      </button>
+         <button class="items-center flex w-full rounded-lg px-4 py-2 text-lg font-medium text-slate-700 transition duration-300 hover:bg-blue-600 hover:text-white">
+        <a href="{{ route('catalogs.list') }}">Kembali</a>
+      </button>
     </div>
-    <div>
-        <canvas id="canvas-bg" width="1200" height="1000" style="border:1px solid blue"></canvas> 
+  
+    <div id="tengah" class="bg-green-200 rounded-lg shadow-lg">
+      <canvas id="canvas-bg">canvas</canvas>
     </div>
-</div>
+  
+</div>  
 
 <h1>rayhan</h1>
 @endsection
 
 @push('fabric_scripts')
     <script>
+        function showFileName(input) {
+            const fileName = input.files[0]?.name || "Belum ada file";
+            document.getElementById("fileName").textContent = fileName;
+        }
+
 		// Background
 		let canvas = new fabric.Canvas("canvas-bg", { 
 			backgroundImage: "{{ asset('images/base_mockup.png') }}",
-            scaleToHeight: 720,
-            scaleToWidth: 640 
+            scaleToHeight: 640,
+            scaleToWidth: 360 
 		});
 
         // Editor objek
