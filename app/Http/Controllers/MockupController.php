@@ -8,9 +8,17 @@ use App\Models\Mockup;
 
 class MockupController extends Controller
 {
-    public function mockup()
+    public function mockupTshirt()
     {
-        return view('mockup');
+        return view('mockup.t-shirt');
+    }
+    public function mockupCrewneck()
+    {
+        return view('mockup.crewneck');
+    }
+    public function mockupHoodie()
+    {
+        return view('mockup.hoodie');
     }
 
     // public function saveMockup(Request $request)

@@ -4,6 +4,7 @@ use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\MockupController;
 use Illuminate\Support\Facades\Route;
@@ -16,20 +17,22 @@ Route::get('/fabric', function () {
 })->name('fabric');
 
 // Mockup
-Route::get('/mockup/t-shirt', function () {
-    return view('mockup.t-shirt');
-})->name('mockT-shirt');
-Route::get('/mockup/crewneck', function () {
-    return view('mockup.crewneck');
-})->name('mockCrewneck');
-Route::get('/mockup/hoodie', function () {
-    return view('mockup.hoodie');
-})->name('mockHoodie');
 
-Route::get('/order', function () {
-    return view('order');
-})->name('orderCoy');
+Route::get('/mockup/t-shirt', [MockupController::class, 'mockupTshirt'])->name('mockT-shirt');
+Route::get('/mockup/crewneck', [MockupController::class, 'mockupCrewneck'])->name('mockCrewneck');
+Route::get('/mockup/hoodie', [MockupController::class, 'mockupHoodie'])->name('mockHoodie');
 
+
+
+// Route::middleware('auth:user')->controller(OrderController::class)->group(function () {
+//     Route::get('/order/t-shirt', 'orderTshirt')->name('orderTshirt'); 
+//     Route::get('/order/crewneck','orderCrewneck')->name('orderCrewneck'); 
+//     Route::get('/order/hoodie','orderHoodie')->name('orderHoodie'); 
+// });
+
+Route::get('/order/t-shirt', [OrderController::class, 'orderTshirt'])->name('orderTshirt'); 
+Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck'); 
+Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie'); 
 
 
 // USERS AUTH

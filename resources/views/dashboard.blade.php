@@ -9,11 +9,10 @@
         <!-- Hero Section -->
         <div class="text-center mb-16">
             <h2 class="text-4xl text-blue-400 font-medium mb-6">
-                Kaos dan Jersey dengan bahan yang terbaik
+                Dari karya Anda menjadi produk Nyata!
             </h2>
             <p class="text-gray-700 max-w-3xl mx-auto text-lg">
-                Dengan bahan kaos cotton combed 30s dan 24s, serta jersey yang
-                menggunakan Dri-fit sebagai bahan terbaik kami
+                Dengan bahan kaos cotton combed 30s dan 24s
             </p>
         </div>
 

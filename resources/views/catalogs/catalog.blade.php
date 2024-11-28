@@ -29,11 +29,11 @@
               <a href="{{ route('mockT-shirt') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
                   Mockup T-shirt
               </a>
-          @elseif ($catalog['type'] === 'crewneck')
+          @elseif ($catalog['type'] === 'Crewneck')
               <a href="{{ route('mockCrewneck') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
                   Mockup Crewneck
               </a>
-          @elseif ($catalog['type'] === 'hoodie')
+          @elseif ($catalog['type'] === 'Hoodie')
               <a href="{{ route('mockHoodie') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
                   Mockup Hoodie
               </a>
