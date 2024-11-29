@@ -40,7 +40,24 @@
 
 @push('fabric_scripts')
     <script>
-        // Tombol upload file
+        // Upload nama file
+        function validateFile(input) {
+          const file = input.files[0];
+          const fileNameSpan = document.getElementById("fileName");
+          const allowedExtensions = ["png", "jpg", "jpeg"];
+
+          if (file) {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if (allowedExtensions.includes(fileExtension)) {
+              showFileName(input);
+            } else {
+              input.value = "";
+              fileNameSpan.textContent = "Format file tidak didukung! Harus .png, .jpg, atau .jpeg";
+              alert("File tidak valid! Harap unggah file dengan format .png, .jpg, atau .jpeg.");
+            }
+          }
+        }
+
         function showFileName(input) {
           const fileNameSpan = document.getElementById("fileName");
           const file = input.files[0];
