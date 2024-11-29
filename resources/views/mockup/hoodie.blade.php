@@ -10,20 +10,29 @@
   </div>
 </div>
 
-<div class="flex left mb-2 min-h-6">
-    <div class="">
-        <input type="file" id="uploadImg"><br>
-        <button id="newText" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tambah teks</button>
-        <button id="downImg" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Download</button>
-        <button class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">
-            <a href="{{ route('orderHoodie') }}">Pesan</a>
-        </button>
-        <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes3</button>
-        <button id="klik" class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">Tes4</button>
+<div class="h-50 mb-2 flex w-fit grid-cols-2 gap-x-1 rounded-lg bg-white p-3 shadow-sm outline outline-1 outline-slate-200 justify-self-center">
+  <div id="kiri" class="grid-rows-auto h-fit w-fit justify-items-center space-y-2 rounded-lg bg-white p-2 shadow-lg hover:divide-solid">
+    <div class="rounded-lg bg-slate-50 outline outline-1 outline-slate-200 space-1">
+      <button id="newText" class="flex w-full rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200">Teks</button>
+      <form class="flex flex-col">
+        <label for="uploadImg" class="w-full cursor-pointer justify-center rounded-lg px-4 py-2 text-lg text-slate-700 hover:bg-slate-200">Gambar</label>
+        <input type="file" id="uploadImg" class="hidden" onchange="showFileName(this)" />
+        <span id="fileName" class="text-black"></span>
+      </form>
+      <button id="downImg" class="flex w-full rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200">Simpan</button>
     </div>
-    <div>
-        <canvas id="canvas-bg" width="1200" height="1000" style="border:1px solid blue"></canvas> 
-    </div>
+
+    <button class="justify-center flex w-full rounded-lg bg-blue-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-blue-600 hover:text-white">
+      <a href="{{ route('orderTshirt') }}">Pesan</a>
+    </button>
+    <button class="justify-center flex w-full rounded-lg px-4 py-2 text-lg text-slate-700 outline outline-1 outline-slate-200 transition duration-300 hover:bg-slate-200">
+      <a href="{{ route('catalogs.list') }}">Kembali</a>
+    </button>
+  </div>
+
+  <div id="tengah" class="rounded-lg bg-green-200 shadow-lg">
+    <canvas id="canvas-bg" width="720" height="720">canvas</canvas>
+  </div>
 </div>
 
 <h1>rayhan</h1>
@@ -31,12 +40,17 @@
 
 @push('fabric_scripts')
     <script>
-		// Background
-		let canvas = new fabric.Canvas("canvas-bg", { 
-			backgroundImage: "{{ asset('images/base_mockup.png') }}",
-            scaleToHeight: 720,
-            scaleToWidth: 640 
-		});
+        function showFileName(input) {
+            const fileName = input.files[0]?.name || "Belum ada file";
+            document.getElementById("fileName").textContent = fileName;
+        }
+
+        // Background
+        let canvas = new fabric.Canvas("canvas-bg", { 
+          backgroundImage: "{{ asset('images/mockup-Tshirt.png') }}",
+                scaleToHeight: 720,
+                scaleToWidth: 720,
+        });
 
         // Editor objek
         fabric.Object.prototype.set({
