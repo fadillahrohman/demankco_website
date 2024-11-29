@@ -13,13 +13,13 @@
 <div class="h-50 mb-2 flex w-fit grid-cols-2 gap-x-1 rounded-lg bg-white p-3 shadow-sm outline outline-1 outline-slate-200 justify-self-center">
   <div id="kiri" class="grid-rows-auto h-fit w-fit justify-items-center space-y-2 rounded-lg bg-white p-2 shadow-lg hover:divide-solid">
     <div class="rounded-lg bg-slate-50 outline outline-1 outline-slate-200 space-1">
-      <button id="newText" class="flex w-full rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200">Teks</button>
+      <button id="newText" class="flex w-full items-center gap-x-2 rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-regular fa-i"></i> Teks</button>
       <form class="flex flex-col">
-        <label for="uploadImg" class="w-full cursor-pointer justify-center rounded-lg px-4 py-2 text-lg text-slate-700 hover:bg-slate-200">Gambar</label>
+        <label for="uploadImg" class="w-full cursor-pointer justify-center rounded-lg px-4 py-2 text-lg text-slate-700 hover:bg-slate-200"><i class="fa-solid fa-image"></i> Gambar</label>
         <input type="file" id="uploadImg" class="hidden" onchange="showFileName(this)" />
         <span id="fileName" class="text-black"></span>
       </form>
-      <button id="downImg" class="flex w-full rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200">Simpan</button>
+      <button id="downImg" class="flex w-full items-center gap-x-2 rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-solid fa-download"></i>  Simpan</button>
     </div>
 
     <button class="justify-center flex w-full rounded-lg bg-blue-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-blue-600 hover:text-white">
@@ -31,7 +31,7 @@
   </div>
 
   <div id="tengah" class="rounded-lg bg-green-200 shadow-lg">
-    <canvas id="canvas-bg" width="720" height="720">canvas</canvas>
+    <canvas id="canvas-bg" width="1098" height="720">canvas</canvas>
   </div>
 </div>
 
@@ -40,16 +40,49 @@
 
 @push('fabric_scripts')
     <script>
+        // Upload nama file
+        function validateFile(input) {
+          const file = input.files[0];
+          const fileNameSpan = document.getElementById("fileName");
+          const allowedExtensions = ["png", "jpg", "jpeg"];
+
+          if (file) {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if (allowedExtensions.includes(fileExtension)) {
+              showFileName(input);
+            } else {
+              input.value = "";
+              fileNameSpan.textContent = "Format file tidak didukung! Harus .png, .jpg, atau .jpeg";
+              alert("File tidak valid! Harap unggah file dengan format .png, .jpg, atau .jpeg.");
+            }
+          }
+        }
+
         function showFileName(input) {
-            const fileName = input.files[0]?.name || "Belum ada file";
-            document.getElementById("fileName").textContent = fileName;
+          const fileNameSpan = document.getElementById("fileName");
+          const file = input.files[0];
+
+          if (file) {
+            const maxLength = 20;
+            const fileName = file.name;
+
+            if (fileName.length > maxLength) {
+              const shortName =
+                fileName.substring(0, 10) + "..." + fileName.substring(fileName.length - 7);
+              fileNameSpan.textContent = shortName;
+            } else {
+              fileNameSpan.textContent = fileName;
+            }
+          } else {
+            fileNameSpan.textContent = "";
+          }
         }
 
         // Background
         let canvas = new fabric.Canvas("canvas-bg", { 
-          backgroundImage: "{{ asset('images/mockup-Tshirt.png') }}",
+          backgroundImage: "{{ asset('images/mockup-tshirt.png') }}",
                 scaleToHeight: 720,
-                scaleToWidth: 720,
+                scaleToWidth: 1098,
         });
 
         // Editor objek

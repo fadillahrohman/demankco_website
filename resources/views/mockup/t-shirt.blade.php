@@ -13,13 +13,13 @@
 <div class="h-50 mb-2 flex w-fit grid-cols-2 gap-x-1 rounded-lg bg-white p-3 shadow-sm outline outline-1 outline-slate-200 justify-self-center">
   <div id="kiri" class="grid-rows-auto h-fit w-fit justify-items-center space-y-2 rounded-lg bg-white p-2 shadow-lg hover:divide-solid">
     <div class="rounded-lg bg-slate-50 outline outline-1 outline-slate-200 space-1">
-      <button id="newText" class="flex w-full rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200">Teks</button>
+      <button id="newText" class="flex w-full items-center gap-x-2 rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-regular fa-i"></i> Teks</button>
       <form class="flex flex-col">
-        <label for="uploadImg" class="w-full cursor-pointer justify-center rounded-lg px-4 py-2 text-lg text-slate-700 hover:bg-slate-200">Gambar</label>
+        <label for="uploadImg" class="w-full cursor-pointer justify-center rounded-lg px-4 py-2 text-lg text-slate-700 hover:bg-slate-200"><i class="fa-solid fa-image"></i> Gambar</label>
         <input type="file" id="uploadImg" class="hidden" onchange="showFileName(this)" />
         <span id="fileName" class="text-black"></span>
       </form>
-      <button id="downImg" class="flex w-full rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200">Simpan</button>
+      <button id="downImg" class="flex w-full items-center gap-x-2 rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-solid fa-download"></i>  Simpan</button>
     </div>
 
     <button class="justify-center flex w-full rounded-lg bg-blue-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-blue-600 hover:text-white">
