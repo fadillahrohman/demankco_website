@@ -31,7 +31,7 @@
   </div>
 
   <div id="tengah" class="rounded-lg bg-green-200 shadow-lg">
-    <canvas id="canvas-bg" width="720" height="720">canvas</canvas>
+    <canvas id="canvas-bg" width="1098" height="720">canvas</canvas>
   </div>
 </div>
 
@@ -40,16 +40,32 @@
 
 @push('fabric_scripts')
     <script>
+        // Tombol upload file
         function showFileName(input) {
-            const fileName = input.files[0]?.name || "Belum ada file";
-            document.getElementById("fileName").textContent = fileName;
+          const fileNameSpan = document.getElementById("fileName");
+          const file = input.files[0];
+
+          if (file) {
+            const maxLength = 20;
+            const fileName = file.name;
+
+            if (fileName.length > maxLength) {
+              const shortName =
+                fileName.substring(0, 10) + "..." + fileName.substring(fileName.length - 7);
+              fileNameSpan.textContent = shortName;
+            } else {
+              fileNameSpan.textContent = fileName;
+            }
+          } else {
+            fileNameSpan.textContent = "";
+          }
         }
 
         // Background
         let canvas = new fabric.Canvas("canvas-bg", { 
-          backgroundImage: "{{ asset('images/mockup-Tshirt.png') }}",
+          backgroundImage: "{{ asset('images/mockup-tshirt.png') }}",
                 scaleToHeight: 720,
-                scaleToWidth: 720,
+                scaleToWidth: 1098,
         });
 
         // Editor objek
