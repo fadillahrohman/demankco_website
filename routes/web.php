@@ -4,9 +4,9 @@ use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\MockupController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -30,6 +30,11 @@ Route::get('/mockup/hoodie', [MockupController::class, 'mockupHoodie'])->name('m
 Route::get('/order/t-shirt', [OrderController::class, 'orderTshirt'])->name('orderTshirt'); 
 Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck'); 
 Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie'); 
+
+Route::post('/order/t-shirt', [OrderController::class, 'check_ongkir']);
+Route::post('/order/crewneck', [OrderController::class, 'check_ongkir']);
+Route::post('/order/hoodie', [OrderController::class, 'check_ongkir']);
+Route::get('/cities/{province_id}', [OrderController::class, 'getCities']);
 
 // USERS AUTH
 Route::get('/login', [LoginController::class, 'login'])->name('login');

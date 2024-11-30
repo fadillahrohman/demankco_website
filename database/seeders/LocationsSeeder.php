@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
-use App\Province;
-use App\City;
+use App\Models\Province;
+use App\Models\City;
 
 class LocationsSeeder extends Seeder
 {
