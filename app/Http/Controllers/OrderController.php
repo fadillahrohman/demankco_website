@@ -18,11 +18,12 @@ class OrderController extends Controller
         $provinces = Province::pluck('name', 'province_id');
         $defaultProvinceId = 9; // Default Jawa Barat
         $defaultCityId = 149;   // Default Kab.Indramayu
+        // $defaultWeight = 170; // Default Berat (Gram)
 
-        // Ambil daftar kota berdasarkan provinsi default
         $cities = City::where('province_id', $defaultProvinceId)->pluck('name', 'city_id');
         
         return view('orders.orderTshirt', compact('catalogs','provinces', 'cities', 'defaultProvinceId', 'defaultCityId'));
+        
     }
 
     public function orderCrewneck() {
@@ -33,7 +34,6 @@ class OrderController extends Controller
         $defaultProvinceId = 9; // Default Jawa Barat
         $defaultCityId = 149;   // Default Kab.Indramayu
 
-        // Ambil daftar kota berdasarkan provinsi default
         $cities = City::where('province_id', $defaultProvinceId)->pluck('name', 'city_id');
         
 
@@ -48,7 +48,6 @@ class OrderController extends Controller
         $defaultProvinceId = 9; // Default Jawa Barat
         $defaultCityId = 149;   // Default Kab.Indramayu
 
-        // Ambil daftar kota berdasarkan provinsi default
         $cities = City::where('province_id', $defaultProvinceId)->pluck('name', 'city_id');
         
        
