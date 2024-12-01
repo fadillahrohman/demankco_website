@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCatalogController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\AdminLogoutController;
+
 use App\Http\Controllers\CatalogController;
+// use App\Http\Controllers\CheckOngkirController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -16,6 +22,30 @@ Route::get('/fabric', function () {
     return view('fabric');
 })->name('fabric');
 
+
+
+// ADMIN AUTH
+Route::get('/admin/login', [AdminLoginController::class, 'login'])->name('login');
+Route::get('/admin/logout', [AdminLogoutController::class, 'logout'])->name('logout');
+Route::post('/admin/authenticate', [AdminLoginController::class, 'adminAuthenticate'])->name('admin.authenticate');
+
+
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'adminDashboard'])->name('admin.dashboard');
+});
+
+// ADMIN CATALOG
+Route::middleware('auth:admin')->controller(AdminCatalogController::class)->group(function () {
+    Route::get('/admin/catalog', 'index')->name('admin.catalogs.list');
+    Route::get('/admin/catalog/create', 'create')->name('admin.catalogs.create');
+    Route::post('/admin/catalog', 'store')->name('admin.catalogs.store');
+    Route::get('/admin//catalog/{catalog}/edit', 'edit')->name('admin.catalogs.edit');
+    Route::put('/admin/catalog/{catalog}', 'update')->name('admin.catalogs.update');
+    Route::delete('/admin/catalog/{catalog}', 'destroy')->name('admin.catalogs.destroy');
+});
+
+
+
 // Mockup
 Route::get('/mockup/t-shirt', [MockupController::class, 'mockupTshirt'])->name('mockT-shirt');
 Route::get('/mockup/crewneck', [MockupController::class, 'mockupCrewneck'])->name('mockCrewneck');
@@ -27,10 +57,16 @@ Route::get('/mockup/hoodie', [MockupController::class, 'mockupHoodie'])->name('m
 //     Route::get('/order/hoodie','orderHoodie')->name('orderHoodie'); 
 // });
 
-Route::get('/order/t-shirt', [OrderController::class, 'orderTshirt'])->name('orderTshirt'); 
-Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck'); 
-Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie'); 
+// Route::get('/order/t-shirt', [OrderController::class, 'orderTshirt'])->name('orderTshirt'); 
+// Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck'); 
+// Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie'); 
+Route::middleware('auth')->group(function () {
+    Route::get('/order/t-shirt', [OrderController::class, 'orderTshirt'])->name('orderTshirt');
+    Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck');
+    Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie');
+});
 
+// USER ORDER & CHECK SHIPPING
 Route::post('/order/t-shirt', [OrderController::class, 'check_ongkir']);
 Route::post('/order/crewneck', [OrderController::class, 'check_ongkir']);
 Route::post('/order/hoodie', [OrderController::class, 'check_ongkir']);
@@ -57,5 +93,11 @@ Route::get('/catalog', [CatalogController::class, 'index'])->name('catalogs.list
 // Mockup save state test
 Route::post('/mockup/save', [MockupController::class, 'saveMockup'])->name('mockup.save')->middleware('auth');
 Route::get('/mockup/load', [MockupController::class, 'loadMockup'])->name('mockup.load')->middleware('auth');
+
+
+// Route::post('/ongkir', [CheckOngkirController::class, 'check_ongkir']);
+
+
+
 
 

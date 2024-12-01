@@ -16,6 +16,8 @@
     },
     "dependencies": {
         "fabric": "^6.4.3",
-        "flowbite": "^2.5.2"
+        "flowbite": "^2.5.2",
+        "sweetalert": "^2.1.2",
+        "sweetalert2": "^11.14.5"
     }
 }

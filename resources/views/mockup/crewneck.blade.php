@@ -23,7 +23,7 @@
     </div>
 
     <button class="justify-center flex w-full rounded-lg bg-blue-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-blue-600 hover:text-white">
-      <a href="{{ route('orderTshirt') }}">Pesan</a>
+      <a href="{{ route('orderCrewneck') }}">Pesan</a>
     </button>
     <button class="justify-center flex w-full rounded-lg px-4 py-2 text-lg text-slate-700 outline outline-1 outline-slate-200 transition duration-300 hover:bg-slate-200">
       <a href="{{ route('catalogs.list') }}">Kembali</a>
