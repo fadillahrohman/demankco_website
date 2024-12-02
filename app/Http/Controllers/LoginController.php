@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {
@@ -36,7 +36,6 @@ class LoginController extends Controller
                 'email' => 'Email atau akun belum terdaftar.',
             ])->onlyInput('email');
         }
-
     
         // Jika email terdaftar, cek password
         if (!Hash::check($request->password, $user->password)) {
@@ -44,6 +43,22 @@ class LoginController extends Controller
             return back()->withErrors([
                 'password' => 'Password yang Anda masukkan salah.',
             ])->onlyInput('email');
+        }
+
+        // Cek apakah email sudah terverifikasi
+        if ($user->email_verified_at === null) {
+            // Generate verification token
+            $verification_token = mt_rand(100000, 999999);
+            $user->verification_token = $verification_token;
+            $user->save();
+
+            // Kirim email dengan OTP
+            Mail::send('emails.verify-otp', ['token' => $verification_token], function ($message) use ($request) { 
+                $message->to($request->email)->subject('😎 Verifikasi Email - Kode OTP'); 
+            }); 
+
+            return redirect()->route('verify.otp', ['email' => $request->email])
+                ->withErrors(['email' => 'Email belum diverifikasi. Silakan periksa email Anda untuk verifikasi.']);
         }
 
         // Login jika email dan password benar

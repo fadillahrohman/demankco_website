@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Login')
+@section('title', 'Login - DMCO')
 
 @section('content')
     @if (session('success'))

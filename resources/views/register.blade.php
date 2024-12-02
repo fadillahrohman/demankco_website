@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Register')
+@section('title', 'Daftar Akun - DMCO')
 
 @section('content')
     <div class="bg-gray-100 h-screen flex items-center justify-center font-poppins">

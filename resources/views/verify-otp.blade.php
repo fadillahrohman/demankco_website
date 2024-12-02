@@ -57,19 +57,22 @@
         <div class="flex w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
             <div class="w-1/2 p-12 flex flex-col">
                 <h2 class="text-4xl font-normal text-blue-400 text-center mb-6">
-                    Berhasil Daftar!
+                    Verifikasi Email
                 </h2>
                 <form class="flex-grow flex flex-col items-center space-y-6" action="{{ route('verify.process') }}"
                     method="POST">
                     @csrf
                     <div class="flex justify-center w-full">
-                        <dotlottie-player src="https://lottie.host/403d08a5-4988-4525-8035-e4f5f5d87316/BuSGiTmVb3.json"
-                            background="transparent" speed="1" style="width: 200px; height: 200px" direction="1"
-                            playMode="normal" autoplay></dotlottie-player>
+                        <dotlottie-player
+                            src="https://lottie.host/991fe643-bdb2-4df5-9261-5f95e5ad34ed/iQdOE3jgtb.lottie"
+                            background="transparent" speed="1" style="width: 200px; height: 200px" loop
+                            autoplay></dotlottie-player>
                     </div>
                     <p class="text-center text-gray-600 mb-4">
-                        Silakan verifikasi email dengan Kode OTP
+                        Silakan verifikasi email dengan Kode OTP <br>
+                        Cek Email Kamu
                     </p>
+
                     <div class="w-full">
                         <div class="relative mb-4">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
@@ -80,7 +83,7 @@
                                 class="w-full px-4 py-3 pl-16 rounded-full border border-gray-200 focus:outline-none focus:border-blue-400" />
                         </div>
                         @error('otp')
-                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                         @enderror
                         <button type="submit"
                             class="w-full bg-blue-400 text-white py-3 rounded-full hover:bg-blue-500 transition duration-300 mb-4">

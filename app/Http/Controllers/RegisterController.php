@@ -27,6 +27,7 @@ class RegisterController extends Controller
             'password.regex' => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi Password tidak cocok.',
         ]);
+        
 
         $name = explode('@', $request->email)[0];
 
@@ -46,9 +47,13 @@ class RegisterController extends Controller
             'is_activated' => false
         ]);
 
-        Mail::send('emails.verify-otp', ['token' => $token], function ($message) use ($request) {
-            $message->to($request->email)->subject('😎 Verifikasi Email - Kode OTP');
-        });
+        try {
+            Mail::send('emails.verify-otp', ['token' => $token], function ($message) use ($request) {
+                $message->to($request->email)->subject('😎 Verifikasi Email - Kode OTP');
+            });
+        } catch (\Exception $e) {
+            return back()->withErrors(['email' => 'Email tidak terkirim, silakan coba lagi.']);
+        }
 
         return redirect()->route('verify.otp', ['email' => $request->email]);
     }
