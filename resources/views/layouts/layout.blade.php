@@ -40,7 +40,7 @@
     <!-- Scripts -->
     @stack('fabric_scripts')
 
-
+    @yield('mid-scripts')
 </body>
 
 </html>

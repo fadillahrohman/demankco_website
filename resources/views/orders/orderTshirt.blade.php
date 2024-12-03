@@ -159,10 +159,6 @@
 @endsection
 
 
-
-
-
-
 {{-- ================= JAVASCRIPT ORDER & CEK ONGKIR ================ --}}
 <script>
     document.addEventListener("DOMContentLoaded", function () {

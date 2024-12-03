@@ -22,7 +22,10 @@ Route::get('/fabric', function () {
     return view('fabric');
 })->name('fabric');
 
-
+// Tes checkout
+Route::get('/checkout', function () {
+    return view('orders.checkout');
+})->name('checkout');
 
 // ADMIN AUTH
 Route::get('/admin/login', [AdminLoginController::class, 'login'])->name('login');
@@ -64,6 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/t-shirt', [OrderController::class, 'orderTshirt'])->name('orderTshirt');
     Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck');
     Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie');
+    Route::get('/order/detail/{id}', [OrderController::class, 'orderDetail'])->name('orderDetail');
 });
 
 // USER ORDER & CHECK SHIPPING
