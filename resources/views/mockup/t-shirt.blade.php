@@ -31,6 +31,8 @@
     <div id="divHapus" class="hidden justify-self-center rounded-lg bg-red-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-red-600 hover:text-white shadow-lg">
       <button id="hapusObj" type="button" onclick="delObj()">Hapus</button>
     </div>
+    <div id="price" class="hidden flex text-lg font-bold text-green-500 mt-4 px-4 py">Harga: Rp. 150,000</div>
+
 
   </div>
 
@@ -43,143 +45,140 @@
 @endsection
 
 @push('fabric_scripts')
-    <script>
-        // Upload nama file
-        function handleFiles(input) {
-        const fileList = document.getElementById("fileList");
-        const file = input.files[0];
-        fileList.innerHTML = "";
-        
-        // Pendekin nama file
-        if (file) {
-            const maxLength = 20;
-            const fileName = file.name;
+  <script>
+    // Inisialisasi canvas fabric.js
+    let canvas = new fabric.Canvas("canvas-bg", { 
+        backgroundImage: "{{ asset('images/mockup-tshirt.png') }}",
+        scaleToHeight: 720,
+        scaleToWidth: 1098,
+    });
 
-            if (fileName.length > maxLength) {
-              const shortName =
-                fileName.substring(0, 10) + "..." + fileName.substring(fileName.length - 7);
-              fileNameSpan.textContent = shortName;
-            } else {
-              fileNameSpan.textContent = fileName;
+    // Area batas sablon (merah dan biru)
+    const targetAreaRed = {
+        left: 650, top: 100, right: 1000, bottom: 600, price: 100000
+    };
+    const targetAreaBlue = {
+        left: 100, top: 100, right: 500, bottom: 600, price: 75000
+    };
+
+    // Gambar batas area merah
+    const boundaryRed = new fabric.Rect({
+        left: targetAreaRed.left,
+        top: targetAreaRed.top,
+        width: targetAreaRed.right - targetAreaRed.left,
+        height: targetAreaRed.bottom - targetAreaRed.top,
+        fill: 'rgba(0, 0, 0, 0)', // Transparan
+        stroke: 'red',            // Warna garis batas
+        strokeWidth: 2,           // Ketebalan garis
+        selectable: false         // Tidak bisa dipilih
+    });
+    canvas.add(boundaryRed);
+
+    // Gambar batas area biru
+    const boundaryBlue = new fabric.Rect({
+        left: targetAreaBlue.left,
+        top: targetAreaBlue.top,
+        width: targetAreaBlue.right - targetAreaBlue.left,
+        height: targetAreaBlue.bottom - targetAreaBlue.top,
+        fill: 'rgba(0, 0, 0, 0)', // Transparan
+        stroke: 'blue',           // Warna garis batas
+        strokeWidth: 2,           // Ketebalan garis
+        selectable: false         // Tidak bisa dipilih
+    });
+    canvas.add(boundaryBlue);
+
+    // Ambil elemen harga dari HTML
+    const priceElement = document.getElementById("price");
+
+    // Fungsi cek apakah objek ada di dalam area
+    function isObjectInArea(obj, area) {
+        const objLeft = obj.left;
+        const objTop = obj.top;
+        const objRight = obj.left + obj.width * obj.scaleX;
+        const objBottom = obj.top + obj.height * obj.scaleY;
+
+        return (
+            objLeft >= area.left &&
+            objTop >= area.top &&
+            objRight <= area.right &&
+            objBottom <= area.bottom
+        );
+    }
+
+    // Update harga berdasarkan posisi objek
+    canvas.on('object:moving', function(e) {
+        let totalPrice = 0;
+
+        canvas.getObjects().forEach(function(obj) {
+            // Cek objek di area merah
+            if (isObjectInArea(obj, targetAreaRed)) {
+                totalPrice += targetAreaRed.price;
             }
-          } else {
-            fileNameSpan.textContent = "";
-          }
 
-        if (input.files.length > 0) {
-          Array.from(input.files).forEach((file, index) => {
-            // Daftar file
-            const listItem = document.createElement("li");
-            listItem.textContent = `${index + 1}. ${file.name}`;
-            fileList.appendChild(listItem);
-          });
+            // Cek objek di area biru
+            else if (isObjectInArea(obj, targetAreaBlue)) {
+                totalPrice += targetAreaBlue.price;
+            }
+
+            else {
+              totalPrice = 0
+            }
+        });
+
+        // Tampilkan atau sembunyikan harga
+        if (totalPrice > 0) {
+            priceElement.classList.remove("hidden"); // Tampilkan harga
+            priceElement.textContent = "Harga: Rp. " + totalPrice.toLocaleString();
         } else {
-          fileList.textContent = "Tidak ada file dipilih.";
+            priceElement.classList.add("hidden"); // Sembunyikan harga
         }
-      }
+    });
 
-        // Background
-        let canvas = new fabric.Canvas("canvas-bg", { 
-          backgroundImage: "{{ asset('images/mockup-tshirt.png') }}",
-                scaleToHeight: 720,
-                scaleToWidth: 1098,
+    // Tambah teks ke canvas
+    document.getElementById("newText").addEventListener("click", function() {
+        const newText = new fabric.Textbox('Masukkan teks di sini', {
+            left: 100,
+            top: 100,
+            fill: 'black'
         });
 
-        // Editor objek
-        const deleteBtn = document.getElementById("hapusObj");
-        fabric.Object.prototype.set({
-              cornerStyle: 'rect',
-              cornerStrokeColor: 'blue',
-              cornerColor: 'lightblue',
-              padding: 10,
-              transparentCorners: false,
-              cornerDashArray: null,
-              borderColor: 'blue',
-              borderDashArray: null,
-              borderScaleFactor: 2,
-        });
+        canvas.add(newText);
+    });
 
-        canvas.on('selection:created', function() {
-            const deleteDiv = document.getElementById("divHapus");
-            deleteDiv.classList.remove("hidden");
-        });
-        canvas.on('selection:updated', function() {
-            const deleteDiv = document.getElementById("divHapus");
-            deleteDiv.classList.remove("hidden");
-        });
-        canvas.on('selection:cleared', function() {
-            const deleteDiv = document.getElementById("divHapus");
-            deleteDiv.classList.add("hidden");
-        });
-
-        // Event listener untuk menghapus objek saat tombol hapus diklik
-        deleteBtn.addEventListener('click', function() {
-            const activeObject = canvas.getActiveObject();
-            if (activeObject) {
-                canvas.remove(activeObject);
-                canvas.discardActiveObject();
-                canvas.renderAll();
-                document.getElementById("divHapus").classList.add("hidden");
-            }
-        });
-
-          // Hapus objek
-          function delObj() {
-            const fileInput = document.getElementById("uploadImg");
-            const fileNameSpan = document.getElementById("fileName");
-            var activeObj = canvas.getActiveObject()
-            if (activeObj) {
-              canvas.remove(activeObj)
-              if (activeObj.type == "activeSelection") {
-                activeObj.getObjects().forEach(x => canvas.remove(x))
-                canvas.discardActiveObject().renderAll()
-              }
-            }
-            fileInput.value = "";
-            if (fileNameSpan) {
-              fileNameSpan.textContent = "";
-            }
-          }
-        
-        // Tambah teks ke canvas
-        document.getElementById("newText").addEventListener("click", function() {
-            console.log('menambahkan teks');
-            const newText = new fabric.Textbox('Masukkan teks di sini', {
-                left: 100,
-                top: 100,
-                fill: 'black'
-            });
-
-            canvas.centerObject(newText);
-            canvas.add(newText);
-        });
-
-        // Tambah gambar ke canvas
-        document.getElementById('uploadImg').addEventListener("change", function (e) {
-            var file = e.target.files[0];
-            var reader = new FileReader();
-            reader.onload = function (f) {
-                var data = f.target.result;                    
-                fabric.Image.fromURL(data, function (img) {
-                var oImg = img.set({left: 0, top: 0, angle: 0});
+    // Tambah gambar ke canvas
+    document.getElementById('uploadImg').addEventListener("change", function (e) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (f) {
+            var data = f.target.result;                    
+            fabric.Image.fromURL(data, function (img) {
+                img.set({ left: 0, top: 0, angle: 0 });
                 img.scaleToHeight(100);
                 img.scaleToWidth(200);
-                canvas.add(oImg).renderAll();
-                var a = canvas.setActiveObject(oImg);
-                var dataURL = canvas.toDataURL({format: 'png', quality: 0.8});
-                });
-            };
-            reader.readAsDataURL(file);
-        });
-        
-        // Download gambar
-        document.getElementById('downImg').addEventListener('click', function() {
-            const dataURL = canvas.toDataURL({ format: 'jpeg', quality: 1 });
-            const link = document.createElement('a');
-            link.href = dataURL;
-            link.download = 'Mockup.jpeg';
-            link.click();
-        });
+                canvas.add(img).renderAll();
+            });
+        };
+        reader.readAsDataURL(file);
+    });
 
-    </script>
+    // Download gambar mockup
+    document.getElementById('downImg').addEventListener('click', function() {
+        const dataURL = canvas.toDataURL({ format: 'jpeg', quality: 1 });
+        const link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'Mockup.jpeg';
+        link.click();
+    });
+
+    // Fungsi hapus objek
+    function delObj() {
+        const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            canvas.remove(activeObject);
+            canvas.discardActiveObject().renderAll(); // Update canvas
+        }
+    }
+  </script>
+
+
 @endpush
