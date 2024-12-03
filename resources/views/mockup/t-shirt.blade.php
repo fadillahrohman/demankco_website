@@ -67,10 +67,10 @@
         top: targetAreaRed.top,
         width: targetAreaRed.right - targetAreaRed.left,
         height: targetAreaRed.bottom - targetAreaRed.top,
-        fill: 'rgba(0, 0, 0, 0)', // Transparan
-        stroke: 'red',            // Warna garis batas
-        strokeWidth: 2,           // Ketebalan garis
-        selectable: false         // Tidak bisa dipilih
+        fill: 'rgba(0, 0, 0, 0)',
+        stroke: 'red',            
+        strokeWidth: 2,           
+        selectable: false         
     });
     canvas.add(boundaryRed);
 
@@ -80,17 +80,17 @@
         top: targetAreaBlue.top,
         width: targetAreaBlue.right - targetAreaBlue.left,
         height: targetAreaBlue.bottom - targetAreaBlue.top,
-        fill: 'rgba(0, 0, 0, 0)', // Transparan
-        stroke: 'blue',           // Warna garis batas
-        strokeWidth: 2,           // Ketebalan garis
-        selectable: false         // Tidak bisa dipilih
+        fill: 'rgba(0, 0, 0, 0)',
+        stroke: 'blue',   
+        strokeWidth: 2,  
+        selectable: false      
     });
     canvas.add(boundaryBlue);
 
-    // Ambil elemen harga dari HTML
+
     const priceElement = document.getElementById("price");
 
-    // Fungsi cek apakah objek ada di dalam area
+    // Fungsi cek apa objek ada di dalam area
     function isObjectInArea(obj, area) {
         const objLeft = obj.left;
         const objTop = obj.top;
@@ -110,12 +110,11 @@
         let totalPrice = 0;
 
         canvas.getObjects().forEach(function(obj) {
-            // Cek objek di area merah
+
             if (isObjectInArea(obj, targetAreaRed)) {
                 totalPrice += targetAreaRed.price;
             }
 
-            // Cek objek di area biru
             else if (isObjectInArea(obj, targetAreaBlue)) {
                 totalPrice += targetAreaBlue.price;
             }
@@ -125,12 +124,12 @@
             }
         });
 
-        // Tampilkan atau sembunyikan harga
+        // Tampilkan harga
         if (totalPrice > 0) {
-            priceElement.classList.remove("hidden"); // Tampilkan harga
+            priceElement.classList.remove("hidden");
             priceElement.textContent = "Harga: Rp. " + totalPrice.toLocaleString();
         } else {
-            priceElement.classList.add("hidden"); // Sembunyikan harga
+            priceElement.classList.add("hidden");
         }
     });
 
