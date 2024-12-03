@@ -29,7 +29,7 @@
       <a href="{{ route('catalogs.list') }}">Kembali</a>
     </button>
     <div id="divHapus" class="hidden justify-self-center rounded-lg bg-red-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-red-600 hover:text-white shadow-lg">
-      <button id="hapusObj" type="button" onclick="delObj()">Hapus</button>
+      <button id="hapusObj" type="button" onclick="delObj()"><i class="fa-solid fa-trash"></i> Hapus</button>
     </div>
     <div class="flex max-w-sm text-lg font-bold text-green-500">Biaya sablon:</div>
     <div id="price" class="hidden flex max-w-sm text-lg font-bold text-green-500">Rp. 150,000</div>
@@ -48,6 +48,7 @@
 @push('fabric_scripts')
   <script>
     // Inisialisasi canvas fabric.js
+    const deleteBtn = document.getElementById('hapusObj');
     let canvas = new fabric.Canvas("canvas-bg", { 
         backgroundImage: "{{ asset('images/mockup-tshirt.png') }}",
         scaleToHeight: 720,
@@ -76,6 +77,7 @@
         fill: 'rgba(0, 0, 0, 0)',
         stroke: 'red',            
         strokeWidth: 2,  
+        opacity: 0.1,
         strokeDashArray: [5, 5],         
         selectable: false         
     });
@@ -89,11 +91,26 @@
         height: targetAreaLogo.bottom - targetAreaLogo.top,
         fill: 'rgba(0, 0, 0, 0)',
         stroke: 'blue',   
-        strokeWidth: 2, 
+        strokeWidth: 2,
+        opacity: 0.1,
         strokeDashArray: [5, 5], 
         selectable: false      
     });
     canvas.add(boundaryBlue);
+
+    // Event listener untuk menampilkan tombol hapus saat objek dipilih
+    canvas.on('selection:created', function() {
+        divHapus.classList.remove("hidden");
+      });
+
+    canvas.on('selection:updated', function() {
+        divHapus.classList.remove("hidden");
+      });
+
+    // Event listener untuk menyembunyikan tombol hapus saat tidak ada objek yang dipilih
+    canvas.on('selection:cleared', function() {
+        divHapus.classList.add("hidden");
+      });
 
     const priceElement = document.getElementById("price");
     // Fungsi cek apa objek ada di dalam area
@@ -112,31 +129,35 @@
     }
 
     // Update harga berdasarkan posisi objek
-    canvas.on('object:moving', function(e) {
-        let totalPrice = 0;
+    canvas.on('object:moving', function (e) {
+    let totalPrice = 0;
+    let isAnyObjectInArea = false;
 
-        canvas.getObjects().forEach(function(obj) {
-
-          if (isObjectInArea(obj, targetAreaA3)) {
-            totalPrice = 0;
+    // Iterasi semua objek di canvas
+    canvas.getObjects().forEach(function (obj) {
+        if (isObjectInArea(obj, targetAreaA3)) {
             totalPrice += targetAreaA3.harga;
-          } else if (isObjectInArea(obj, targetAreaLogo)) {
-            totalPrice = 0;
+            isAnyObjectInArea = true;
+        } else if (isObjectInArea(obj, targetAreaLogo)) {
             totalPrice += targetAreaLogo.harga;
-          } else {
-          totalPrice = 0;
-          }
-        });
-
-    // Tampilkan harga
-    if (totalPrice > 0) {
-      priceElement.classList.remove("hidden");
-      priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
-    } else {
-      priceElement.classList.add("hidden");
-      totalPrice = 0;
-    }
+            isAnyObjectInArea = true;
+        }
     });
+
+    // Tampilkan harga hanya jika ada objek di area mana pun
+    if (isAnyObjectInArea) {
+        priceElement.classList.remove("hidden");
+        priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
+    } else {
+        priceElement.classList.add("hidden");
+        priceElement.textContent = ""; // Sembunyikan harga jika tidak ada objek
+    }
+});
+
+
+    // Set harga ke nol saat awal
+    priceElement.classList.add("hidden");
+    priceElement.textContent = "";
 
     // Tambah teks ke canvas
     document.getElementById("newText").addEventListener("click", function() {
