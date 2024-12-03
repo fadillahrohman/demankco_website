@@ -67,117 +67,114 @@
         top: targetAreaRed.top,
         width: targetAreaRed.right - targetAreaRed.left,
         height: targetAreaRed.bottom - targetAreaRed.top,
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: 'red',            
-        strokeWidth: 2,           
-        selectable: false         
-    });
-    canvas.add(boundaryRed);
+    fill: 'rgba(0, 0, 0, 0)',
+    stroke: 'red',            
+    strokeWidth: 2,           
+    selectable: false         
+});
+canvas.add(boundaryRed);
 
-    // Gambar batas area biru
-    const boundaryBlue = new fabric.Rect({
-        left: targetAreaBlue.left,
-        top: targetAreaBlue.top,
-        width: targetAreaBlue.right - targetAreaBlue.left,
-        height: targetAreaBlue.bottom - targetAreaBlue.top,
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: 'blue',   
-        strokeWidth: 2,  
-        selectable: false      
-    });
-    canvas.add(boundaryBlue);
+// Gambar batas area biru
+const boundaryBlue = new fabric.Rect({
+    left: targetAreaBlue.left,
+    top: targetAreaBlue.top,
+    width: targetAreaBlue.right - targetAreaBlue.left,
+    height: targetAreaBlue.bottom - targetAreaBlue.top,
+    fill: 'rgba(0, 0, 0, 0)',
+    stroke: 'blue',   
+    strokeWidth: 2,  
+    selectable: false      
+});
+canvas.add(boundaryBlue);
 
+const priceElement = document.getElementById("price");
+// Fungsi cek apa objek ada di dalam area
+function isObjectInArea(obj, area) {
+    const objLeft = obj.left;
+    const objTop = obj.top;
+    const objRight = obj.left + obj.width * obj.scaleX;
+    const objBottom = obj.top + obj.height * obj.scaleY;
 
-    const priceElement = document.getElementById("price");
+    return (
+        objLeft >= area.left &&
+        objTop >= area.top &&
+        objRight <= area.right &&
+        objBottom <= area.bottom
+    );
+}
 
-    // Fungsi cek apa objek ada di dalam area
-    function isObjectInArea(obj, area) {
-        const objLeft = obj.left;
-        const objTop = obj.top;
-        const objRight = obj.left + obj.width * obj.scaleX;
-        const objBottom = obj.top + obj.height * obj.scaleY;
+// Update harga berdasarkan posisi objek
+canvas.on('object:moving', function(e) {
+    let totalPrice = 0;
 
-        return (
-            objLeft >= area.left &&
-            objTop >= area.top &&
-            objRight <= area.right &&
-            objBottom <= area.bottom
-        );
+    canvas.getObjects().forEach(function(obj) {
+
+      if (isObjectInArea(obj, targetAreaRed)) {
+        totalPrice += targetAreaRed.price;
     }
+    else if (isObjectInArea(obj, targetAreaBlue)) {
+      totalPrice += targetAreaBlue.price;
+  }
 
-    // Update harga berdasarkan posisi objek
-    canvas.on('object:moving', function(e) {
-        let totalPrice = 0;
+  else {
+    totalPrice = 0
+  }
+});
 
-        canvas.getObjects().forEach(function(obj) {
+// Tampilkan harga
+if (totalPrice > 0) {
+  priceElement.classList.remove("hidden");
+  priceElement.textContent = "Harga: Rp. " + totalPrice.toLocaleString();
+} else {
+  priceElement.classList.add("hidden");
+}
+});
 
-            if (isObjectInArea(obj, targetAreaRed)) {
-                totalPrice += targetAreaRed.price;
-            }
+// Tambah teks ke canvas
+document.getElementById("newText").addEventListener("click", function() {
+const newText = new fabric.Textbox('Masukkan teks di sini', {
+    left: 100,
+    top: 100,
+    fill: 'black'
+});
 
-            else if (isObjectInArea(obj, targetAreaBlue)) {
-                totalPrice += targetAreaBlue.price;
-            }
+canvas.add(newText);
+});
 
-            else {
-              totalPrice = 0
-            }
-        });
-
-        // Tampilkan harga
-        if (totalPrice > 0) {
-            priceElement.classList.remove("hidden");
-            priceElement.textContent = "Harga: Rp. " + totalPrice.toLocaleString();
-        } else {
-            priceElement.classList.add("hidden");
-        }
+// Tambah gambar ke canvas
+document.getElementById('uploadImg').addEventListener("change", function (e) {
+var file = e.target.files[0];
+var reader = new FileReader();
+reader.onload = function (f) {
+    var data = f.target.result;                    
+    fabric.Image.fromURL(data, function (img) {
+        img.set({ left: 0, top: 0, angle: 0 });
+        img.scaleToHeight(100);
+        img.scaleToWidth(200);
+        canvas.add(img).renderAll();
     });
+};
+reader.readAsDataURL(file);
+});
 
-    // Tambah teks ke canvas
-    document.getElementById("newText").addEventListener("click", function() {
-        const newText = new fabric.Textbox('Masukkan teks di sini', {
-            left: 100,
-            top: 100,
-            fill: 'black'
-        });
+// Download gambar mockup
+document.getElementById('downImg').addEventListener('click', function() {
+const dataURL = canvas.toDataURL({ format: 'jpeg', quality: 1 });
+const link = document.createElement('a');
+link.href = dataURL;
+link.download = 'Mockup.jpeg';
+link.click();
+});
 
-        canvas.add(newText);
-    });
-
-    // Tambah gambar ke canvas
-    document.getElementById('uploadImg').addEventListener("change", function (e) {
-        var file = e.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function (f) {
-            var data = f.target.result;                    
-            fabric.Image.fromURL(data, function (img) {
-                img.set({ left: 0, top: 0, angle: 0 });
-                img.scaleToHeight(100);
-                img.scaleToWidth(200);
-                canvas.add(img).renderAll();
-            });
-        };
-        reader.readAsDataURL(file);
-    });
-
-    // Download gambar mockup
-    document.getElementById('downImg').addEventListener('click', function() {
-        const dataURL = canvas.toDataURL({ format: 'jpeg', quality: 1 });
-        const link = document.createElement('a');
-        link.href = dataURL;
-        link.download = 'Mockup.jpeg';
-        link.click();
-    });
-
-    // Fungsi hapus objek
-    function delObj() {
-        const activeObject = canvas.getActiveObject();
-        if (activeObject) {
-            canvas.remove(activeObject);
-            canvas.discardActiveObject().renderAll(); // Update canvas
-        }
-    }
-  </script>
+// Fungsi hapus objek
+function delObj() {
+const activeObject = canvas.getActiveObject();
+if (activeObject) {
+    canvas.remove(activeObject);
+    canvas.discardActiveObject().renderAll(); // Update canvas
+}
+}
+</script>
 
 
 @endpush
