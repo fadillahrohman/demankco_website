@@ -3,51 +3,53 @@
 @section('title', 'Mockup - DMCO')
 
 @section('content')
-<div class="flex left mb-2 min-h-6">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-3xl font-semibold mb-4 text-[#3FA3FF]">Mockup</h1>
-    <p class="text-gray-600 mb-8">Buat Mockupmu di sini</p>
+<div class="left mb-2 flex min-h-6">
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <h1 class="mb-4 text-3xl font-semibold text-[#3FA3FF]">Mockup</h1>
+    <p class="mb-8 text-gray-600">Buat Mockupmu di sini</p>
   </div>
 </div>
 
-<div class="h-50 mb-2 flex w-fit grid-cols-2 gap-x-1 rounded-lg bg-white p-3 shadow-sm outline outline-1 outline-slate-200 justify-self-center">
-  <div id="kiri" class="grid-rows-auto h-fit w-fit justify-items-center space-y-2 rounded-lg bg-white p-2 shadow-lg hover:divide-solid outline outline-1 outline-slate-100">
-    <div class="rounded-lg bg-slate-50 outline outline-1 outline-slate-200 space-1">
-      <button id="newText" class="flex w-full items-center gap-x-2 rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-regular fa-i"></i> Teks</button>
+<div class="h-50 mb-2 flex w-fit grid-cols-2 gap-x-1 justify-self-center rounded-lg bg-white p-3 shadow-sm outline outline-1 outline-slate-200">
+  <div id="kiri" class="grid-rows-auto h-fit w-fit justify-items-center space-y-2 rounded-lg bg-white p-2 shadow-lg outline outline-1 outline-slate-100 hover:divide-solid">
+    <div class="space-1 rounded-lg bg-slate-50 outline outline-1 outline-slate-200">
+      <button id="newText" class="flex w-full items-center justify-center gap-x-2 rounded-lg px-4 py-2 text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-regular fa-i"></i> Teks</button>
       <form class="flex flex-col">
         <label for="uploadImg" class="w-full cursor-pointer justify-center rounded-lg px-4 py-2 text-lg text-slate-700 hover:bg-slate-200"><i class="fa-solid fa-image"></i> Gambar</label>
-        <input type="file" id="uploadImg" class="hidden" multiple onchange="handleFiles(this)" />
+        <input type="file" id="uploadImg" class="hidden" multiple />
         <ul id="fileList" class="mt-2 list-disc text-black"></ul>
       </form>
-      <button id="downImg" class="flex w-full items-center gap-x-2 rounded-lg px-4 py-2 justify-center text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-solid fa-download"></i>  Simpan</button>
+      <button id="downImg" class="flex w-full items-center justify-center gap-x-2 rounded-lg px-4 py-2 text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-solid fa-download"></i> Simpan</button>
     </div>
-
-    <button class="justify-center flex w-full rounded-lg bg-blue-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-blue-600 hover:text-white">
+    <button class="flex w-full justify-center rounded-lg bg-blue-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-blue-600 hover:text-white">
       <a href="{{ route('orderTshirt') }}">Pesan</a>
     </button>
-    <button class="justify-center flex w-full rounded-lg px-4 py-2 text-lg text-slate-700 outline outline-1 outline-slate-200 transition duration-300 hover:bg-slate-200">
+    <button class="flex w-full justify-center rounded-lg px-4 py-2 text-lg text-slate-700 outline outline-1 outline-slate-200 transition duration-300 hover:bg-slate-200">
       <a href="{{ route('catalogs.list') }}">Kembali</a>
     </button>
-    <div id="divHapus" class="hidden justify-self-center rounded-lg bg-red-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-red-600 hover:text-white shadow-lg">
+    <div id="divHapus" class="hidden justify-self-center rounded-lg bg-red-500 px-4 py-2 text-lg font-medium text-white shadow-lg transition duration-300 hover:bg-red-600 hover:text-white">
       <button id="hapusObj" type="button" onclick="delObj()"><i class="fa-solid fa-trash"></i> Hapus</button>
     </div>
     <div class="flex max-w-sm text-lg font-bold text-green-500">Biaya sablon:</div>
-    <div id="price" class="hidden flex max-w-sm text-lg font-bold text-green-500">Rp. 150,000</div>
-
-
+    <div id="price" class="hidden max-w-sm text-lg font-bold text-green-500">Rp. 150,000</div>
   </div>
 
-  <div id="tengah" class="rounded-lg bg-green-200 shadow-lg pt-6">
-    <canvas id="canvas-bg" width="1098" height="720">canvas</canvas>
+  <div id="tengah" class="justify-items-start relative z-0 rounded-lg bg-green-200 pt-6 shadow-lg">
+    <div id="propertiObj" class="hidden duration-600 absolute z-10 left-0 h-auto w-auto justify-items-center rounded-lg bg-slate-50 text-lg text-slate-700 outline outline-1 outline-slate-300 transition hover:shadow-lg">
+      <p>Properti Obek</p>
+
+    </div>
+    <canvas id="canvas-bg" width="1098" height="720" class="">canvas</canvas>
   </div>
 </div>
 
 <div class="pt-10"></div>
+
 @endsection
 
 @push('fabric_scripts')
   <script>
-    // Inisialisasi canvas fabric.js
+
     const deleteBtn = document.getElementById('hapusObj');
     let canvas = new fabric.Canvas("canvas-bg", { 
         backgroundImage: "{{ asset('images/mockup-tshirt.png') }}",
@@ -55,7 +57,6 @@
         scaleToWidth: 1098,
     });
 
-    // Area batas sablon
     const targetAreaA3 = {
         left: 720, top: 210, right: 940, bottom: 565, harga: 45000
     };
@@ -68,8 +69,7 @@
       left: 650, top: 100, right: 1000, bottom: 600, price: 100000
     };
 
-    // Gambar batas area merah
-    const boundaryRed = new fabric.Rect({
+    const boundaryAreaA3 = new fabric.Rect({
         left: targetAreaA3.left,
         top: targetAreaA3.top,
         width: targetAreaA3.right - targetAreaA3.left,
@@ -81,10 +81,9 @@
         strokeDashArray: [5, 5],         
         selectable: false         
     });
-    canvas.add(boundaryRed);
+    canvas.add(boundaryAreaA3);
 
-    // Gambar batas area biru
-    const boundaryBlue = new fabric.Rect({
+    const boundaryAreaLogo = new fabric.Rect({
         left: targetAreaLogo.left,
         top: targetAreaLogo.top,
         width: targetAreaLogo.right - targetAreaLogo.left,
@@ -96,112 +95,398 @@
         strokeDashArray: [5, 5], 
         selectable: false      
     });
-    canvas.add(boundaryBlue);
+    canvas.add(boundaryAreaLogo);
 
-    // Event listener untuk menampilkan tombol hapus saat objek dipilih
     canvas.on('selection:created', function() {
         divHapus.classList.remove("hidden");
+        propertiObj.classList.remove("hidden");
       });
 
-    canvas.on('selection:updated', function() {
-        divHapus.classList.remove("hidden");
-      });
-
-    // Event listener untuk menyembunyikan tombol hapus saat tidak ada objek yang dipilih
-    canvas.on('selection:cleared', function() {
-        divHapus.classList.add("hidden");
-      });
-
-    const priceElement = document.getElementById("price");
-    // Fungsi cek apa objek ada di dalam area
-    function isObjectInArea(obj, area) {
-        const objLeft = obj.left;
-        const objTop = obj.top;
-        const objRight = obj.left + obj.width * obj.scaleX;
-        const objBottom = obj.top + obj.height * obj.scaleY;
-
-        return (
-            objLeft >= area.left &&
-            objTop >= area.top &&
-            objRight <= area.right &&
-            objBottom <= area.bottom
-        );
-    }
-
-    // Update harga berdasarkan posisi objek
-    canvas.on('object:moving', function (e) {
+      canvas.on("selection:created", function (e) {
     let totalPrice = 0;
     let isAnyObjectInArea = false;
 
-    // Iterasi semua objek di canvas
-    canvas.getObjects().forEach(function (obj) {
+    canvas.getActiveObjects().forEach(function (obj) {
         if (isObjectInArea(obj, targetAreaA3)) {
             totalPrice += targetAreaA3.harga;
             isAnyObjectInArea = true;
-        } else if (isObjectInArea(obj, targetAreaLogo)) {
+        }
+        if (isObjectInArea(obj, targetAreaLogo)) {
             totalPrice += targetAreaLogo.harga;
             isAnyObjectInArea = true;
         }
     });
 
-    // Tampilkan harga hanya jika ada objek di area mana pun
-    if (isAnyObjectInArea) {
-        priceElement.classList.remove("hidden");
-        priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
-    } else {
-        priceElement.classList.add("hidden");
-        priceElement.textContent = ""; // Sembunyikan harga jika tidak ada objek
-    }
-});
+        if (isAnyObjectInArea) {
+            priceElement.classList.remove("hidden");
+            priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
+        } else {
+            priceElement.classList.add("hidden");
+            priceElement.textContent = "";
+        }
+    });
 
 
-    // Set harga ke nol saat awal
+    canvas.on('selection:updated', function() {
+        divHapus.classList.remove("hidden");
+        propertiObj.classList.remove("hidden");
+      });
+
+    canvas.on('selection:cleared', function() {
+        divHapus.classList.add("hidden");
+        propertiObj.classList.add("hidden");
+      });
+
+    const priceElement = document.getElementById("price");
+
+    function isObjectInArea(obj, area) {
+    const objLeft = obj.left;
+    const objTop = obj.top;
+    const objRight = obj.left + obj.width * obj.scaleX;
+    const objBottom = obj.top + obj.height * obj.scaleY;
+
+    return (
+        objLeft >= area.left &&
+        objTop >= area.top &&
+        objRight <= area.right &&
+        objBottom <= area.bottom
+    );
+}
+
+
+canvas.on("object:moving", function (e) {
+    let totalPrice = 0;
+    let isAnyObjectInArea = false;
+    targetAreaA3.opacity = 0.1;
+    targetAreaLogo.opacity = 0.1;
+
+    canvas.getObjects().forEach(function (obj) {
+        if (isObjectInArea(obj, targetAreaA3)) {
+            totalPrice += targetAreaA3.harga;
+            isAnyObjectInArea = true;
+            targetAreaA3.opacity = 1;
+        }
+        if (isObjectInArea(obj, targetAreaLogo)) {
+            totalPrice += targetAreaLogo.harga;
+            isAnyObjectInArea = true;
+            targetAreaLogo.opacity = 1;
+        }
+    });
+
+        if (isAnyObjectInArea) {
+            priceElement.classList.remove("hidden");
+            priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
+        } else {
+            priceElement.classList.add("hidden");
+            priceElement.textContent = "";
+        }
+    });
+
+
     priceElement.classList.add("hidden");
     priceElement.textContent = "";
 
-    // Tambah teks ke canvas
-    document.getElementById("newText").addEventListener("click", function() {
-    const newText = new fabric.Textbox('Masukkan teks di sini', {
+    document.getElementById("newText").addEventListener("click", function () {
+    const newText = new fabric.Textbox("Masukkan teks di sini", {
         left: 100,
         top: 100,
-        fill: 'black'
+        fill: "black",
     });
 
     canvas.add(newText);
+
+    priceElement.classList.add("hidden");
+    priceElement.textContent = "";
     });
 
-    // Tambah gambar ke canvas
-    document.getElementById('uploadImg').addEventListener("change", function (e) {
-    var file = e.target.files[0];
-    var reader = new FileReader();
-    reader.onload = function (f) {
-        var data = f.target.result;                    
-        fabric.Image.fromURL(data, function (img) {
-            img.set({ left: 0, top: 0, angle: 0 });
-            img.scaleToHeight(100);
-            img.scaleToWidth(200);
-            canvas.add(img).renderAll();
-        });
-    };
-    reader.readAsDataURL(file);
+    document.getElementById("uploadImg").addEventListener("change", function (e) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (f) {
+            var data = f.target.result;
+            fabric.Image.fromURL(data, function (img) {
+                img.set({ left: 0, top: 0, angle: 0 });
+                img.scaleToHeight(100);
+                img.scaleToWidth(200);
+                canvas.add(img).renderAll();
+
+                priceElement.classList.add("hidden");
+                priceElement.textContent = "";
+            });
+        };
+        reader.readAsDataURL(file);
     });
 
-    // Download gambar mockup
+
+    // Download gambar
     document.getElementById('downImg').addEventListener('click', function() {
+    boundaryAreaA3.visible = false;
+    boundaryAreaLogo.visible = false;
     const dataURL = canvas.toDataURL({ format: 'jpeg', quality: 1 });
     const link = document.createElement('a');
     link.href = dataURL;
     link.download = 'Mockup.jpeg';
     link.click();
+    boundaryAreaA3.visible = true;
+    boundaryAreaLogo.visible = true;
     });
-
-    // Fungsi hapus objek
+    
+    // Hapus objek
     function delObj() {
     const activeObject = canvas.getActiveObject();
     if (activeObject) {
         canvas.remove(activeObject);
-        canvas.discardActiveObject().renderAll(); // Update canvas
-    }};
+        canvas.discardActiveObject().renderAll();
+
+    // Reset harga
+    let totalPrice = 0;
+    let isAnyObjectInArea = false;
+
+    canvas.getObjects().forEach(function (obj) {
+            if (isObjectInArea(obj, targetAreaA3)) {
+                totalPrice += targetAreaA3.harga;
+                isAnyObjectInArea = true;
+                targetAreaA3.opacity = 1;
+            }
+            if (isObjectInArea(obj, targetAreaLogo)) {
+                totalPrice += targetAreaLogo.harga;
+                isAnyObjectInArea = true;
+                targetAreaLogo.opacity = 1;
+            }
+        });
+
+          if (isAnyObjectInArea) {
+              priceElement.classList.remove("hidden");
+              priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
+          } else {
+              priceElement.classList.add("hidden");
+              priceElement.textContent = "";
+          }
+      }
+  }
+
+  // Update harga
+  canvas.on('object:moving', updatePrice);
+  canvas.on('object:modified', updatePrice);
+  canvas.on('object:added', function(e) {
+      e.target.set({
+          price: 0
+      });
+  });
+
+  function updatePrice() {
+      let totalPrice = 0;
+      let isAnyObjectInArea = false;
+
+      canvas.getObjects().forEach(function(obj) {
+          if (obj.type === 'rect') return;
+          
+          if (isObjectInArea(obj, targetAreaA3)) {
+              totalPrice += targetAreaA3.harga;
+              isAnyObjectInArea = true;
+              targetAreaA3.opacity = 1;
+          } else if (isObjectInArea(obj, targetAreaLogo)) {
+              totalPrice += targetAreaLogo.harga;
+              isAnyObjectInArea = true;
+              targetAreaLogo.opacity = 1;
+          }
+      });
+
+      if (isAnyObjectInArea) {
+          priceElement.classList.remove("hidden");
+          priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
+      } else {
+          priceElement.classList.add("hidden");
+          priceElement.textContent = "";
+      }
+  }
+
+  document.getElementById('uploadImg').addEventListener("change", function(e) {
+      var file = e.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function(f) {
+          var data = f.target.result;
+          const timestamp = new Date().getTime();
+          fabric.Image.fromURL(data + '?t=' + timestamp, function(img) {
+              img.set({
+                  left: 100,
+                  top: 100,
+                  angle: 0,
+                  price: 0
+              });
+              img.scaleToHeight(100);
+              img.scaleToWidth(200);
+              canvas.add(img).renderAll();
+          });
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+  });
+
+  function delObj() {
+      const activeObject = canvas.getActiveObject();
+      if (activeObject) {
+          canvas.remove(activeObject);
+          canvas.discardActiveObject().renderAll();
+          updatePrice();
+      }
+  }
+
+  // Update area opasitas
+  function updateAreaOpacity() {
+      let objectInA3 = false;
+      let objectInLogo = false;
+
+      canvas.getObjects().forEach(function(obj) {
+          if (obj.type === 'rect') return;
+          
+          if (isObjectInArea(obj, targetAreaA3)) {
+              objectInA3 = true;
+          }
+          if (isObjectInArea(obj, targetAreaLogo)) {
+              objectInLogo = true;
+          }
+      });
+
+      boundaryAreaA3.set('opacity', objectInA3 ? 1 : 0.1);
+      boundaryAreaLogo.set('opacity', objectInLogo ? 1 : 0.1);
+      canvas.renderAll();
+  }
+
+  // Event listener
+  canvas.on('object:moving', updateAreaOpacity);
+  canvas.on('object:modified', updateAreaOpacity);
+  canvas.on('object:added', updateAreaOpacity);
+  canvas.on('object:removed', updateAreaOpacity);
+
+  // Panel properti objek
+  canvas.on('selection:created', function(e) {
+      const activeObj = e.target;
+      const propertiObj = document.getElementById('propertiObj');
+      
+      propertiObj.innerHTML = '<p class="font-bold p-2">Properti Objek</p>';
+      
+      const sizeControls = `
+          <div class="p-2">
+              <label class="block text-sm">Ukuran:</label>
+              <input type="number" id="objWidth" value="${Math.round(activeObj.getScaledWidth())}" class="w-20 p-1 border rounded">
+              <span class="mx-1">x</span>
+              <input type="number" id="objHeight" value="${Math.round(activeObj.getScaledHeight())}" class="w-20 p-1 border rounded">
+          </div>
+      `;
+      
+      // const alignControls = `
+      //     <div class="p-2">
+      //         <label class="block text-sm">Sejajarkan:</label>
+      //         <button id="alignLeft" class="p-1 border rounded"><i class="fas fa-align-left"></i></button>
+      //         <button id="alignCenter" class="p-1 border rounded"><i class="fas fa-align-center"></i></button>
+      //         <button id="alignRight" class="p-1 border rounded"><i class="fas fa-align-right"></i></button>
+      //     </div>
+      // `;
+
+      // Properti teks
+      let textControls = '';
+      if (activeObj.type === 'textbox') {
+          textControls = `
+              <div class="p-2">
+                  <label class="block text-sm">Font:</label>
+                  <select id="fontFamily" class="w-full p-1 border rounded">
+                      <option value="Arial">Arial</option>
+                      <option value="Times New Roman">Times New Roman</option>
+                      <option value="Courier New">Courier New</option>
+                  </select>
+                  
+                  <label class="block text-sm mt-2">Ukuran Font:</label>
+                  <input type="number" id="fontSize" value="${activeObj.fontSize}" class="w-20 p-1 border rounded">
+                  
+                  <label class="block text-sm mt-2">Warna:</label>
+                  <input type="color" id="textColor" value="${activeObj.fill}" class="p-1">
+                  
+                  <div class="mt-2">
+                      <button id="boldText" class="p-1 border rounded"><i class="fas fa-bold"></i></button>
+                      <button id="italicText" class="p-1 border rounded"><i class="fas fa-italic"></i></button>
+                      <button id="underlineText" class="p-1 border rounded"><i class="fas fa-underline"></i></button>
+                  </div>
+              </div>
+          `;
+      }
+      
+      propertiObj.innerHTML += sizeControls + textControls;
+      // alignControls
+      propertiObj.classList.remove('hidden');
+
+    // Properti teks
+    if (activeObj.type === 'textbox') {
+        document.getElementById('fontFamily').addEventListener('change', function(e) {
+            activeObj.set('fontFamily', e.target.value);
+            canvas.renderAll();
+        });
+
+        document.getElementById('fontSize').addEventListener('change', function(e) {
+            activeObj.set('fontSize', parseInt(e.target.value));
+            canvas.renderAll();
+        });
+
+        document.getElementById('textColor').addEventListener('input', function(e) {
+            activeObj.set('fill', e.target.value);
+            canvas.renderAll();
+        });
+
+        document.getElementById('boldText').addEventListener('click', function() {
+            activeObj.set('fontWeight', activeObj.fontWeight === 'bold' ? 'normal' : 'bold');
+            canvas.renderAll();
+        });
+
+        document.getElementById('italicText').addEventListener('click', function() {
+            activeObj.set('fontStyle', activeObj.fontStyle === 'italic' ? 'normal' : 'italic');
+            canvas.renderAll();
+        });
+
+        document.getElementById('underlineText').addEventListener('click', function() {
+            activeObj.set('underline', !activeObj.underline);
+            canvas.renderAll();
+        });
+    }
+
+    // Prpoperti ukuran objek
+    document.getElementById('objWidth').addEventListener('change', function(e) {
+        activeObj.scaleToWidth(parseInt(e.target.value));
+        canvas.renderAll();
+        updateAreaOpacity();
+    });
+
+    document.getElementById('objHeight').addEventListener('change', function(e) {
+        activeObj.scaleToHeight(parseInt(e.target.value));
+        canvas.renderAll();
+        updateAreaOpacity();
+    });
+
+    // // Properti Sejajarkan objek
+    // document.getElementById('alignLeft').addEventListener('click', function() {
+    //     activeObj.set('left', targetAreaA3.left);
+    //     canvas.renderAll();
+    //     updateAreaOpacity();
+    // });
+
+    // document.getElementById('alignCenter').addEventListener('click', function() {
+    //     const center = targetAreaA3.left + (targetAreaA3.right - targetAreaA3.left) / 2;
+    //     activeObj.set('left', center - activeObj.getScaledWidth() / 2);
+    //     canvas.renderAll();
+    //     updateAreaOpacity();
+    // });
+
+    // document.getElementById('alignRight').addEventListener('click', function() {
+    //     activeObj.set('left', targetAreaA3.right - activeObj.getScaledWidth());
+    //     canvas.renderAll();
+    //     updateAreaOpacity();
+    // });
+});
+
+    // Sembunyikan panel properti
+    canvas.on('selection:cleared', function() {
+        document.getElementById('propertiObj').classList.add('hidden');
+    });
+
   </script>
 
 @endpush
