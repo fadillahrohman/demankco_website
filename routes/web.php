@@ -27,6 +27,11 @@ Route::get('/checkout', function () {
     return view('orders.checkout');
 })->name('checkout');
 
+// Tes checkout
+Route::get('/order', function () {
+    return view('orders.order');
+})->name('order');
+
 // ADMIN AUTH
 Route::get('/admin/login', [AdminLoginController::class, 'login'])->name('login');
 Route::get('/admin/logout', [AdminLogoutController::class, 'logout'])->name('logout');
