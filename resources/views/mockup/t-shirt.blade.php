@@ -369,9 +369,9 @@ canvas.on("object:moving", function (e) {
       const sizeControls = `
           <div class="p-2">
               <label class="block text-sm">Ukuran:</label>
-              <input type="number" id="objWidth" value="${Math.round(activeObj.getScaledWidth())}" class="w-20 p-1 border rounded">
+              <input type="number" id="objWidth" value="${Math.round(activeObj.getScaledWidth())}" class="w-20 p-1 border rounded bg-slate-100 outline outline-1 outline-slate-300">
               <span class="mx-1">x</span>
-              <input type="number" id="objHeight" value="${Math.round(activeObj.getScaledHeight())}" class="w-20 p-1 border rounded">
+              <input type="number" id="objHeight" value="${Math.round(activeObj.getScaledHeight())}" class="w-20 p-1 border rounded bg-slate-100 outline outline-1 outline-slate-100">
           </div>
       `;
       
@@ -390,14 +390,14 @@ canvas.on("object:moving", function (e) {
           textControls = `
               <div class="p-2">
                   <label class="block text-sm">Font:</label>
-                  <select id="fontFamily" class="w-full p-1 border rounded">
+                  <select id="fontFamily" class="w-full p-1 border rounded bg-slate-100 outline outline-1 outline-slate-200">
                       <option value="Arial">Arial</option>
                       <option value="Times New Roman">Times New Roman</option>
                       <option value="Courier New">Courier New</option>
                   </select>
                   
                   <label class="block text-sm mt-2">Ukuran Font:</label>
-                  <input type="number" id="fontSize" value="${activeObj.fontSize}" class="w-20 p-1 border rounded">
+                  <input type="number" id="fontSize" value="${activeObj.fontSize}" class="w-20 p-1 border rounded bg-slate-100 outline outline-1 outline-slate-200">
                   
                   <label class="block text-sm mt-2">Warna:</label>
                   <input type="color" id="textColor" value="${activeObj.fill}" class="p-1">
