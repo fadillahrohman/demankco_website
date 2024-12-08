@@ -7,9 +7,11 @@ use App\Http\Controllers\Admin\AdminLogoutController;
 
 use App\Http\Controllers\CatalogController;
 // use App\Http\Controllers\CheckOngkirController;
+use App\Http\Controllers\Customer\ListOrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\MockupController;
 use App\Http\Controllers\OrderController;
@@ -68,13 +70,26 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck');
     Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie');
     Route::get('/order/detail/{id}', [OrderController::class, 'orderDetail'])->name('orderDetail');
+
+    // USER ORDER & CHECK SHIPPING
+    Route::post('/order/t-shirt', [OrderController::class, 'check_ongkir']);
+    Route::post('/order/crewneck', [OrderController::class, 'check_ongkir']);
+    Route::post('/order/hoodie', [OrderController::class, 'check_ongkir']);
+    Route::get('/cities/{province_id}', [OrderController::class, 'getCities']);
+    Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+
+
+    Route::get('/orders/success', function() {
+        return view('orders.success'); // Mengarahkan langsung ke view success - sementara han
+    })->name('orders.success');
+    
+    
+    Route::get('/list/orders', [ListOrderController::class, 'index'])->name('customer.orders.index');
+    Route::get('/detail/orders/{order}', [ListOrderController::class, 'show'])->name('customer.orders.show');
+    Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback']);
+
 });
 
-// USER ORDER & CHECK SHIPPING
-Route::post('/order/t-shirt', [OrderController::class, 'check_ongkir']);
-Route::post('/order/crewneck', [OrderController::class, 'check_ongkir']);
-Route::post('/order/hoodie', [OrderController::class, 'check_ongkir']);
-Route::get('/cities/{province_id}', [OrderController::class, 'getCities']);
 
 // USERS AUTH
 Route::get('/login', [LoginController::class, 'login'])->name('login');
@@ -99,7 +114,7 @@ Route::post('/mockup/save', [MockupController::class, 'saveMockup'])->name('mock
 Route::get('/mockup/load', [MockupController::class, 'loadMockup'])->name('mockup.load')->middleware('auth');
 
 
-// Route::post('/ongkir', [CheckOngkirController::class, 'check_ongkir']);
+// Route::post('/ongkir', [CheckOngkirController::class, 'check_ongkir']); abaikan saja 
 
 
 

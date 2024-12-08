@@ -53,6 +53,7 @@ class AdminCatalogController extends Controller
         }
 
         $catalog = new Catalog();
+        $catalog->catalog_id = 'CAT-' . strtoupper(uniqid()); // Untuk generate catalog_id secara otomatis
         $catalog->name = $request->name;
         $catalog->type = $request->type;
         $catalog->stock = $request->stock;
@@ -104,8 +105,7 @@ class AdminCatalogController extends Controller
         if ($validator->fails()) {
             return redirect()->route('admin.catalogs.edit', $catalog->id)->withInput()->withErrors($validator);
         }
-
-        $catalog->name = $request->name;
+        $catalog->name = $request->name; 
         $catalog->type = $request->type;
         $catalog->stock = $request->stock;
         $catalog->price = $request->price;
