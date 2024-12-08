@@ -1,5 +1,5 @@
 <?php
-
+use App\Models\Order;
 use App\Http\Controllers\Admin\AdminCatalogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminLoginController;
@@ -78,15 +78,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/cities/{province_id}', [OrderController::class, 'getCities']);
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 
-
+ 
+    Route::get('/list/orders', [ListOrderController::class, 'index'])->name('customer.orders.index');
+    Route::get('/detail/orders/{order}', [ListOrderController::class, 'show'])->name('customer.orders.show');
     Route::get('/orders/success', function() {
         return view('orders.success'); // Mengarahkan langsung ke view success - sementara han
     })->name('orders.success');
     
-    
-    Route::get('/list/orders', [ListOrderController::class, 'index'])->name('customer.orders.index');
-    Route::get('/detail/orders/{order}', [ListOrderController::class, 'show'])->name('customer.orders.show');
-    Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback']);
+
+
+   
+   
 
 });
 
@@ -117,6 +119,4 @@ Route::get('/mockup/load', [MockupController::class, 'loadMockup'])->name('mocku
 // Route::post('/ongkir', [CheckOngkirController::class, 'check_ongkir']); abaikan saja 
 
 
-
-
-
+Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback']);
