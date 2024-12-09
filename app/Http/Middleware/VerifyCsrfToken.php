@@ -12,7 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        // Tambahkan URI di sini
         'payment/midtrans-callback',
     ];
 }
