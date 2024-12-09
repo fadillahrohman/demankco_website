@@ -94,12 +94,13 @@ class OrderController extends Controller
             'province_destination' => 'required|exists:provinces,id',
             'city_destination' => 'required|exists:cities,id',
             'address' => 'required|string|max:500',
+            'notes' => 'nullable|string|max:500',
             'courier' => 'required|string',
             'sizes' => 'required|array',
             'sizes.*' => 'integer|min:0', 
             'total_price' => 'required|numeric',
         ]);
-    
+
         // Simpan data Order
         $order = Order::create([
             'status' => 'pending',
@@ -109,22 +110,13 @@ class OrderController extends Controller
             'list_size' => json_encode($validated['sizes']),
             'total_price' => $validated['total_price'],
             'address' => $validated['address'],
-            'courier' => $validated['courier'],
-            'weight' => array_sum(array_map(fn($qty) => $qty * 170, $validated['sizes'])),
-            'province_destination' => $validated['province_destination'],
-            'city_destination' => $validated['city_destination'],
+            'notes' => $validated['notes'],
         ]);
-    
-        // Simpan Order Items dari data order yang baru saja dibuat
-        Order_item::create([
-            'order_id' => $order->id,
-            'product_name' => $order->name, 
-            'price' => $order->total_price, 
-            'quantity' => $order->number_of_orders,
-        ]);
-    
-        return redirect()->route('orders.success', ['order' => $order->id])
-            ->with('success', 'Pesanan berhasil dibuat!');
+
+        // Hapus harga sablon dari localStorage setelah pesanan disimpan
+        echo "<script>localStorage.removeItem('hargaSablon');</script>";
+
+        return redirect()->route('order.success');
     }
     
     

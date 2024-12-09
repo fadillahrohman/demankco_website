@@ -461,32 +461,23 @@ canvas.on("object:moving", function (e) {
         updateAreaOpacity();
     });
 
-    // // Properti Sejajarkan objek
-    // document.getElementById('alignLeft').addEventListener('click', function() {
-    //     activeObj.set('left', targetAreaA3.left);
-    //     canvas.renderAll();
-    //     updateAreaOpacity();
-    // });
-
-    // document.getElementById('alignCenter').addEventListener('click', function() {
-    //     const center = targetAreaA3.left + (targetAreaA3.right - targetAreaA3.left) / 2;
-    //     activeObj.set('left', center - activeObj.getScaledWidth() / 2);
-    //     canvas.renderAll();
-    //     updateAreaOpacity();
-    // });
-
-    // document.getElementById('alignRight').addEventListener('click', function() {
-    //     activeObj.set('left', targetAreaA3.right - activeObj.getScaledWidth());
-    //     canvas.renderAll();
-    //     updateAreaOpacity();
-    // });
-});
-
     // Sembunyikan panel properti
     canvas.on('selection:cleared', function() {
         document.getElementById('propertiObj').classList.add('hidden');
     });
 
+  });
+
+  </script>
+
+  <script>
+    function simpanHargaSablon() {
+        const hargaSablon = document.getElementById('price').textContent.replace('Rp. ', '').replace(/\./g, '').replace(',', '').trim();
+        localStorage.setItem('hargaSablon', hargaSablon || '0');
+    }
+
+    // Tambahkan onclick ke tombol Pesan
+    document.querySelector('a[href="{{ route('orderTshirt') }}"]').addEventListener('click', simpanHargaSablon);
   </script>
 
 @endpush
