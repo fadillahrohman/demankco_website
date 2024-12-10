@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\City;
 use App\Models\Province;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
-class OrderController extends Controller
+class backUpController extends Controller
 {
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -94,14 +94,12 @@ class OrderController extends Controller
             'province_destination' => 'required|exists:provinces,id',
             'city_destination' => 'required|exists:cities,id',
             'address' => 'required|string|max:500',
-            // 'notes' => 'nullable|string|max:500',
             'courier' => 'required|string',
             'sizes' => 'required|array',
             'sizes.*' => 'integer|min:0', 
             'total_price' => 'required|numeric',
         ]);
     
-
         // Simpan data Order
         $order = Order::create([
             'status' => 'pending',
@@ -123,7 +121,6 @@ class OrderController extends Controller
             'product_name' => $order->name, 
             'price' => $order->total_price, 
             'quantity' => $order->number_of_orders,
-            // 'notes' => $validated['notes'],
         ]);
     
         return redirect()->route('orders.success', ['order' => $order->id])
@@ -131,5 +128,4 @@ class OrderController extends Controller
     }
     
     
-
 }

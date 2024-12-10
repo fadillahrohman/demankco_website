@@ -15,7 +15,7 @@ class PaymentController extends Controller
 
             if ($midtransService->getStatus() == 'success') {
                 $order->update([
-                    'status' => 'processing',
+                    'status' => 'pending',
                     'payment_status' => 'paid',
                 ]);
 
