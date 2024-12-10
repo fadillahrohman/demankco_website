@@ -32,7 +32,7 @@
                     <form action="{{ route('logout') }}" method="GET">
                         @csrf
                         <button type="submit"
-                            class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">
+                            class="flex items-center text-white text-lg bg-[#3FA3FF] hover:bg-blue-500 font-medium rounded-lg px-4 py-2 transition duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-6 h-6 mr-2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -44,7 +44,7 @@
                 @else
                     <a href="{{ route('login') }}">
                         <button type="button"
-                            class="flex items-center text-white text-lg bg-blue-500 hover:bg-blue-600 font-medium rounded-lg px-4 py-2 transition duration-300">
+                            class="flex items-center text-white text-lg bg-[#3FA3FF] hover:bg-blue-500 font-medium rounded-lg px-4 py-2 transition duration-300">
                             <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />

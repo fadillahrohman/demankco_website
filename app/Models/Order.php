@@ -12,29 +12,32 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'order_id', 
-        'status', 
-        'payment_status', 
-        'name', 
-        'number_of_orders', 
-        'list_size', 
-        'total_price', 
-        'address', 
-        'courier', 
-        'weight', 
-        'province_destination', 
-        'city_destination'
+        'product_name',
+        'status',
+        'payment_status',
+        'user_id',
+        'name',
+        'email',
+        'phone_number',
+        'number_of_orders',
+        'list_size',
+        'total_price',
+        'address',
+        'courier',
+        'weight',
+        'province_destination',
+        'city_destination',
     ];
 
-     protected static function boot()
-     {
-         parent::boot();
-         static::creating(function ($order) {
-             // Membuat order_id unik
-             $order->order_id = 'DMCO' . mt_rand(10000000, 99999999); // Menghasilkan angka acak 8 digit
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($order) {
+            // Membuat order_id unik
+            $order->order_id = 'DMCO' . mt_rand(10000000, 99999999); // Menghasilkan angka acak 8 digit
 
-         });
-     }
+        });
+    }
 
     /**
      * Mendefinisikan relasi dengan order item.
@@ -59,13 +62,13 @@ class Order extends Model
     // Relasi ke Province
     public function province()
     {
-    return $this->belongsTo(Province::class, 'province_destination');
+        return $this->belongsTo(Province::class, 'province_destination');
     }
 
-// Relasi ke City
+    // Relasi ke City
     public function city()
     {
-    return $this->belongsTo(City::class, 'city_destination');
+        return $this->belongsTo(City::class, 'city_destination');
     }
 
 }

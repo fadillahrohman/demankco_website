@@ -146,9 +146,9 @@ class MidtransService
     {
         // Sesuaikan data customer dengan informasi yang dimiliki oleh aplikasi Anda
         return [
-            'first_name' => 'Nama Customer', // Ganti dengan data nyata
-            'email' => 'Email@email.com', // Ganti dengan data nyata
-            'phone' => '081234567890', // Ganti dengan data nyata
+            'name' => $order->name, // Ganti dengan data nyata
+            'email' => $order->email, // Ganti dengan data nyata
+            'phone_number' => $order->phone, // Ganti dengan data nyata
         ];
     }
 }

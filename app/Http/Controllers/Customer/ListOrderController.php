@@ -9,12 +9,28 @@ use Illuminate\Http\Request;
 
 class ListOrderController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $orders = Order::all();
+        $order_id = $request->get('order_id');
+
+        if (!auth()->check()) {
+            // Jika ada order_id, cari pesanan berdasarkan order_id
+            $orders = $order_id
+                ? Order::where('order_id', $order_id)->get()
+                : collect();
+        } else {
+            $orders = Order::where('user_id', auth()->id())
+                ->when($order_id, function ($query, $order_id) {
+                    // Jika ada order_id, tambahkan filter berdasarkan order_id
+                    $query->where('order_id', $order_id);
+                })
+                ->get();
+        }
 
         return view('customer.orders.list-order', compact('orders'));
     }
+
 
     /**
      * @throws \Exception

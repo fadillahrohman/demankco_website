@@ -14,10 +14,13 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_id', 32)->unique();
+            $table->string('product_name');
             $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'failed'])->default('unpaid');
-            $table->string('product_name');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
+            $table->string('email');
+            $table->string('phone_number', 15);
             $table->integer('number_of_orders');
             $table->text('list_size');
             $table->double('total_price', 15, 2);
@@ -26,7 +29,6 @@ return new class extends Migration
             $table->foreignId('city_destination')->constrained('cities')->onDelete('cascade');
             $table->string('courier');
             $table->integer('weight'); 
-
             $table->timestamps();
         });
     }

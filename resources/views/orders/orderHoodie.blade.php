@@ -9,8 +9,6 @@
             <p class="text-gray-600 mb-6">Siapkan informasi pembayaran untuk melanjutkan pesanan</p>
             <form action="{{ route('order.store') }}" method="POST">
                 @csrf
-                
-
                 <div class="bg-gray-50 p-6 rounded-lg border">
                     <h2 class="text-lg font-bold mb-4">Ukuran</h2>
                     <div class="grid grid-cols-2 gap-8">
@@ -20,7 +18,8 @@
                                 @foreach (['M', 'L', 'XL', 'XXL'] as $size)
                                     <div class="flex flex-col items-center">
                                         <span class="text-sm font-medium">{{ $size }}</span>
-                                        <input type="number" name="sizes[{{ $size }}]" value="0" min="0"
+                                        <input type="number" name="sizes[{{ $size }}]" value="0"
+                                            min="0"
                                             class="size-input w-16 h-10 border rounded-md text-center focus:outline-none focus:ring focus:ring-blue-300"
                                             data-weight="170" />
                                     </div>
@@ -34,13 +33,21 @@
                     <div class="mb-4">
                         <label for="name" class="block font-medium">Nama</label>
                         <input type="text" id="name" name="name" placeholder="Masukan nama penerima" required
-                            class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-none focus:ring focus:ring-blue-300" />
+                            class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-slate-300 focus:ring focus:ring-blue-300" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="name" class="block font-medium">No. HP</label>
+                        <input type="number" id="phone_number" name="phone_number" placeholder="Masukkan nama no hp"
+                            required
+                            class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-slate-300 focus:ring focus:ring-blue-300"
+                            value="{{ old('phone_number', $defaultPhoneNumber) }}" />
                     </div>
 
                     <!-- Alamat Tujuan -->
                     <div class="mb-4 bg-gray-50 p-6 rounded-lg border">
                         <p class="text-[14px] text-[#3FA3FF]">Dikirim Dari:
-                            <span id="origin-city">{{ $cities[$defaultCityId] }}, {{ $provinces[$defaultProvinceId] }}</span>
+                            <span id="origin-city">{{ $cities[$defaultCityId] }},
+                                {{ $provinces[$defaultProvinceId] }}</span>
                         </p>
                         <h3 class="text-lg font-bold mb-4">Alamat Tujuan</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -92,7 +99,7 @@
 
                     <!-- Ongkir -->
                     <div class="mt-3 d-none ongkir">
-                        <div class="bg-white p-4 rounded-lg border">
+                        <div id="ongkirListVisible" class="hidden bg-white p-4 rounded-lg border">
                             <ul class="list-group" id="ongkir"></ul>
                         </div>
                     </div>
@@ -103,30 +110,45 @@
                     <textarea id="address" name="address" placeholder="Masukan alamat penerima" required
                         class="w-full border rounded-md h-20 px-3 py-2 mt-2 focus:outline-none focus:ring focus:ring-blue-300"></textarea>
                     <div class="text-left text-gray-500 mt-4">
-                        <p class="text-[12px] text-red-500"><i>Alamat Lengkap berupa : Nama jalan / blok / gang / no.rumah - desa & kecamatan</i></p>
+                        <p class="text-[12px] text-blue-500"><i>* Alamat Lengkap berupa : Nama jalan / blok / gang /
+                                no.rumah - desa & kecamatan</i></p>
                     </div>
                 </div>
+                <!-- Catatan -->
+                {{-- <div class="mb-4">
+                    <label for="notes" class="block font-medium">Catatan</label>
+                    <textarea id="notes" name="notes" placeholder="Masukan catatan" required
+                        class="w-full border rounded-md h-20 px-3 py-2 mt-2 focus:outline-none focus:ring focus:ring-blue-300"></textarea>
+                    <div class="text-left text-gray-500 mt-4">
+                        <p class="text-[12px] text-blue-500"><i>* Contoh: Ukuran M yang lengan panjang 3pcs dan ukuran M yang pendek 1pcs</i></p>
+                    </div>
+                </div> --}}
                 <!-- Total Harga -->
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-2">
                         <span class="font-medium text-gray-700">Harga Produk</span>
-                        <span class="font-bold text-gray-900">Rp {{ number_format($catalogs->first()->price, 0, ',', '.') }}</span>
+                        <span class="font-bold text-gray-900">Rp
+                            {{ number_format($catalogs->first()->price, 0, ',', '.') }}</span>
                     </div>
                     <hr>
-                    {{-- <div class="flex justify-between items-center mb-2">
-                        <span class="font-medium text-gray-700">Harga Jasa</span>
-                        <span class="font-bold text-gray-900">Rp 50.000</span>
-                    </div> --}}
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-gray-700">Harga Sablon</span>
+                        <input type="hidden" name="type" value="Hoodie">
+                        <span class="font-bold text-gray-900" id="harga-sablon">Rp 0</span>
+                    </div>
+                    <hr>
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-gray-700">Total Harga</span>
                         <input type="hidden" id="total-price-input" name="total_price" value="0">
-                        <h4>Rp <span class="font-bold text-[#3FA3FF]" id="total-price">0</span></h4>
-                    </div>                    
+                        <h4 class="font-bold text-[#3FA3FF]">Rp <span class="font-bold text-[#3FA3FF]"
+                                id="total-price">0</span></h4>
+                    </div>
                     <hr>
                     <div class="flex justify-end mt-5">
-                        <button type="submit" class="w-full bg-[#3FA3FF] text-white text-xl font-semibold px-6 py-2 rounded-md hover:bg-blue-500 transition">
+                        <button type="submit"
+                            class="w-full bg-[#3FA3FF] text-white text-xl font-semibold px-6 py-2 rounded-md hover:bg-blue-500 transition">
                             PESAN
-                         </button>
+                        </button>
                     </div>
                 </div>
             </form>
@@ -137,120 +159,131 @@
 
 {{-- ================= JAVASCRIPT ORDER & CEK ONGKIR ================ --}}
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const provinceDropdown = document.getElementById("province_destination");
-    const cityDropdown = document.getElementById("city_destination");
-    const checkShippingButton = document.getElementById("check_shipping");
-    const ongkirContainer = document.querySelector(".ongkir");
-    const ongkirList = document.getElementById("ongkir");
-    const totalPriceElement = document.getElementById("total-price");
-    const weightDisplay = document.getElementById("weight-display");
+    document.addEventListener("DOMContentLoaded", function() {
+        const provinceDropdown = document.getElementById("province_destination");
+        const cityDropdown = document.getElementById("city_destination");
+        const checkShippingButton = document.getElementById("check_shipping");
+        const ongkirContainer = document.querySelector(".ongkir");
+        const ongkirList = document.getElementById("ongkir");
+        const totalPriceElement = document.getElementById("total-price");
+        const weightDisplay = document.getElementById("weight-display");
 
-    // Harga produk (dikirim dari controller)
-    const productTotal = {{ $catalogs->first()->price }};
-    const defaultWeightPerSize = 170; // Berat default per ukuran (gram)
-    const sizeInputs = document.querySelectorAll('.size-input');
+        // Harga produk (dikirim dari controller)
+        const productTotal = {{ $catalogs->first()->price }};
+        const defaultWeightPerSize = 170; // Berat default per ukuran (gram)
+        const sizeInputs = document.querySelectorAll('.size-input');
 
-    function calculateTotalWeight() {
-        let totalWeight = 0;
+        // Ambil harga sablon dari localStorage
+        const hargaSablon = parseInt(localStorage.getItem('hargaSablon')) || 0;
+
+        // Update tampilan harga sablon
+        const hargaSablonElement = document.getElementById('harga-sablon');
+        if (hargaSablonElement) {
+            hargaSablonElement.textContent = `Rp ${hargaSablon.toLocaleString()}`;
+        }
+
+        function calculateTotalWeight() {
+            let totalWeight = 0;
+            sizeInputs.forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                totalWeight += quantity * defaultWeightPerSize;
+            });
+            weightDisplay.textContent = totalWeight;
+            return totalWeight;
+        }
+
+        // Fungsi untuk memperbarui harga total dengan ongkir
+        function updateTotalPrice(ongkirPrice) {
+            const totalWeight = calculateTotalWeight();
+            const totalPrice = productTotal + hargaSablon + ongkirPrice;
+            totalPriceElement.textContent = totalPrice.toLocaleString();
+
+            // Update input tersembunyi total harga
+            const totalPriceInput = document.getElementById("total-price-input");
+            totalPriceInput.value = totalPrice;
+        }
+
         sizeInputs.forEach(input => {
-            const quantity = parseInt(input.value) || 0;    
-            totalWeight += quantity * defaultWeightPerSize;
+            input.addEventListener('input', calculateTotalWeight);
         });
-        weightDisplay.textContent = totalWeight;
-        return totalWeight; 
-    }
 
-    // Fungsi untuk memperbarui harga total dengan ongkir
-    function updateTotalPrice(ongkirPrice) {
-        const totalWeight = calculateTotalWeight(); 
-        const totalPrice = productTotal + ongkirPrice;
-        totalPriceElement.textContent = totalPrice.toLocaleString();
+        // Fetch cities when province is selected
+        if (provinceDropdown && cityDropdown) {
+            provinceDropdown.addEventListener("change", function() {
+                const provinceId = this.value;
 
-        // Update input tersembunyi total harga
-        const totalPriceInput = document.getElementById("total-price-input");
-        totalPriceInput.value = totalPrice;
-    }
+                cityDropdown.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
 
-    sizeInputs.forEach(input => {
-        input.addEventListener('input', calculateTotalWeight);
-    });
+                if (provinceId) {
+                    fetch(`/cities/${provinceId}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            Object.entries(data).forEach(([key, value]) => {
+                                const option = document.createElement("option");
+                                option.value = key;
+                                option.textContent = value;
+                                cityDropdown.appendChild(option);
+                            });
+                        })
+                        .catch((error) => console.error("Error fetching cities:", error));
+                }
+            });
+        }
 
-    // Fetch cities when province is selected
-    if (provinceDropdown && cityDropdown) {
-        provinceDropdown.addEventListener("change", function () {
-            const provinceId = this.value;
+        if (checkShippingButton) {
+            checkShippingButton.addEventListener("click", function(e) {
+                e.preventDefault();
 
-            cityDropdown.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
+                const provinceId = provinceDropdown.value;
+                const cityId = cityDropdown.value;
+                const courier = document.querySelector('input[name="courier"]:checked')?.value;
+                const weight = calculateTotalWeight();
 
-            if (provinceId) {
-                fetch(`/cities/${provinceId}`)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        Object.entries(data).forEach(([key, value]) => {
-                            const option = document.createElement("option");
-                            option.value = key;
-                            option.textContent = value;
-                            cityDropdown.appendChild(option);
-                        });
+                if (!provinceId || !cityId) {
+                    alert("Silakan pilih provinsi dan kota tujuan terlebih dahulu.");
+                    return;
+                }
+
+                if (!courier) {
+                    alert("Silakan pilih kurir.");
+                    return;
+                }
+
+                if (weight <= 0) {
+                    alert("Silakan masukkan jumlah ukuran untuk menghitung berat pengiriman.");
+                    return;
+                }
+
+                // Get CSRF token (assuming it's available in a meta tag)
+                const token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+                const cityOrigin = "{{ $defaultCityId }}";
+
+                fetch("/order/t-shirt", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": token
+                        },
+                        body: JSON.stringify({
+                            city_origin: cityOrigin,
+                            city_destination: cityId,
+                            courier: courier,
+                            weight: weight
+                        })
                     })
-                    .catch((error) => console.error("Error fetching cities:", error));
-            }
-        });
-    }
+                    .then(response => response.json())
+                    .then(data => {
+                        ongkirList.innerHTML = "";
+                        ongkirContainer.classList.remove("d-none");
+                        ongkirContainer.classList.add("d-block");
 
-    if (checkShippingButton) {
-        checkShippingButton.addEventListener("click", function (e) {
-            e.preventDefault();
-
-            const provinceId = provinceDropdown.value;
-            const cityId = cityDropdown.value;
-            const courier = document.querySelector('input[name="courier"]:checked')?.value;
-            const weight = calculateTotalWeight(); 
-
-            if (!provinceId || !cityId) {
-                alert("Silakan pilih provinsi dan kota tujuan terlebih dahulu.");
-                return;
-            }
-
-            if (!courier) {
-                alert("Silakan pilih kurir.");
-                return;
-            }
-
-            if (weight <= 0) {
-                alert("Silakan masukkan jumlah ukuran untuk menghitung berat pengiriman.");
-                return;
-            }
-
-            // Get CSRF token (assuming it's available in a meta tag)
-            const token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-
-            const cityOrigin = "{{ $defaultCityId }}";
-
-            fetch("/order/t-shirt", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": token
-                },
-                body: JSON.stringify({
-                    city_origin: cityOrigin,
-                    city_destination: cityId,
-                    courier: courier,
-                    weight: weight
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    ongkirList.innerHTML = "";
-                    ongkirContainer.classList.remove("d-none");
-                    ongkirContainer.classList.add("d-block");
-
-                    data[0].costs.forEach((costOption, index) => {
-                        const listItem = document.createElement("li");
-                        listItem.classList.add("list-group-item");
-                        listItem.innerHTML = `
+                        data[0].costs.forEach((costOption, index) => {
+                            const listItem = document.createElement("li");
+                            const show = document.getElementById("ongkirListVisible");
+                            listItem.classList.add("list-group-item");
+                            show.classList.remove("hidden");
+                            listItem.innerHTML = `
                             <input type="radio" name="shipping_option" value="${index}" id="shipping_${index}" class="shipping-option-radio">
                             <label for="shipping_${index}">
                                 ${data[0].code.toUpperCase()} : 
@@ -259,28 +292,27 @@ document.addEventListener("DOMContentLoaded", function () {
                                 (${costOption.cost[0].etd} Hari)
                             </label>
                         `;
-                        ongkirList.appendChild(listItem);
-                    });
-
-                    const shippingOptions = document.querySelectorAll('.shipping-option-radio');
-                    shippingOptions.forEach(option => {
-                        option.addEventListener('change', function () {
-                            const selectedOption = data[0].costs[this.value];
-                            const shippingPrice = selectedOption.cost[0].value;
-                            updateTotalPrice(shippingPrice);
+                            ongkirList.appendChild(listItem);
                         });
+
+                        const shippingOptions = document.querySelectorAll('.shipping-option-radio');
+                        shippingOptions.forEach(option => {
+                            option.addEventListener('change', function() {
+                                const selectedOption = data[0].costs[this.value];
+                                const shippingPrice = selectedOption.cost[0].value;
+                                updateTotalPrice(shippingPrice);
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error checking shipping costs:", error);
+                        alert("Terjadi kesalahan saat memeriksa ongkir. Silakan coba lagi.");
                     });
-                })
-                .catch(error => {
-                    console.error("Error checking shipping costs:", error);
-                    alert("Terjadi kesalahan saat memeriksa ongkir. Silakan coba lagi.");
-                });
-        });
-    }
+            });
+        }
 
-    // Hitung berat dan total harga awal (dengan ongkir 0 pada awalnya)
-    calculateTotalWeight();
-    updateTotalPrice(0);
-});
+        // Hitung berat dan total harga awal (dengan ongkir 0 pada awalnya)
+        calculateTotalWeight();
+        updateTotalPrice(0);
+    });
 </script>
-

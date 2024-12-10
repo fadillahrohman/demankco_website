@@ -17,6 +17,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
+    <!-- Import AOS CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -32,6 +35,9 @@
         @yield('content')
     </div>
 
+    <!-- Include Footer -->
+    @include('footer')
+
     <!-- Footer -->
     {{-- @include('footer') --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.2/fabric.min.js"></script>
@@ -41,6 +47,13 @@
     @stack('fabric_scripts')
 
     @yield('mid-scripts')
+
+    
+    <!-- Import AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 
 </html>

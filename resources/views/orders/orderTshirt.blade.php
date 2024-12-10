@@ -32,8 +32,15 @@
                     <!-- Nama Input -->
                     <div class="mb-4">
                         <label for="name" class="block font-medium">Nama</label>
-                        <input type="text" id="name" name="name" placeholder="Masukan nama penerima" required
+                        <input type="text" id="name" name="name" placeholder="Masukkan nama penerima" required
                             class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-slate-300 focus:ring focus:ring-blue-300" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="name" class="block font-medium">No. HP</label>
+                        <input type="number" id="phone_number" name="phone_number" placeholder="Masukkan nama no hp"
+                            required
+                            class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-slate-300 focus:ring focus:ring-blue-300"
+                            value="{{ old('phone_number', $defaultPhoneNumber) }}" />
                     </div>
 
                     <!-- Alamat Tujuan -->
@@ -100,7 +107,7 @@
                 <!-- Alamat Lengkap -->
                 <div class="mb-4">
                     <label for="address" class="block font-medium">Alamat Lengkap</label>
-                    <textarea id="address" name="address" placeholder="Masukan alamat penerima" required
+                    <textarea id="address" name="address" placeholder="Masukkan alamat penerima" required
                         class="w-full border rounded-md h-20 px-3 py-2 mt-2 focus:outline-none focus:ring focus:ring-blue-300"></textarea>
                     <div class="text-left text-gray-500 mt-4">
                         <p class="text-[12px] text-blue-500"><i>* Alamat Lengkap berupa : Nama jalan / blok / gang /
@@ -126,6 +133,7 @@
                     <hr>
                     <div class="flex justify-between items-center mb-2">
                         <span class="font-medium text-gray-700">Harga Sablon</span>
+                        <input type="hidden" name="type" value="Tshirt">
                         <span class="font-bold text-gray-900" id="harga-sablon">Rp 0</span>
                     </div>
                     <hr>
