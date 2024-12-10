@@ -34,7 +34,7 @@
                     <div class="mb-4">
                         <label for="name" class="block font-medium">Nama</label>
                         <input type="text" id="name" name="name" placeholder="Masukan nama penerima" required
-                            class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-slate-300 focus:ring focus:ring-blue-300" />
+                            class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-none focus:ring focus:ring-blue-300" />
                     </div>
 
                     <!-- Alamat Tujuan -->
@@ -92,7 +92,8 @@
 
                     <!-- Ongkir -->
                     <div class="mt-3 d-none ongkir">
-                        <div id="ongkirListVisible" class="hidden bg-white p-4 rounded-lg border">
+                        <div class="bg-white p-4 rounded-lg border">
+                        <div class="bg-white p-4 rounded-lg border">
                             <ul class="list-group" id="ongkir"></ul>
                         </div>
                     </div>
@@ -103,6 +104,7 @@
                     <textarea id="address" name="address" placeholder="Masukan alamat penerima" required
                         class="w-full border rounded-md h-20 px-3 py-2 mt-2 focus:outline-none focus:ring focus:ring-blue-300"></textarea>
                     <div class="text-left text-gray-500 mt-4">
+                        <p class="text-[12px] text-red-500"><i>Alamat Lengkap berupa : Nama jalan / blok / gang / no.rumah - desa & kecamatan</i></p>
                         <p class="text-[12px] text-blue-500"><i>* Alamat Lengkap berupa : Nama jalan / blok / gang / no.rumah - desa & kecamatan</i></p>
                     </div>
                 </div>
@@ -122,14 +124,19 @@
                         <span class="font-bold text-gray-900">Rp {{ number_format($catalogs->first()->price, 0, ',', '.') }}</span>
                     </div>
                     <hr>
-                    <div class="flex justify-between items-center mb-2">
+                    {{-- <div class="flex justify-between items-center mb-2">
                         <span class="font-medium text-gray-700">Harga Sablon</span>
                         <span class="font-bold text-gray-900" id="harga-sablon">Rp 0</span>
                     </div>
-                    <hr>
+                    <hr> --}}
+                    {{-- <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-gray-700">Harga Jasa</span>
+                        <span class="font-bold text-gray-900">Rp 50.000</span>
+                    </div> --}}
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-gray-700">Total Harga</span>
                         <input type="hidden" id="total-price-input" name="total_price" value="0">
+                        <h4>Rp <span class="font-bold text-[#3FA3FF]" id="total-price">0</span></h4>
                         <h4 class="font-bold text-[#3FA3FF]">Rp <span class="font-bold text-[#3FA3FF]" id="total-price">0</span></h4>
                     </div>                    
                     <hr>
@@ -162,13 +169,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const sizeInputs = document.querySelectorAll('.size-input');
 
     // Ambil harga sablon dari localStorage
-    const hargaSablon = parseInt(localStorage.getItem('hargaSablon')) || 0;
+    // const hargaSablon = parseInt(localStorage.getItem('hargaSablon')) || 0;
 
-    // Update tampilan harga sablon
-    const hargaSablonElement = document.getElementById('harga-sablon');
-    if (hargaSablonElement) {
-        hargaSablonElement.textContent = `Rp ${hargaSablon.toLocaleString()}`;
-    }
+    // // Update tampilan harga sablon
+    // const hargaSablonElement = document.getElementById('harga-sablon');
+    // if (hargaSablonElement) {
+    //     hargaSablonElement.textContent = `Rp ${hargaSablon.toLocaleString()}`;
+    // }
 
     function calculateTotalWeight() {
         let totalWeight = 0;
@@ -183,7 +190,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fungsi untuk memperbarui harga total dengan ongkir
     function updateTotalPrice(ongkirPrice) {
         const totalWeight = calculateTotalWeight(); 
-        const totalPrice = productTotal + hargaSablon + ongkirPrice;
+        const totalPrice = productTotal + ongkirPrice;
+        // const totalPrice = productTotal + hargaSablon + ongkirPrice;
         totalPriceElement.textContent = totalPrice.toLocaleString();
 
         // Update input tersembunyi total harga
@@ -268,9 +276,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     data[0].costs.forEach((costOption, index) => {
                         const listItem = document.createElement("li");
-                        const show = document.getElementById("ongkirListVisible");
+                        // const show = document.getElementById("ongkirListVisible");
                         listItem.classList.add("list-group-item");
-                        show.classList.remove("hidden");
+                        // show.classList.remove("hidden");
                         listItem.innerHTML = `
                             <input type="radio" name="shipping_option" value="${index}" id="shipping_${index}" class="shipping-option-radio">
                             <label for="shipping_${index}">

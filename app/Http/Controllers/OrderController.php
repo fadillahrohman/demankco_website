@@ -98,47 +98,39 @@ class OrderController extends Controller
             'courier' => 'required|string',
             'sizes' => 'required|array',
             'sizes.*' => 'integer|min:0', 
-            'total_price' => 'required|numeric|min:0.01',
+            'total_price' => 'required|numeric',
         ]);
+    
 
         // Simpan data Order
         $order = Order::create([
             'status' => 'pending',
-            'payment_status' => 'unpaid',
-            'name' => $validated['name'],
-            'number_of_orders' => array_sum($validated['sizes']),
             'list_size' => json_encode($validated['sizes']),
             'total_price' => $validated['total_price'],
             'address' => $validated['address'],
+            'courier' => $validated['courier'],
+            'weight' => array_sum(array_map(fn($qty) => $qty * 170, $validated['sizes'])),
+            'province_destination' => $validated['province_destination'],
+            'city_destination' => $validated['city_destination'],
         ]);
+    
+        // Simpan Order Items dari data order yang baru saja dibuat
+        Order_item::create([
+            'order_id' => $order->id,
+            'product_name' => $order->name, 
+            'price' => $order->total_price, 
+            'quantity' => $order->number_of_orders,
+            // 'notes' => $validated['notes'],
+        ]);
+    
+        return redirect()->route('orders.success', ['order' => $order->id])
+            ->with('success', 'Pesanan berhasil dibuat!');
 
-        // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
-        \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
+        // // Hapus harga sablon dari localStorage setelah pesanan disimpan
+        // echo "<script>localStorage.removeItem('hargaSablon');</script>";
 
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => $order->id,
-                'gross_amount' => $order->total_price,
-            ),
-            'customer_details' => array(
-                'first_name' => $order->name,
-                'email' => Auth::user()->email,
-                'phone' => Auth::user()->phone,
-            ),
-        );
-
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
-        $order->snap_token = $snapToken;
-        $order->save();
-
-        return redirect()->route('orderDetail', $order->id);
+        // return redirect()->route('order.success');
     }
     
     
-}
+
