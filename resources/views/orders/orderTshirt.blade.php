@@ -107,14 +107,14 @@
                     </div>
                 </div>
                 <!-- Catatan -->
-                <div class="mb-4">
+                {{-- <div class="mb-4">
                     <label for="notes" class="block font-medium">Catatan</label>
                     <textarea id="notes" name="notes" placeholder="Masukan catatan" required
                         class="w-full border rounded-md h-20 px-3 py-2 mt-2 focus:outline-none focus:ring focus:ring-blue-300"></textarea>
                     <div class="text-left text-gray-500 mt-4">
                         <p class="text-[12px] text-blue-500"><i>* Contoh: Ukuran M yang lengan panjang 3pcs dan ukuran M yang pendek 1pcs</i></p>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Total Harga -->
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-2">
@@ -127,10 +127,6 @@
                         <span class="font-bold text-gray-900" id="harga-sablon">Rp 0</span>
                     </div>
                     <hr>
-                    {{-- <div class="flex justify-between items-center mb-2">
-                        <span class="font-medium text-gray-700">Harga Jasa</span>
-                        <span class="font-bold text-gray-900">Rp 50.000</span>
-                    </div> --}}
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-gray-700">Total Harga</span>
                         <input type="hidden" id="total-price-input" name="total_price" value="0">
