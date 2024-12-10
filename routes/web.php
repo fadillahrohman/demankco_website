@@ -124,5 +124,4 @@ Route::get('/mockup/load', [MockupController::class, 'loadMockup'])->name('mocku
 // Route::post('/ongkir', [CheckOngkirController::class, 'check_ongkir']); abaikan saja 
 
 
-Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback'])
-    ->withoutMiddleware(['web', 'csrf']);
+Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback']);

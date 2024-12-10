@@ -10,17 +10,12 @@ class PaymentController extends Controller
 {
     public function midtransCallback(Request $request, MidtransService $midtransService)
     {
-        \Log::info('Midtrans Callback', [
-            'all_data' => $request->all(),
-            'headers' => $request->headers->all()
-        ]);
-
         if ($midtransService->isSignatureKeyVerified()) {
             $order = $midtransService->getOrder();
 
             if ($midtransService->getStatus() == 'success') {
                 $order->update([
-                    'status' => 'pending',
+                    'status' => 'processing',
                     'payment_status' => 'paid',
                 ]);
 
