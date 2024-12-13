@@ -64,6 +64,14 @@
                                     Menunggu Konfirmasi Pesanan
                                 @elseif ($order->status == 'pending')
                                     Menunggu Pembayaran
+                                @elseif ($order->status == 'processing')
+                                    Sedang Diproses
+                                @elseif ($order->status == 'processing')
+                                    Sedang Diproses
+                                @elseif ($order->status == 'completed')
+                                    Selesai
+                                @elseif ($order->status == 'cancelled')
+                                    Dibatalkan
                                 @else
                                     Status Tidak Diketahui..
                                 @endif

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+// use App\Jobs\ResendOtpEmailJob;
+use App\Jobs\SendOtpEmailJob;
 use App\Models\User;
 use App\Models\Verifytoken;
 use Illuminate\Http\Request;
@@ -27,7 +29,7 @@ class RegisterController extends Controller
             'password.regex' => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi Password tidak cocok.',
         ]);
-        
+
 
         $name = explode('@', $request->email)[0];
 
@@ -48,9 +50,8 @@ class RegisterController extends Controller
         ]);
 
         try {
-            Mail::send('emails.verify-otp', ['token' => $token], function ($message) use ($request) {
-                $message->to($request->email)->subject('😎 Verifikasi Email - Kode OTP');
-            });
+            $sendOtpEmail = new SendOtpEmailJob($request->email, $token);
+            dispatch($sendOtpEmail);
         } catch (\Exception $e) {
             return back()->withErrors(['email' => 'Email tidak terkirim, silakan coba lagi.']);
         }
@@ -98,6 +99,7 @@ class RegisterController extends Controller
 
         // Generate OTP baru
         $newToken = mt_rand(100000, 999999);
+        \Log::info("Generated OTP for resend: " . $newToken);
 
         Verifytoken::updateOrCreate(
             ['email' => $request->email],
@@ -108,9 +110,14 @@ class RegisterController extends Controller
             ]
         );
 
+
         Mail::send('emails.verify-otp', ['token' => $newToken], function ($message) use ($request) {
-            $message->to($request->email)->subject('🥳 Verifikasi Email - Kode OTP Baru');
+            $message->to($request->email)->subject('😎 Verifikasi Email - Kode OTP');
         });
+
+
+        // $resendOtpEmailJob = new ResendOtpEmailJob($request->email, $newToken);
+        // dispatch($resendOtpEmailJob);
 
         return back()->with('resend_success', 'OTP baru telah dikirim ke email Anda');
     }

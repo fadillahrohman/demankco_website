@@ -9,7 +9,7 @@ use App\Models\City;
 use App\Models\Province;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
 use Illuminate\Support\Facades\Log;
-class OrderController extends Controller
+class OrderControllerFromRayhan extends Controller
 {
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -24,10 +24,10 @@ class OrderController extends Controller
         $provinces = Province::pluck('name', 'province_id');
         $defaultProvinceId = 9; // Default Jawa Barat
         $defaultCityId = 149;   // Default Kab.Indramayu
-
+        
 
         $cities = City::where('province_id', $defaultProvinceId)->pluck('name', 'city_id');
-        return view('orders.orderTshirt', compact('catalogs', 'defaultPhoneNumber', 'provinces', 'cities', 'defaultProvinceId', 'defaultCityId'));
+        return view('orders.orderTshirt', compact('catalogs', 'defaultPhoneNumber','provinces', 'cities', 'defaultProvinceId', 'defaultCityId'));
 
     }
 
@@ -45,10 +45,10 @@ class OrderController extends Controller
 
         $provinces = Province::pluck('name', 'province_id');
         $defaultProvinceId = 9;
-        $defaultCityId = 149;
+        $defaultCityId = 149;   
         $cities = City::where('province_id', $defaultProvinceId)->pluck('name', 'city_id');
 
-        return view('orders.orderCrewneck', compact('catalogs', 'defaultPhoneNumber', 'provinces', 'cities', 'defaultProvinceId', 'defaultCityId'));
+        return view('orders.orderCrewneck', compact('catalogs','defaultPhoneNumber','provinces', 'cities', 'defaultProvinceId', 'defaultCityId'));
     }
 
     public function orderHoodie()
@@ -64,7 +64,7 @@ class OrderController extends Controller
 
         $cities = City::where('province_id', $defaultProvinceId)->pluck('name', 'city_id');
 
-        return view('orders.orderHoodie', compact('catalogs', 'defaultPhoneNumber', 'provinces', 'cities', 'defaultProvinceId', 'defaultCityId'));
+        return view('orders.orderHoodie', compact('catalogs','defaultPhoneNumber','provinces', 'cities', 'defaultProvinceId', 'defaultCityId'));
     }
 
     /**
@@ -85,7 +85,7 @@ class OrderController extends Controller
         $cost = RajaOngkir::ongkosKirim([
             'origin' => $request->city_origin,
             'destination' => $request->city_destination,
-            'weight' => $request->weight,
+            'weight' => $request->weight, 
             'courier' => $request->courier
         ])->get();
 
@@ -107,15 +107,13 @@ class OrderController extends Controller
                 'total_price' => 'required|numeric',
                 'type' => 'required|string|exists:catalogs,type',
             ]);
-
+        
             $userEmail = auth()->user()->email;
-            $userId = auth()->user()->id;
+            $userId = auth()->user()->id; 
 
             // Dapatkan nama produk dari tabel catalogs berdasarkan pilihan pengguna
             $catalog = Catalog::where('type', $validated['type'])->firstOrFail();
             $productName = $catalog->name;
-
-
 
             // Simpan data pesanan (Order)
             $order = Order::create([
@@ -143,7 +141,7 @@ class OrderController extends Controller
                 'price' => $order->total_price,
                 'quantity' => $order->number_of_orders,
             ]);
-
+            
             // Redirect ke halaman sukses dengan membawa ID pesanan
             return redirect()->route('orders.success', ['order' => $order->id])
                 ->with('success', 'Pesanan berhasil dibuat!');
@@ -152,6 +150,4 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat pesanan.');
         }
     }
-
- 
 }

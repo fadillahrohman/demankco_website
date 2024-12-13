@@ -37,8 +37,9 @@
                     </div>
                     <div class="mb-4">
                         <label for="name" class="block font-medium">No. HP</label>
-                        <input type="number" id="phone_number" name="phone_number" placeholder="Masukkan nama no hp"
+                        <input type="tel" id="phone_number" name="phone_number" placeholder="Masukkan nama no hp"
                             required
+                            maxlength="13"
                             class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-slate-300 focus:ring focus:ring-blue-300"
                             value="{{ old('phone_number', $defaultPhoneNumber) }}" />
                     </div>
