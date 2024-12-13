@@ -66,6 +66,8 @@
                                     <h2 class="text-gray-500 text-base sm:text-xl">Belum Bayar</h2>
                                 @elseif($order->status == 'processing')
                                     <h2 class="text-gray-500 text-base sm:text-xl">Sedang Diproses</h2>
+                                @elseif($order->status == 'shipped')
+                                    <h2 class="text-gray-500 text-base sm:text-xl">Dikirim</h2>
                                 @elseif($order->status == 'completed')
                                     <h2 class="text-gray-500 text-base sm:text-xl">Selesai</h2>
                                 @elseif($order->status == 'cancelled')
@@ -118,6 +120,8 @@
                                         <h2 class="text-gray-500 text-base sm:text-xl">Belum Bayar</h2>
                                     @elseif($order->status == 'processing')
                                         <h2 class="text-gray-500 text-base sm:text-xl">Sedang Diproses</h2>
+                                    @elseif($order->status == 'shipped')
+                                        <h2 class="text-gray-500 text-base sm:text-xl">Dikirim</h2>
                                     @elseif($order->status == 'completed')
                                         <h2 class="text-gray-500 text-base sm:text-xl">Selesai</h2>
                                     @elseif($order->status == 'cancelled')

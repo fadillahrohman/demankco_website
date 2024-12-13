@@ -27,7 +27,7 @@
                     </div>
                     <!-- End: Sliding Text animation -->
                     <p class="text-gray-600 max-w-3xl mx-auto text-lg mt-6">
-                        Transformasikan ide kreatif Anda menjadi produk nyata dengan layanan custom sablon kami!
+                        Transformasikan ide kreatif Kamu menjadi produk nyata dengan layanan custom sablon kami!
                         dengan hasil berkualitas tinggi dan detail presisi.
                     </p>
                 </div>

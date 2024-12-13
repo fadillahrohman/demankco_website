@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('order_id', 32)->unique();
             $table->string('product_name');
-            $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'processing', 'shipped', 'completed', 'cancelled'])->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'failed'])->default('unpaid');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
