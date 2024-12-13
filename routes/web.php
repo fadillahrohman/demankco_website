@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\AdminCatalogController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\AdminLogoutController;
+use App\Http\Controllers\Admin\AdminListOrderController;
+use App\Http\Controllers\Admin\AdminLaporanController;
 
 use App\Http\Controllers\CatalogController;
 // use App\Http\Controllers\CheckOngkirController;
@@ -42,6 +44,14 @@ Route::post('/admin/authenticate', [AdminLoginController::class, 'adminAuthentic
 
 Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'adminDashboard'])->name('admin.dashboard');
+    Route::get('/admin/list-order', [AdminListOrderController::class, 'index'])->name('admin.list-order');
+    Route::post('/admin/list-order/{order}/update-status', [AdminListOrderController::class, 'updateStatus'])->name('admin.list-order-update');
+});
+
+// ADMIN LAPORAN PDF
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/laporan', [AdminLaporanController::class, 'index'])->name('admin.laporan');
+    Route::get('/admin/laporan-pdf', [AdminLaporanController::class, 'cetak_pdf'])->name('admin.laporan-pdf');
 });
 
 // ADMIN CATALOG
@@ -53,7 +63,6 @@ Route::middleware('auth:admin')->controller(AdminCatalogController::class)->grou
     Route::put('/admin/catalog/{catalog}', 'update')->name('admin.catalogs.update');
     Route::delete('/admin/catalog/{catalog}', 'destroy')->name('admin.catalogs.destroy');
 });
-
 
 
 // Mockup

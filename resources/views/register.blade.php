@@ -82,7 +82,7 @@
 
                     <div class="text-center text-gray-400 text-sm">
                         Sudah punya akun?
-                        <a href="{{ route('login') }}" class="text-gray-400 hover:text-blue-400">Login</a>
+                        <a href="{{ route('login') }}" class="text-blue-400 hover:text-blue-300">Login</a>
                     </div>
                 </form>
             </div>
