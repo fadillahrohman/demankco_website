@@ -90,66 +90,64 @@ class OrderController extends Controller
         ])->get();
 
         return response()->json($cost);
-    }public function store(Request $request)
-{
-    try {
-        // Validasi input dari pengguna
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'province_destination' => 'required|exists:provinces,id',
-            'city_destination' => 'required|exists:cities,id',
-            'address' => 'required|string|max:500',
-            'phone_number' => 'required|string|min:10|max:15',
-            'courier' => 'required|string',
-            'sizes' => 'required|array',
-            'sizes.*' => 'integer|min:0',
-            'total_price' => 'required|numeric',
-            'type' => 'required|string|exists:catalogs,type',
-        ]);
-    
-        $userEmail = auth()->user()->email;
-        $userId = auth()->user()->id; 
-
-        // Dapatkan nama produk dari tabel catalogs berdasarkan pilihan pengguna
-        $catalog = Catalog::where('type', $validated['type'])->firstOrFail();
-        $productName = $catalog->name;
-
-        // Simpan data pesanan (Order)
-        $order = Order::create([
-            'product_name' => $productName,
-            'status' => 'pending',
-            'payment_status' => 'unpaid',
-            'name' => $validated['name'],
-            'email' => $userEmail,
-            'user_id' => $userId,
-            'phone_number' => $validated['phone_number'],
-            'number_of_orders' => array_sum($validated['sizes']),
-            'list_size' => json_encode($validated['sizes']),
-            'total_price' => $validated['total_price'],
-            'address' => $validated['address'],
-            'courier' => $validated['courier'],
-            'weight' => array_sum(array_map(fn($qty) => $qty * 170, $validated['sizes'])),
-            'province_destination' => $validated['province_destination'],
-            'city_destination' => $validated['city_destination'],
-        ]);
-
-        // Simpan Order Items (detail pesanan) dari data order yang baru saja dibuat
-        Order_item::create([
-            'order_id' => $order->id,
-            'product_name' => $productName,
-            'price' => $order->total_price,
-            'quantity' => $order->number_of_orders,
-        ]);
-        
-        // Redirect ke halaman sukses dengan membawa ID pesanan
-        return redirect()->route('orders.success', ['order' => $order->id])
-            ->with('success', 'Pesanan berhasil dibuat!');
-    } catch (\Exception $e) {
-        Log::error('Error saat membuat pesanan: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat pesanan.');
     }
-}
+    public function store(Request $request)
+    {
+        try {
+            // Validasi input dari pengguna
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'province_destination' => 'required|exists:provinces,id',
+                'city_destination' => 'required|exists:cities,id',
+                'address' => 'required|string|max:500',
+                'phone_number' => 'required|string|min:10|max:15',
+                'courier' => 'required|string',
+                'sizes' => 'required|array',
+                'sizes.*' => 'integer|min:0',
+                'total_price' => 'required|numeric',
+                'type' => 'required|string|exists:catalogs,type',
+            ]);
+        
+            $userEmail = auth()->user()->email;
+            $userId = auth()->user()->id; 
 
+            // Dapatkan nama produk dari tabel catalogs berdasarkan pilihan pengguna
+            $catalog = Catalog::where('type', $validated['type'])->firstOrFail();
+            $productName = $catalog->name;
 
+            // Simpan data pesanan (Order)
+            $order = Order::create([
+                'product_name' => $productName,
+                'status' => 'pending',
+                'payment_status' => 'unpaid',
+                'name' => $validated['name'],
+                'email' => $userEmail,
+                'user_id' => $userId,
+                'phone_number' => $validated['phone_number'],
+                'number_of_orders' => array_sum($validated['sizes']),
+                'list_size' => json_encode($validated['sizes']),
+                'total_price' => $validated['total_price'],
+                'address' => $validated['address'],
+                'courier' => $validated['courier'],
+                'weight' => array_sum(array_map(fn($qty) => $qty * 170, $validated['sizes'])),
+                'province_destination' => $validated['province_destination'],
+                'city_destination' => $validated['city_destination'],
+            ]);
 
+            // Simpan Order Items (detail pesanan) dari data order yang baru saja dibuat
+            Order_item::create([
+                'order_id' => $order->id,
+                'product_name' => $productName,
+                'price' => $order->total_price,
+                'quantity' => $order->number_of_orders,
+            ]);
+            
+            // Redirect ke halaman sukses dengan membawa ID pesanan
+            return redirect()->route('orders.success', ['order' => $order->id])
+                ->with('success', 'Pesanan berhasil dibuat!');
+        } catch (\Exception $e) {
+            Log::error('Error saat membuat pesanan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat pesanan.');
+        }
+    }
 }

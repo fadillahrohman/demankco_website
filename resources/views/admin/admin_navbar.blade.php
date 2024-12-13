@@ -22,8 +22,8 @@
                     class="text-lg {{ Route::currentRouteName() == 'admin.dashboard' ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-600 hover:text-gray-900 transition' }}">
                     Home
                 </a>
-                <a href="/order"
-                    class="text-lg {{ Route::currentRouteName() == 'orders.list' ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-600 hover:text-gray-900 transition' }}">
+                <a href="{{ route('admin.list-order') }}"
+                    class="text-lg {{ Route::currentRouteName() == 'admin.list-order' ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-600 hover:text-gray-900 transition' }}">
                     Pesanan
                 </a>
             </div>
