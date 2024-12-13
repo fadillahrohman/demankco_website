@@ -12,7 +12,7 @@
 			<h5><a target="_blank" href="https://www.malasngoding.com/membuat-laporan-dompdf-laravel/">www.malasngoding.com</a></h5>
 		</center>
 		<br/>
-		<a href="{{ route("admin.laporan-pdf") }}" class="btn btn-primary" target="_blank">CETAK PDF</a>
+		<a href="{{ secure("admin.laporan-pdf") }}" class="btn btn-primary" target="_blank">CETAK PDF</a>
 		<table class='table table-bordered'>
 			<thead>
 				<tr>
