@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,13 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
-
-        // Paksa https
-        if(config('APP_ENV') !== 'local') {
-            URL::forceScheme('https');
-        }
-
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
             return (new MailMessage)
                 ->view('auth.verify-custom', [

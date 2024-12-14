@@ -54,6 +54,10 @@
                                 <td class="font-semibold text-gray-700 py-2">{{ $order->courier }}</td>
                             </tr>
                             <tr>
+                                <td class="font-medium text-gray-500 py-2">Resi Kurir</td>
+                                <td class="font-semibold text-gray-700 py-2">{{ $order->receipt }}</td>
+                            </tr>
+                            <tr>
                                 <td class="font-medium text-gray-500 py-2">Total Harga</td>
                                 <td class="font-semibold text-gray-700 py-2">Rp
                                     {{ number_format($order->total_price, 2, ',', '.') }}</td>
@@ -121,13 +125,20 @@
                                         @endauth
                                     </td>
                                 </tr>
-                            @elseif ($order->payment_status == 'paid')
+                            @elseif ($order->payment_status == 'paid' && $order->status != 'cancelled')
                                 <tr>
                                     <td colspan="2" class="py-4">
                                         <p class="text-green-500 font-semibold text-xl">Pembayaran berhasil</p>
                                     </td>
                                 </tr>
+                            @elseif ($order->payment_status == 'paid' && $order->status == 'cancelled')
+                                <tr>
+                                    <td colspan="2" class="py-4">
+                                        <p class="text-red-500 font-semibold text-xl">Pesanan telah dibatalkan</p>
+                                    </td>
+                                </tr>
                             @endif
+
                         </tbody>
                     </table>
                     <div class="mt-6">

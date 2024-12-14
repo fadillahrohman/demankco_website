@@ -9,18 +9,18 @@
             <p class="text-gray-600 mb-6">Siapkan informasi pembayaran untuk melanjutkan pesanan</p>
             <form action="{{ route('order.store') }}" method="POST">
                 @csrf
-                <div class="bg-gray-50 p-6 rounded-lg border">
+                <div class="bg-gray-50 p-4 sm:p-6 rounded-lg border">
                     <h2 class="text-lg font-bold mb-4">Ukuran</h2>
-                    <div class="grid grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
                         <div>
                             <h3 class="font-semibold text-gray-700 mb-2">T-Shirt</h3>
-                            <div class="grid grid-cols-5 gap-4">
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-4">
                                 @foreach (['M', 'L', 'XL', 'XXL'] as $size)
                                     <div class="flex flex-col items-center">
-                                        <span class="text-sm font-medium">{{ $size }}</span>
+                                        <span class="text-xs sm:text-sm font-medium">{{ $size }}</span>
                                         <input type="number" name="sizes[{{ $size }}]" value="0"
                                             min="0"
-                                            class="size-input w-16 h-10 border rounded-md text-center focus:outline-none focus:ring focus:ring-blue-300"
+                                            class="size-input w-12 sm:w-16 h-8 sm:h-10 border rounded-md text-center text-xs sm:text-base focus:outline-none focus:ring focus:ring-blue-300"
                                             data-weight="170" />
                                     </div>
                                 @endforeach
@@ -29,7 +29,6 @@
                     </div>
                 </div>
                 <div class="mt-6">
-                    <!-- Nama Input -->
                     <div class="mb-4">
                         <label for="name" class="block font-medium">Nama</label>
                         <input type="text" id="name" name="name" placeholder="Masukkan nama penerima" required
@@ -38,12 +37,10 @@
                     <div class="mb-4">
                         <label for="name" class="block font-medium">No. HP</label>
                         <input type="tel" id="phone_number" name="phone_number" placeholder="Masukkan nama no hp"
-                            required
-                            maxlength="13"
+                            required maxlength="13"
                             class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-slate-300 focus:ring focus:ring-blue-300"
                             value="{{ old('phone_number', $defaultPhoneNumber) }}" />
                     </div>
-
                     <!-- Alamat Tujuan -->
                     <div class="mb-4 bg-gray-50 p-6 rounded-lg border">
                         <p class="text-[14px] text-[#3FA3FF]">Dikirim Dari:
@@ -85,9 +82,12 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="absolute bottom-4 right-4 text-gray-700">
-                            <span class="font-medium">Berat:</span>
-                            <span id="weight-display" class="font-bold">0</span> <span>gram</span>
+                        <div class="absolute bottom-0 right-4 sm:bottom-4 text-gray-700 text-sm sm:text-base">
+                            <div class="flex items-center justify-end space-x-2">
+                                <span class="font-medium">Berat:</span>
+                                <span id="weight-display" class="font-bold">0</span>
+                                <span>gram</span>
+                            </div>
                         </div>
                     </div>
                     <!-- Tombol Cek Ongkir -->

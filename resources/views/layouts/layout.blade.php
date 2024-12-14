@@ -22,6 +22,9 @@
 
     {{-- LOTTIE FILES --}}
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+
+    {{-- ALPINE JS --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.7/dist/cdn.min.js"></script>
 </head>
 
 <body class="bg-white font-poppins">

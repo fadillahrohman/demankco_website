@@ -24,6 +24,7 @@ class Order extends Model
         'total_price',
         'address',
         'courier',
+        'receipt',
         'weight',
         'province_destination',
         'city_destination',

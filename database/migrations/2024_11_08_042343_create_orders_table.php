@@ -28,6 +28,7 @@ return new class extends Migration
             $table->foreignId('province_destination')->constrained('provinces')->onDelete('cascade');
             $table->foreignId('city_destination')->constrained('cities')->onDelete('cascade');
             $table->string('courier');
+            $table->string('receipt')->nullable();
             $table->integer('weight'); 
             $table->timestamps();
         });
