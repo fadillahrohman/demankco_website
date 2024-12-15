@@ -9,6 +9,13 @@
             <p class="text-gray-600 mb-6">Siapkan informasi pembayaran untuk melanjutkan pesanan</p>
             <form action="{{ route('order.store') }}" method="POST">
                 @csrf
+                <input type="hidden" name="mockupImage" id="mockupImage">
+                <div class="mb-6">
+                    <h2 class="text-lg font-bold mb-4" data-aos="fade-up" data-aos-duration="1000">Preview Desain</h2>
+                    <div class="flex justify-center" data-aos="fade-up" data-aos-duration="1300">
+                        <img id="mockupPreview" src="" alt="Preview Mockup" class="w-3/4 rounded-lg shadow-md bg-green-300 outline outline-1 outline-slate-200">
+                    </div>
+                </div>
                 <div class="bg-gray-50 p-4 sm:p-6 rounded-lg border">
                     <h2 class="text-lg font-bold mb-4">Ukuran</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
@@ -31,7 +38,7 @@
                 <div class="mt-6">
                     <div class="mb-4">
                         <label for="name" class="block font-medium">Nama</label>
-                        <input type="text" id="name" name="name" placeholder="Masukan nama penerima" required
+                        <input type="text" id="name" name="name" placeholder="Masukkan nama penerima" required
                             class="w-full border rounded-md h-10 px-3 mt-2 focus:outline-slate-300 focus:ring focus:ring-blue-300" />
                     </div>
                     <div class="mb-4">
@@ -108,22 +115,13 @@
                 <!-- Alamat Lengkap -->
                 <div class="mb-4">
                     <label for="address" class="block font-medium">Alamat Lengkap</label>
-                    <textarea id="address" name="address" placeholder="Masukan alamat penerima" required
+                    <textarea id="address" name="address" placeholder="Masukkan alamat penerima" required
                         class="w-full border rounded-md h-20 px-3 py-2 mt-2 focus:outline-none focus:ring focus:ring-blue-300"></textarea>
                     <div class="text-left text-gray-500 mt-4">
                         <p class="text-[12px] text-blue-500"><i>* Alamat Lengkap berupa : Nama jalan / blok / gang /
                                 no.rumah - desa & kecamatan</i></p>
                     </div>
                 </div>
-                <!-- Catatan -->
-                {{-- <div class="mb-4">
-                    <label for="notes" class="block font-medium">Catatan</label>
-                    <textarea id="notes" name="notes" placeholder="Masukan catatan" required
-                        class="w-full border rounded-md h-20 px-3 py-2 mt-2 focus:outline-none focus:ring focus:ring-blue-300"></textarea>
-                    <div class="text-left text-gray-500 mt-4">
-                        <p class="text-[12px] text-blue-500"><i>* Contoh: Ukuran M yang lengan panjang 3pcs dan ukuran M yang pendek 1pcs</i></p>
-                    </div>
-                </div> --}}
                 <!-- Total Harga -->
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-2">
@@ -148,7 +146,7 @@
                     <div class="flex justify-end mt-5">
                         <button type="submit"
                             class="w-full bg-[#3FA3FF] text-white text-xl font-semibold px-6 py-2 rounded-md hover:bg-blue-500 transition">
-                            PESAN
+                            Pesan Sekarang
                         </button>
                     </div>
                 </div>
@@ -160,7 +158,17 @@
 
 {{-- ================= JAVASCRIPT ORDER & CEK ONGKIR ================ --}}
 <script>
+
+
     document.addEventListener("DOMContentLoaded", function() {
+
+        // Load mockup dari localStorage
+        const mockupImage = localStorage.getItem('mockupImage');
+        if (mockupImage) {
+            document.getElementById('mockupImage').value = mockupImage;
+            document.getElementById('mockupPreview').src = mockupImage;
+        }
+
         const provinceDropdown = document.getElementById("province_destination");
         const cityDropdown = document.getElementById("city_destination");
         const checkShippingButton = document.getElementById("check_shipping");
@@ -182,6 +190,7 @@
         if (hargaSablonElement) {
             hargaSablonElement.textContent = `Rp ${hargaSablon.toLocaleString()}`;
         }
+        
 
         function calculateTotalWeight() {
             let totalWeight = 0;
@@ -260,7 +269,7 @@
 
                 const cityOrigin = "{{ $defaultCityId }}";
 
-                fetch("/order/t-shirt", {
+                fetch("/order/crewneck", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -315,5 +324,9 @@
         // Hitung berat dan total harga awal (dengan ongkir 0 pada awalnya)
         calculateTotalWeight();
         updateTotalPrice(0);
+
+        // Hapus gambar mockup dari localStorage saat halaman terload semua
+        localStorage.removeItem('mockupImage');
     });
+
 </script>

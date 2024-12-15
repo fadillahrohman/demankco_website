@@ -6,7 +6,6 @@
     <div class="flex justify-center min-h-screen py-8 bg-gray-100">
         <div class="max-w-4xl w-full bg-white shadow-md rounded-lg p-8">
             <h1 class="text-3xl font-bold text-[#3FA3FF] mb-4">Detail Pesanan</h1>
-            
             <h2 class="text-lg font-semibold mb-4">Pesanan ID: {{ $order->id }}</h2>
             <p class="text-gray-600 mb-6">Nama Penerima: {{ $order->name }}</p>
             

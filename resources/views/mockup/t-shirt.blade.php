@@ -10,8 +10,8 @@
   </div>
 </div>
 
-<div class="h-50 mb-2 flex w-fit grid-cols-2 gap-x-1 justify-self-center rounded-lg bg-white p-3 shadow-sm outline outline-1 outline-slate-200">
-  <div id="kiri" class="grid-rows-auto h-fit w-fit justify-items-center space-y-2 rounded-lg bg-white p-2 shadow-lg outline outline-1 outline-slate-100 hover:divide-solid">
+<div class="h-50 mb-2 flex w-fit grid-cols-2 gap-x-1 justify-self-center rounded-lg bg-white p-3 shadow-sm outline outline-1 outline-slate-200" data-aos="fade-up" data-aos-duration="100">
+  <div id="kiri" class="grid-rows-auto h-fit w-fit justify-items-center space-y-2 rounded-lg bg-white p-2 shadow-lg outline outline-1 outline-slate-100 hover:divide-solid" data-aos="fade-up" data-aos-duration="600">
     <div class="space-1 rounded-lg bg-slate-50 outline outline-1 outline-slate-200">
       <button id="newText" class="flex w-full items-center justify-center gap-x-2 rounded-lg px-4 py-2 text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-regular fa-i"></i> Teks</button>
       <form class="flex flex-col">
@@ -22,7 +22,7 @@
       <button id="downImg" class="flex w-full items-center justify-center gap-x-2 rounded-lg px-4 py-2 text-lg text-slate-700 transition duration-300 hover:bg-slate-200"><i class="fa-solid fa-download"></i> Simpan</button>
     </div>
     <button class="flex w-full justify-center rounded-lg bg-blue-500 px-4 py-2 text-lg font-medium text-white transition duration-300 hover:bg-blue-600 hover:text-white">
-      <a href="{{ route('orderTshirt') }}">Pesan</a>
+      <a href="{{ route('orderTshirt') }}" onclick="saveMockupImage()">Pesan</a>
     </button>
     <button class="flex w-full justify-center rounded-lg px-4 py-2 text-lg text-slate-700 outline outline-1 outline-slate-200 transition duration-300 hover:bg-slate-200">
       <a href="{{ route('catalogs.list') }}">Kembali</a>
@@ -34,7 +34,7 @@
     <div id="price" class="hidden max-w-sm text-lg font-bold text-green-500">Rp. 150,000</div>
   </div>
 
-  <div id="tengah" class="justify-items-start relative z-0 rounded-lg bg-green-200 pt-6 shadow-lg">
+  <div id="tengah" class="justify-items-start relative z-0 rounded-lg bg-green-200 pt-6 shadow-lg" data-aos="fade-up" data-aos-duration="800">
     <div id="propertiObj" class="hidden duration-600 absolute z-10 left-0 h-auto w-auto justify-items-center rounded-lg bg-slate-50 text-lg text-slate-700 outline outline-1 outline-slate-300 transition hover:shadow-lg">
       <p>Properti Obek</p>
 
@@ -50,199 +50,121 @@
 @push('fabric_scripts')
   <script>
 
-    const deleteBtn = document.getElementById('hapusObj');
-    let canvas = new fabric.Canvas("canvas-bg", { 
-        backgroundImage: "{{ asset('images/mockup-tshirt.png') }}",
-        scaleToHeight: 720,
-        scaleToWidth: 1098,
-    });
+    let canvas;
 
-    const targetAreaA3 = {
-        left: 720, top: 210, right: 940, bottom: 565, harga: 45000
-    };
+    document.addEventListener("DOMContentLoaded", function() {
 
-    const targetAreaLogo = {
-        left: 300, top: 235, right: 380, bottom: 310, harga: 10000
-    };
+        fabric.Image.fromURL("{{ asset('images/mockup-tshirt.png') }}", function(img) {
+        canvas = new fabric.Canvas("canvas-bg", { 
+            scaleToHeight: 720,
+            scaleToWidth: 1098,
+        });
+        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
 
-    const targetArea21cm = {
-      left: 650, top: 100, right: 1000, bottom: 600, price: 100000
-    };
+        const targetAreaA3 = {
+            left: 720, top: 210, right: 940, bottom: 565, harga: 45000
+        };
 
-    const boundaryAreaA3 = new fabric.Rect({
-        left: targetAreaA3.left,
-        top: targetAreaA3.top,
-        width: targetAreaA3.right - targetAreaA3.left,
-        height: targetAreaA3.bottom - targetAreaA3.top,
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: 'red',            
-        strokeWidth: 2,  
-        opacity: 0.1,
-        strokeDashArray: [5, 5],         
-        selectable: false         
-    });
-    canvas.add(boundaryAreaA3);
+        const targetAreaLogo = {
+            left: 300, top: 235, right: 380, bottom: 310, harga: 10000
+        };
 
-    const boundaryAreaLogo = new fabric.Rect({
-        left: targetAreaLogo.left,
-        top: targetAreaLogo.top,
-        width: targetAreaLogo.right - targetAreaLogo.left,
-        height: targetAreaLogo.bottom - targetAreaLogo.top,
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: 'blue',   
-        strokeWidth: 2,
-        opacity: 0.1,
-        strokeDashArray: [5, 5], 
-        selectable: false      
-    });
-    canvas.add(boundaryAreaLogo);
+        const targetArea21cm = {
+        left: 650, top: 100, right: 1000, bottom: 600, price: 100000
+        };
 
-    canvas.on('selection:created', function() {
-        divHapus.classList.remove("hidden");
-        propertiObj.classList.remove("hidden");
-      });
+        const boundaryAreaA3 = new fabric.Rect({
+            left: targetAreaA3.left,
+            top: targetAreaA3.top,
+            width: targetAreaA3.right - targetAreaA3.left,
+            height: targetAreaA3.bottom - targetAreaA3.top,
+            fill: 'rgba(0, 0, 0, 0)',
+            stroke: 'red',            
+            strokeWidth: 2,  
+            opacity: 0.1,
+            strokeDashArray: [5, 5],         
+            selectable: false         
+        });
+        canvas.add(boundaryAreaA3);
 
-      canvas.on("selection:created", function (e) {
-    let totalPrice = 0;
-    let isAnyObjectInArea = false;
+        const boundaryAreaLogo = new fabric.Rect({
+            left: targetAreaLogo.left,
+            top: targetAreaLogo.top,
+            width: targetAreaLogo.right - targetAreaLogo.left,
+            height: targetAreaLogo.bottom - targetAreaLogo.top,
+            fill: 'rgba(0, 0, 0, 0)',
+            stroke: 'blue',   
+            strokeWidth: 2,
+            opacity: 0.1,
+            strokeDashArray: [5, 5], 
+            selectable: false      
+        });
+        canvas.add(boundaryAreaLogo);
 
-    canvas.getActiveObjects().forEach(function (obj) {
-        if (isObjectInArea(obj, targetAreaA3)) {
-            totalPrice += targetAreaA3.harga;
-            isAnyObjectInArea = true;
-        }
-        if (isObjectInArea(obj, targetAreaLogo)) {
-            totalPrice += targetAreaLogo.harga;
-            isAnyObjectInArea = true;
-        }
-    });
+        canvas.on('selection:created', function() {
+            divHapus.classList.remove("hidden");
+            propertiObj.classList.remove("hidden");
+        });
 
-        if (isAnyObjectInArea) {
-            priceElement.classList.remove("hidden");
-            priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
-        } else {
-            priceElement.classList.add("hidden");
-            priceElement.textContent = "";
-        }
-    });
+        canvas.on("selection:created", function (e) {
+        let totalPrice = 0;
+        let isAnyObjectInArea = false;
 
+        canvas.getActiveObjects().forEach(function (obj) {
+            if (isObjectInArea(obj, targetAreaA3)) {
+                totalPrice += targetAreaA3.harga;
+                isAnyObjectInArea = true;
+            }
+            if (isObjectInArea(obj, targetAreaLogo)) {
+                totalPrice += targetAreaLogo.harga;
+                isAnyObjectInArea = true;
+            }
+        });
 
-    canvas.on('selection:updated', function() {
-        divHapus.classList.remove("hidden");
-        propertiObj.classList.remove("hidden");
-      });
-
-    canvas.on('selection:cleared', function() {
-        divHapus.classList.add("hidden");
-        propertiObj.classList.add("hidden");
-      });
-
-    const priceElement = document.getElementById("price");
-
-    function isObjectInArea(obj, area) {
-    const objLeft = obj.left;
-    const objTop = obj.top;
-    const objRight = obj.left + obj.width * obj.scaleX;
-    const objBottom = obj.top + obj.height * obj.scaleY;
-
-    return (
-        objLeft >= area.left &&
-        objTop >= area.top &&
-        objRight <= area.right &&
-        objBottom <= area.bottom
-    );
-}
-
-
-canvas.on("object:moving", function (e) {
-    let totalPrice = 0;
-    let isAnyObjectInArea = false;
-    targetAreaA3.opacity = 0.1;
-    targetAreaLogo.opacity = 0.1;
-
-    canvas.getObjects().forEach(function (obj) {
-        if (isObjectInArea(obj, targetAreaA3)) {
-            totalPrice += targetAreaA3.harga;
-            isAnyObjectInArea = true;
-            targetAreaA3.opacity = 1;
-        }
-        if (isObjectInArea(obj, targetAreaLogo)) {
-            totalPrice += targetAreaLogo.harga;
-            isAnyObjectInArea = true;
-            targetAreaLogo.opacity = 1;
-        }
-    });
-
-        if (isAnyObjectInArea) {
-            priceElement.classList.remove("hidden");
-            priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
-        } else {
-            priceElement.classList.add("hidden");
-            priceElement.textContent = "";
-        }
-    });
-
-
-    priceElement.classList.add("hidden");
-    priceElement.textContent = "";
-
-    document.getElementById("newText").addEventListener("click", function () {
-    const newText = new fabric.Textbox("Masukkan teks di sini", {
-        left: 100,
-        top: 100,
-        fill: "black",
-    });
-
-    canvas.add(newText);
-
-    priceElement.classList.add("hidden");
-    priceElement.textContent = "";
-    });
-
-    document.getElementById("uploadImg").addEventListener("change", function (e) {
-        var file = e.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function (f) {
-            var data = f.target.result;
-            fabric.Image.fromURL(data, function (img) {
-                img.set({ left: 0, top: 0, angle: 0 });
-                img.scaleToHeight(100);
-                img.scaleToWidth(200);
-                canvas.add(img).renderAll();
-
+            if (isAnyObjectInArea) {
+                priceElement.classList.remove("hidden");
+                priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
+            } else {
                 priceElement.classList.add("hidden");
                 priceElement.textContent = "";
-            });
-        };
-        reader.readAsDataURL(file);
-    });
+            }
+        });
 
 
-    // Download gambar
-    document.getElementById('downImg').addEventListener('click', function() {
-    boundaryAreaA3.visible = false;
-    boundaryAreaLogo.visible = false;
-    const dataURL = canvas.toDataURL({ format: 'jpeg', quality: 1 });
-    const link = document.createElement('a');
-    link.href = dataURL;
-    link.download = 'Mockup.jpeg';
-    link.click();
-    boundaryAreaA3.visible = true;
-    boundaryAreaLogo.visible = true;
-    });
-    
-    // Hapus objek
-    function delObj() {
-    const activeObject = canvas.getActiveObject();
-    if (activeObject) {
-        canvas.remove(activeObject);
-        canvas.discardActiveObject().renderAll();
+        canvas.on('selection:updated', function() {
+            divHapus.classList.remove("hidden");
+            propertiObj.classList.remove("hidden");
+        });
 
-    // Reset harga
-    let totalPrice = 0;
-    let isAnyObjectInArea = false;
+        canvas.on('selection:cleared', function() {
+            divHapus.classList.add("hidden");
+            propertiObj.classList.add("hidden");
+        });
 
-    canvas.getObjects().forEach(function (obj) {
+        const priceElement = document.getElementById("price");
+
+        function isObjectInArea(obj, area) {
+        const objLeft = obj.left;
+        const objTop = obj.top;
+        const objRight = obj.left + obj.width * obj.scaleX;
+        const objBottom = obj.top + obj.height * obj.scaleY;
+
+        return (
+            objLeft >= area.left &&
+            objTop >= area.top &&
+            objRight <= area.right &&
+            objBottom <= area.bottom
+        );
+    }
+
+
+    canvas.on("object:moving", function (e) {
+        let totalPrice = 0;
+        let isAnyObjectInArea = false;
+        targetAreaA3.opacity = 0.1;
+        targetAreaLogo.opacity = 0.1;
+
+        canvas.getObjects().forEach(function (obj) {
             if (isObjectInArea(obj, targetAreaA3)) {
                 totalPrice += targetAreaA3.harga;
                 isAnyObjectInArea = true;
@@ -255,229 +177,339 @@ canvas.on("object:moving", function (e) {
             }
         });
 
-          if (isAnyObjectInArea) {
-              priceElement.classList.remove("hidden");
-              priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
-          } else {
-              priceElement.classList.add("hidden");
-              priceElement.textContent = "";
-          }
-      }
-  }
-
-  // Update harga
-  canvas.on('object:moving', updatePrice);
-  canvas.on('object:modified', updatePrice);
-  canvas.on('object:added', function(e) {
-      e.target.set({
-          price: 0
-      });
-  });
-
-  function updatePrice() {
-      let totalPrice = 0;
-      let isAnyObjectInArea = false;
-
-      canvas.getObjects().forEach(function(obj) {
-          if (obj.type === 'rect') return;
-          
-          if (isObjectInArea(obj, targetAreaA3)) {
-              totalPrice += targetAreaA3.harga;
-              isAnyObjectInArea = true;
-              targetAreaA3.opacity = 1;
-          } else if (isObjectInArea(obj, targetAreaLogo)) {
-              totalPrice += targetAreaLogo.harga;
-              isAnyObjectInArea = true;
-              targetAreaLogo.opacity = 1;
-          }
-      });
-
-      if (isAnyObjectInArea) {
-          priceElement.classList.remove("hidden");
-          priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
-      } else {
-          priceElement.classList.add("hidden");
-          priceElement.textContent = "";
-      }
-  }
-
-  document.getElementById('uploadImg').addEventListener("change", function(e) {
-      var file = e.target.files[0];
-      var reader = new FileReader();
-      reader.onload = function(f) {
-          var data = f.target.result;
-          const timestamp = new Date().getTime();
-          fabric.Image.fromURL(data + '?t=' + timestamp, function(img) {
-              img.set({
-                  left: 100,
-                  top: 100,
-                  angle: 0,
-                  price: 0
-              });
-              img.scaleToHeight(100);
-              img.scaleToWidth(200);
-              canvas.add(img).renderAll();
-          });
-      };
-      reader.readAsDataURL(file);
-      e.target.value = '';
-  });
-
-  function delObj() {
-      const activeObject = canvas.getActiveObject();
-      if (activeObject) {
-          canvas.remove(activeObject);
-          canvas.discardActiveObject().renderAll();
-          updatePrice();
-      }
-  }
-
-  // Update area opasitas
-  function updateAreaOpacity() {
-      let objectInA3 = false;
-      let objectInLogo = false;
-
-      canvas.getObjects().forEach(function(obj) {
-          if (obj.type === 'rect') return;
-          
-          if (isObjectInArea(obj, targetAreaA3)) {
-              objectInA3 = true;
-          }
-          if (isObjectInArea(obj, targetAreaLogo)) {
-              objectInLogo = true;
-          }
-      });
-
-      boundaryAreaA3.set('opacity', objectInA3 ? 1 : 0.1);
-      boundaryAreaLogo.set('opacity', objectInLogo ? 1 : 0.1);
-      canvas.renderAll();
-  }
-
-  // Event listener
-  canvas.on('object:moving', updateAreaOpacity);
-  canvas.on('object:modified', updateAreaOpacity);
-  canvas.on('object:added', updateAreaOpacity);
-  canvas.on('object:removed', updateAreaOpacity);
-
-  // Panel properti objek
-  canvas.on('selection:created', function(e) {
-      const activeObj = e.target;
-      const propertiObj = document.getElementById('propertiObj');
-      
-      propertiObj.innerHTML = '<p class="font-bold p-2">Properti Objek</p>';
-      
-      const sizeControls = `
-          <div class="p-2">
-              <label class="block text-sm">Ukuran:</label>
-              <input type="number" id="objWidth" value="${Math.round(activeObj.getScaledWidth())}" class="w-20 p-1 border rounded bg-slate-100 outline outline-1 outline-slate-300">
-              <span class="mx-1">x</span>
-              <input type="number" id="objHeight" value="${Math.round(activeObj.getScaledHeight())}" class="w-20 p-1 border rounded bg-slate-100 outline outline-1 outline-slate-100">
-          </div>
-      `;
-      
-      // const alignControls = `
-      //     <div class="p-2">
-      //         <label class="block text-sm">Sejajarkan:</label>
-      //         <button id="alignLeft" class="p-1 border rounded"><i class="fas fa-align-left"></i></button>
-      //         <button id="alignCenter" class="p-1 border rounded"><i class="fas fa-align-center"></i></button>
-      //         <button id="alignRight" class="p-1 border rounded"><i class="fas fa-align-right"></i></button>
-      //     </div>
-      // `;
-
-      // Properti teks
-      let textControls = '';
-      if (activeObj.type === 'textbox') {
-          textControls = `
-              <div class="p-2">
-                  <label class="block text-sm">Font:</label>
-                  <select id="fontFamily" class="w-full p-1 border rounded bg-slate-100 outline outline-1 outline-slate-200">
-                      <option value="Arial">Arial</option>
-                      <option value="Times New Roman">Times New Roman</option>
-                      <option value="Courier New">Courier New</option>
-                  </select>
-                  
-                  <label class="block text-sm mt-2">Ukuran Font:</label>
-                  <input type="number" id="fontSize" value="${activeObj.fontSize}" class="w-20 p-1 border rounded bg-slate-100 outline outline-1 outline-slate-200">
-                  
-                  <label class="block text-sm mt-2">Warna:</label>
-                  <input type="color" id="textColor" value="${activeObj.fill}" class="p-1">
-                  
-                  <div class="mt-2">
-                      <button id="boldText" class="p-1 border rounded"><i class="fas fa-bold"></i></button>
-                      <button id="italicText" class="p-1 border rounded"><i class="fas fa-italic"></i></button>
-                      <button id="underlineText" class="p-1 border rounded"><i class="fas fa-underline"></i></button>
-                  </div>
-              </div>
-          `;
-      }
-      
-      propertiObj.innerHTML += sizeControls + textControls;
-      // alignControls
-      propertiObj.classList.remove('hidden');
-
-    // Properti teks
-    if (activeObj.type === 'textbox') {
-        document.getElementById('fontFamily').addEventListener('change', function(e) {
-            activeObj.set('fontFamily', e.target.value);
-            canvas.renderAll();
+            if (isAnyObjectInArea) {
+                priceElement.classList.remove("hidden");
+                priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
+            } else {
+                priceElement.classList.add("hidden");
+                priceElement.textContent = "";
+            }
         });
 
-        document.getElementById('fontSize').addEventListener('change', function(e) {
-            activeObj.set('fontSize', parseInt(e.target.value));
-            canvas.renderAll();
+
+        priceElement.classList.add("hidden");
+        priceElement.textContent = "";
+
+        document.getElementById("newText").addEventListener("click", function () {
+        const newText = new fabric.Textbox("Masukkan teks di sini", {
+            left: 100,
+            top: 100,
+            fill: "black",
         });
 
-        document.getElementById('textColor').addEventListener('input', function(e) {
-            activeObj.set('fill', e.target.value);
-            canvas.renderAll();
+        canvas.add(newText);
+
+        priceElement.classList.add("hidden");
+        priceElement.textContent = "";
         });
 
-        document.getElementById('boldText').addEventListener('click', function() {
-            activeObj.set('fontWeight', activeObj.fontWeight === 'bold' ? 'normal' : 'bold');
-            canvas.renderAll();
+        document.getElementById("uploadImg").addEventListener("change", function (e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (f) {
+                var data = f.target.result;
+                fabric.Image.fromURL(data, function (img) {
+                    img.set({ left: 0, top: 0, angle: 0 });
+                    img.scaleToHeight(100);
+                    img.scaleToWidth(200);
+                    canvas.add(img).renderAll();
+
+                    priceElement.classList.add("hidden");
+                    priceElement.textContent = "";
+                });
+            };
+            reader.readAsDataURL(file);
         });
 
-        document.getElementById('italicText').addEventListener('click', function() {
-            activeObj.set('fontStyle', activeObj.fontStyle === 'italic' ? 'normal' : 'italic');
-            canvas.renderAll();
+
+        // Download gambar
+        document.getElementById('downImg').addEventListener('click', function() {
+        boundaryAreaA3.visible = false;
+        boundaryAreaLogo.visible = false;
+        const dataURL = canvas.toDataURL({ format: 'jpeg', quality: 1 });
+        const link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'Mockup.jpeg';
+        link.click();
+        boundaryAreaA3.visible = true;
+        boundaryAreaLogo.visible = true;
+        });
+        
+        
+
+    // Update harga
+    canvas.on('object:moving', updatePrice);
+    canvas.on('object:modified', updatePrice);
+    canvas.on('object:added', function(e) {
+        e.target.set({
+            price: 0
+        });
+    });
+
+    function updatePrice() {
+        let totalPrice = 0;
+        let isAnyObjectInArea = false;
+
+        canvas.getObjects().forEach(function(obj) {
+            if (obj.type === 'rect') return;
+            
+            if (isObjectInArea(obj, targetAreaA3)) {
+                totalPrice += targetAreaA3.harga;
+                isAnyObjectInArea = true;
+                targetAreaA3.opacity = 1;
+            } else if (isObjectInArea(obj, targetAreaLogo)) {
+                totalPrice += targetAreaLogo.harga;
+                isAnyObjectInArea = true;
+                targetAreaLogo.opacity = 1;
+            }
         });
 
-        document.getElementById('underlineText').addEventListener('click', function() {
-            activeObj.set('underline', !activeObj.underline);
-            canvas.renderAll();
-        });
+        if (isAnyObjectInArea) {
+            priceElement.classList.remove("hidden");
+            priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
+        } else {
+            priceElement.classList.add("hidden");
+            priceElement.textContent = "";
+        }
     }
 
-    // Prpoperti ukuran objek
-    document.getElementById('objWidth').addEventListener('change', function(e) {
-        activeObj.scaleToWidth(parseInt(e.target.value));
+    document.getElementById('uploadImg').addEventListener("change", function(e) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(f) {
+            var data = f.target.result;
+            const timestamp = new Date().getTime();
+            fabric.Image.fromURL(data + '?t=' + timestamp, function(img) {
+                img.set({
+                    left: 100,
+                    top: 100,
+                    angle: 0,
+                    price: 0
+                });
+                img.scaleToHeight(100);
+                img.scaleToWidth(200);
+                canvas.add(img).renderAll();
+            });
+        };
+        reader.readAsDataURL(file);
+        e.target.value = '';
+    });
+
+    // function delObj() {
+    //     const activeObject = canvas.getActiveObject();
+    //     if (activeObject) {
+    //         canvas.remove(activeObject);
+    //         canvas.discardActiveObject().renderAll();
+    //         updatePrice();
+    //     }
+    // }
+
+    // Update area opasitas
+    function updateAreaOpacity() {
+        let objectInA3 = false;
+        let objectInLogo = false;
+
+        canvas.getObjects().forEach(function(obj) {
+            if (obj.type === 'rect') return;
+            
+            if (isObjectInArea(obj, targetAreaA3)) {
+                objectInA3 = true;
+            }
+            if (isObjectInArea(obj, targetAreaLogo)) {
+                objectInLogo = true;
+            }
+        });
+
+        boundaryAreaA3.set('opacity', objectInA3 ? 1 : 0.1);
+        boundaryAreaLogo.set('opacity', objectInLogo ? 1 : 0.1);
         canvas.renderAll();
-        updateAreaOpacity();
-    });
-
-    document.getElementById('objHeight').addEventListener('change', function(e) {
-        activeObj.scaleToHeight(parseInt(e.target.value));
-        canvas.renderAll();
-        updateAreaOpacity();
-    });
-
-    // Sembunyikan panel properti
-    canvas.on('selection:cleared', function() {
-        document.getElementById('propertiObj').classList.add('hidden');
-    });
-
-  });
-
-  </script>
-
-  <script>
-    function simpanHargaSablon() {
-        const hargaSablon = document.getElementById('price').textContent.replace('Rp. ', '').replace(/\./g, '').replace(',', '').trim();
-        localStorage.setItem('hargaSablon', hargaSablon || '0');
     }
 
-    // Tambahkan onclick ke tombol Pesan
-    document.querySelector('a[href="{{ route('orderTshirt') }}"]').addEventListener('click', simpanHargaSablon);
-  </script>
+    // Event listener
+    canvas.on('object:moving', updateAreaOpacity);
+    canvas.on('object:modified', updateAreaOpacity);
+    canvas.on('object:added', updateAreaOpacity);
+    canvas.on('object:removed', updateAreaOpacity);
+
+    // Panel properti objek
+    canvas.on('selection:created', function(e) {
+        const activeObj = e.target;
+        const propertiObj = document.getElementById('propertiObj');
+        
+        propertiObj.innerHTML = '<p class="font-bold p-2">Properti Objek</p>';
+        
+        const sizeControls = `
+            <div class="p-2">
+                <label class="block text-sm">Ukuran:</label>
+                <input type="number" id="objWidth" value="${Math.round(activeObj.getScaledWidth())}" class="w-20 p-1 border rounded bg-slate-100 outline outline-1 outline-slate-300">
+                <span class="mx-1">x</span>
+                <input type="number" id="objHeight" value="${Math.round(activeObj.getScaledHeight())}" class="w-20 p-1 border rounded bg-slate-100 outline outline-1 outline-slate-100">
+            </div>
+        `;
+
+        // Properti teks
+        let textControls = '';
+        if (activeObj.type === 'textbox') {
+            textControls = `
+                <div class="p-2">
+                    <label class="block text-sm">Font:</label>
+                    <select id="fontFamily" class="w-full p-1 border rounded bg-slate-100 outline outline-1 outline-slate-200">
+                        <option value="Arial">Arial</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Courier New">Courier New</option>
+                    </select>
+                    
+                    <label class="block text-sm mt-2">Ukuran Font:</label>
+                    <input type="number" id="fontSize" value="${activeObj.fontSize}" class="w-20 p-1 border rounded bg-slate-100 outline outline-1 outline-slate-200">
+                    
+                    <label class="block text-sm mt-2">Warna:</label>
+                    <input type="color" id="textColor" value="${activeObj.fill}" class="p-1">
+                    
+                    <div class="mt-2">
+                        <button id="boldText" class="p-1 border rounded"><i class="fas fa-bold"></i></button>
+                        <button id="italicText" class="p-1 border rounded"><i class="fas fa-italic"></i></button>
+                        <button id="underlineText" class="p-1 border rounded"><i class="fas fa-underline"></i></button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        propertiObj.innerHTML += sizeControls + textControls;
+        // // alignControls
+        // propertiObj.classList.remove('hidden');
+
+        // Properti teks
+        if (activeObj.type === 'textbox') {
+            document.getElementById('fontFamily').addEventListener('change', function(e) {
+                activeObj.set('fontFamily', e.target.value);
+                canvas.renderAll();
+            });
+
+            document.getElementById('fontSize').addEventListener('change', function(e) {
+                activeObj.set('fontSize', parseInt(e.target.value));
+                canvas.renderAll();
+            });
+
+            document.getElementById('textColor').addEventListener('input', function(e) {
+                activeObj.set('fill', e.target.value);
+                canvas.renderAll();
+            });
+
+            document.getElementById('boldText').addEventListener('click', function() {
+                activeObj.set('fontWeight', activeObj.fontWeight === 'bold' ? 'normal' : 'bold');
+                canvas.renderAll();
+            });
+
+            document.getElementById('italicText').addEventListener('click', function() {
+                activeObj.set('fontStyle', activeObj.fontStyle === 'italic' ? 'normal' : 'italic');
+                canvas.renderAll();
+            });
+
+            document.getElementById('underlineText').addEventListener('click', function() {
+                activeObj.set('underline', !activeObj.underline);
+                canvas.renderAll();
+            });
+        }
+
+        // Prpoperti ukuran objek
+        document.getElementById('objWidth').addEventListener('change', function(e) {
+            activeObj.scaleToWidth(parseInt(e.target.value));
+            canvas.renderAll();
+            updateAreaOpacity();
+        });
+
+        document.getElementById('objHeight').addEventListener('change', function(e) {
+            activeObj.scaleToHeight(parseInt(e.target.value));
+            canvas.renderAll();
+            updateAreaOpacity();
+        });
+
+        // Sembunyikan panel properti
+        canvas.on('selection:cleared', function() {
+            document.getElementById('propertiObj').classList.add('hidden');
+        });
+
+    });
+    
+    });
+    
+    });
+
+    // Hapus objek
+    function delObj() {
+        const activeObject = canvas.getActiveObject();
+        if (activeObject) {
+            canvas.remove(activeObject);
+            canvas.discardActiveObject().renderAll();
+            updatePrice();
+
+        // Reset harga
+        let totalPrice = 0;
+        let isAnyObjectInArea = false;
+
+        canvas.getObjects().forEach(function (obj) {
+                if (isObjectInArea(obj, targetAreaA3)) {
+                    totalPrice += targetAreaA3.harga;
+                    isAnyObjectInArea = true;
+                    targetAreaA3.opacity = 1;
+                }
+                if (isObjectInArea(obj, targetAreaLogo)) {
+                    totalPrice += targetAreaLogo.harga;
+                    isAnyObjectInArea = true;
+                    targetAreaLogo.opacity = 1;
+                }
+            });
+
+            if (isAnyObjectInArea) {
+                priceElement.classList.remove("hidden");
+                priceElement.textContent = "Rp. " + totalPrice.toLocaleString();
+            } else {
+                priceElement.classList.add("hidden");
+                priceElement.textContent = "";
+            }
+        }
+    }
+
+    </script>
+
+    <script>
+
+        const boundaryAreaA3 = document.getElementById("boundaryAreaA3");
+        const boundaryAreaLogo = document.getElementById("boundaryAreaLogo");
+
+        // Simpan harga sablon sementara
+        function simpanHargaSablon() {
+            const hargaSablon = document.getElementById('price').textContent.replace('Rp. ', '').replace(/\./g, '').replace(',', '').trim();
+            localStorage.setItem('hargaSablon', hargaSablon || '0');
+        }
+
+        // Simpan mockup sementara
+        function saveMockupImage() {
+        if (canvas instanceof fabric.Canvas) {
+            const boundaryAreaA3 = canvas.getObjects().find(obj => obj.type === 'rect' && obj.stroke === 'red');
+            const boundaryAreaLogo = canvas.getObjects().find(obj => obj.type === 'rect' && obj.stroke === 'blue');
+
+            if (boundaryAreaA3) boundaryAreaA3.set('visible', false);
+            if (boundaryAreaLogo) boundaryAreaLogo.set('visible', false);
+
+            canvas.renderAll();
+            const mockupImage = canvas.toDataURL('image/png');
+            localStorage.setItem('mockupImage', mockupImage);
+
+            // Kembalikan visibilitas boundary area
+            if (boundaryAreaA3) boundaryAreaA3.set('visible', true);
+            if (boundaryAreaLogo) boundaryAreaLogo.set('visible', true);
+            canvas.renderAll();
+        }
+    }
+
+        // Tambahkan onclick ke tombol Pesan
+        document.querySelector('a[href="{{ route('orderTshirt') }}"]').addEventListener('click', function(event) {
+            saveMockupImage();
+            simpanHargaSablon();
+            event.preventDefault();
+            window.location.href = "{{ route('orderTshirt') }}";
+        });
+    </script>
 
 @endpush

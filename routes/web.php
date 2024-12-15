@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/order/crewneck', [OrderController::class, 'check_ongkir']);
     Route::post('/order/hoodie', [OrderController::class, 'check_ongkir']);
     Route::get('/cities/{province_id}', [OrderController::class, 'getCities']);
-    Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+    Route::post('/order', [OrderController::class, 'store'])->name('order.store');;
 });
 
 

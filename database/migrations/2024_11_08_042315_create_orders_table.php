@@ -30,6 +30,8 @@ return new class extends Migration
             $table->string('courier');
             $table->string('receipt')->nullable();
             $table->integer('weight'); 
+            $table->string('gambar_mockup')->nullable();
+            $table->foreign('gambar_mockup')->references('gambar')->on('desain_mockup');
             $table->timestamps();
         });
     }

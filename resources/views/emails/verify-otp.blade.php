@@ -1,61 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi Email</title>
-    <!-- GOOGLE FONTS -->
+    <title>Verifikasi Email - DMCO</title>
+    @vite('resources/css/app.css')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-    <!-- FONT AWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">  
+    <script>
+        // Function untuk menghitung waktu mundur
+        function startCountdown(duration, buttonId) {
+            const button = document.getElementById(buttonId);
+            button.disabled = true;
+            button.classList.add('opacity-50', 'cursor-not-allowed');
+            let remainingTime = duration;
+
+            const timer = setInterval(() => {
+                if (remainingTime <= 0) {
+                    clearInterval(timer);
+                    button.disabled = false;
+                    button.classList.remove('opacity-50', 'cursor-not-allowed');
+                    button.innerText = "Kirim ulang Kode OTP";
+                } else {
+                    button.innerText = Kirim ulang Kode OTP (${remainingTime}s);
+                }
+                remainingTime--;
+            }, 1000);
+        }
+        // Tombol kirim Email ulang (aktif)
+        window.onload = () => {
+            startCountdown(60, "resendButton"); // 1 menit = 60 detik
+        };
+    </script>
 </head>
 
-<body style="margin: 0; padding: 0; font-family: poppins, sans-serif; background-color: #f4f4f4;">
-    <table role="presentation"
-        style="width: 100%; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; margin-top: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <tr>
-            <td style="padding: 40px 30px;">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <!-- {{-- <img src="/images/ww.png" alt="Logo"
-                        style="width: 60px; height: 60px; border-radius: 50%;"> --}} -->
-                        <h2 style="color:#60a5fa; background-color:black; border-radius: 15px; padding: 10px;">DEMANCKO</h2>
+<body class="font-poppins bg-gray-100">
+    @if (session('resend_success'))
+        <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert">
+            <div class="flex">
+                <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path
+                            d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                    </svg></div>
+                <div>
+                    {{ session('resend_success') }}
                 </div>
-                <div style="text-align: center;">
-                    <h1 style="color: #60a5fa; font-size: 24px; margin: 0 0 20px 0;">Verifikasi Email</h1>
-                    <p style="color: #666666; font-size: 14px; line-height: 24px; margin-bottom: 30px;">
-                        Silakan gunakan kode OTP berikut untuk memverifikasi alamat email Anda:
-                    </p>
-                    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-                        <span style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #2d3748;">
-                            {{ $token }}
-                        </span>
+            </div>
+        </div>
+    @endif
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="flex w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="w-1/2 p-12 flex flex-col">
+                <h2 class="text-4xl font-normal text-blue-400 text-center mb-6">
+                    Verifikasi Email
+                </h2>
+                <form class="flex-grow flex flex-col items-center space-y-6" action="{{ route('verify.process') }}"
+                    method="POST">
+                    @csrf
+                    <div class="flex justify-center w-full">
+                        <dotlottie-player
+                            src="https://lottie.host/991fe643-bdb2-4df5-9261-5f95e5ad34ed/iQdOE3jgtb.lottie"
+                            background="transparent" speed="1" style="width: 200px; height: 200px" loop
+                            autoplay></dotlottie-player>
                     </div>
-                    <p style="color: #666666; font-size: 14px; margin-bottom: 30px;">
-                        Kode ini akan kedaluwarsa dalam <span style="color: #dc3545; font-weight: bold;">5 menit</span>
+                    <p class="text-center text-gray-600 mb-4">
+                        Silakan verifikasi email dengan Kode OTP <br>
+                        Cek Email Kamu
                     </p>
-                    <div style="border-top: 1px solid #e5e5e5; padding-top: 20px;">
-                        <p style="color: #999999; font-size: 13px; line-height: 1.6;">
-                            Jika Anda tidak meminta kode verifikasi ini, abaikan email ini atau hubungi dukungan jika
-                            Kamu memiliki kekhawatiran.
-                        </p>
+
+                    <div class="w-full">
+                        <div class="relative mb-4">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                                <span class="text-gray-500"><i class="fa-solid fa-paper-plane"></i></span>
+                            </div>
+                            <input type="hidden" name="email" value="{{ $email }}">
+                            <input type="text" name="otp" required placeholder="Masukkan Kode OTP" maxlength="6"
+                                class="w-full px-4 py-3 pl-16 rounded-full border border-gray-200 focus:outline-none focus:border-blue-400" />
+                        </div>
+                        @error('otp')
+                            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                        @enderror
+                        <button type="submit"
+                            class="w-full bg-blue-400 text-white py-3 rounded-full hover:bg-blue-500 transition duration-300 mb-4">
+                            <i class="fa-solid fa-envelope-circle-check"></i>
+                            Verifikasi
+                        </button>
                     </div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td style="background-color: #f8f9fa; padding: 20px 30px; border-radius: 0 0 8px 8px;">
-                <p style="color: #999999; font-size: 12px; text-align: center; margin: 0;">
-                  Ini adalah pesan otomatis, mohon jangan membalas email ini.
-                </p>
-            </td>
-        </tr>
-    </table>
+                </form>
+                <form method="POST" action="{{ route('resend.otp') }}" class="text-center">
+                    @csrf
+                    <input type="hidden" name="email" value="{{ $email }}">
+                    <button type="submit" id="resendButton"
+                        class="text-blue-500 hover:text-blue-600 transition duration-300">
+                        Kirim ulang Kode OTP
+                    </button>
+                </form>
+            </div>
+            <div class="w-1/2">
+                <img src="/images/dmco.png" alt="DMCO" class="w-full h-full object-cover" />
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 </body>
 
 </html>
