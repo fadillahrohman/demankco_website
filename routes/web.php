@@ -44,7 +44,8 @@ Route::post('/admin/authenticate', [AdminLoginController::class, 'adminAuthentic
 
 Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'adminDashboard'])->name('admin.dashboard');
-    Route::get('/admin/list-order', [AdminListOrderController::class, 'index'])->name('admin.list-order');
+    Route::get('/admin/list-orders', [AdminListOrderController::class, 'index'])->name('admin.list-orders');
+    Route::get('/admin/detail-orders/{order}', [AdminListOrderController::class, 'show'])->name('admin.detail-orders');
     Route::post('/admin/list-order/{order}/update-status', [AdminListOrderController::class, 'updateStatus'])->name('admin.list-order-update');
 });
 
@@ -116,8 +117,6 @@ Route::get('/catalog', [CatalogController::class, 'index'])->name('catalogs.list
 Route::post('/mockup/save', [MockupController::class, 'saveMockup'])->name('mockup.save')->middleware('auth');
 Route::get('/mockup/load', [MockupController::class, 'loadMockup'])->name('mockup.load')->middleware('auth');
 
-
-// Route::post('/ongkir', [CheckOngkirController::class, 'check_ongkir']); abaikan saja 
 
 Route::get('/list/orders', [ListOrderController::class, 'index'])->name('customer.orders.index');
 Route::get('/detail/orders/{order}', [ListOrderController::class, 'show'])->name('customer.orders.show');

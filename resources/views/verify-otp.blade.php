@@ -29,7 +29,7 @@
                     button.innerText = `Kirim ulang Kode OTP (${remainingTime}s)`;
                 }
                 remainingTime--;
-            }, 10);
+            }, 1000);
         }
         // Tombol kirim Email ulang (aktif)
         window.onload = () => {

@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('layouts.admin_layout')
 
 @section('title', 'Detail Pesanan - DMCO')
 
@@ -161,28 +161,7 @@
         </div>
     </div>
 
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}">
-    </script>
     <script>
-        const payButton = document.querySelector('#pay-button');
-        if (payButton) {
-            payButton.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                snap.pay('{{ $snapToken }}', {
-                    onSuccess: function(result) {
-                        console.log(result);
-                    },
-                    onPending: function(result) {
-                        console.log(result);
-                    },
-                    onError: function(result) {
-                        console.log(result);
-                    }
-                });
-            });
-        }
-
         function copyToClipboard() {
             const receiptText = document.getElementById('receipt-text').textContent;
             navigator.clipboard.writeText(receiptText)
