@@ -3,6 +3,41 @@
 @section('title', 'Pesanan - DMCO')
 
 @section('content')
+    <style>
+        /* Modal styling */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal img {
+            max-width: 100%;
+            /* Gambar mengisi lebar layar */
+            max-height: 100%;
+            /* Gambar mengisi tinggi layar */
+            object-fit: contain;
+            /* Menjaga rasio gambar */
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
 
     <body class="bg-gray-50 p-6 font-poppins">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-9">
@@ -41,7 +76,11 @@
                     @forelse($orders as $order)
                         <div class="flex items-center justify-between pb-4 mb-4 border-gray-300 relative">
                             <div class="flex items-center">
-                                <img src="#" class="w-[7rem] h-[7rem] rounded-md object-cover mr-4" />
+                                <a href="javascript:void(0)"
+                                    onclick="openModal('{{ asset('uploads/mockups/' . $order->mockupImage) }}')">
+                                    <img src="{{ asset('uploads/mockups/' . $order->mockupImage) }}"
+                                        class="w-[7rem] h-[7rem] rounded-md object-contain mr-4 cursor-pointer" />
+                                </a>
                                 <div>
                                     <h2 class="font-semibold text-xl">{{ $order->product_name }}</h2>
                                     <p class="text-gray-400 text-[16px]">{{ $order->order_id }}</p>
@@ -61,7 +100,7 @@
                                     <i class="fa-solid fa-cart-arrow-down text-2xl"></i>
                                 </a>
                             </div>
-                            <div class="absolute bottom-0 right-0 mb-4 mr-4">
+                            <div class="absolute bottom-0 right-0 mt-4 mr-4">
                                 @if ($order->payment_status == 'unpaid')
                                     <h2 class="text-gray-500 text-base sm:text-xl">Belum Bayar</h2>
                                 @elseif($order->status == 'processing')
@@ -96,7 +135,11 @@
                         @foreach ($orders as $order)
                             <div class="flex items-center justify-between pb-4 mb-4 border-gray-300 relative">
                                 <div class="flex items-center">
-                                    <img src="#" class="w-[7rem] h-[7rem] rounded-md object-cover mr-4" />
+                                    <a href="javascript:void(0)"
+                                        onclick="openModal('{{ asset('uploads/mockups/' . $order->mockupImage) }}')">
+                                        <img src="{{ asset('uploads/mockups/' . $order->mockupImage) }}"
+                                            class="w-[7rem] h-[7rem] rounded-md object-contain mr-4 cursor-pointer" />
+                                    </a>
                                     <div>
                                         <h2 class="font-semibold text-xl">{{ $order->product_name }}</h2>
                                         <p class="text-gray-400 text-[16px]">{{ $order->order_id }}</p>
@@ -115,7 +158,7 @@
                                         <i class="fa-solid fa-cart-arrow-down text-2xl"></i>
                                     </a>
                                 </div>
-                                <div class="absolute bottom-0 right-0 mb-4 mr-4">
+                                <div class="absolute bottom-0 right-0 mt-4 mr-4">
                                     @if ($order->payment_status == 'unpaid')
                                         <h2 class="text-gray-500 text-base sm:text-xl">Belum Bayar</h2>
                                     @elseif($order->status == 'processing')
@@ -141,5 +184,31 @@
                 @endif
             @endif
         </div>
+        <!-- Modal untuk image display -->
+        <div id="imageModal" class="modal">
+            <span id="closeModal" class="close">&times;</span>
+            <img id="modalImage" src="" alt="Gambar Besar" />
+        </div>
+        <script>
+            function openModal(imageSrc) {
+                var modal = document.getElementById("imageModal");
+                var modalImage = document.getElementById("modalImage");
+                modal.style.display = "flex";
+                modalImage.src = imageSrc;
+            }
+
+            document.getElementById("closeModal").onclick = function() {
+                var modal = document.getElementById("imageModal");
+                modal.style.display = "none"; // Hide modal
+            }
+
+
+            window.onclick = function(event) {
+                var modal = document.getElementById("imageModal");
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
     </body>
 @endsection

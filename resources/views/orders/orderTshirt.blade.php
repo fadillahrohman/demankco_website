@@ -7,7 +7,7 @@
         <div class="max-w-4xl w-full bg-white shadow-md rounded-lg p-8">
             <h1 class="text-3xl font-bold text-[#3FA3FF] mb-2">Pesan</h1>
             <p class="text-gray-600 mb-6">Siapkan informasi pembayaran untuk melanjutkan pesanan</p>
-            <form action="{{ route('order.store') }}" method="POST">
+            <form action="{{ route('order.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="mockupImage" id="mockupImage">
                 <div class="mb-6">
@@ -158,8 +158,6 @@
 
 {{-- ================= JAVASCRIPT ORDER & CEK ONGKIR ================ --}}
 <script>
-
-
     document.addEventListener("DOMContentLoaded", function() {
 
         // Load mockup dari localStorage
@@ -269,7 +267,7 @@
 
                 const cityOrigin = "{{ $defaultCityId }}";
 
-                fetch("/order/t-shirt", {
+                fetch("/order/hoodie", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -330,3 +328,5 @@
     });
 
 </script>
+
+

@@ -31,7 +31,7 @@ class AdminLaporanController extends Controller
                 ]
             ])
         );
-    	return $pdf->download('laporan-penjualan-demankco.pdf');
+    	return $pdf->download('Laporan_Penjualan_DEMANKCO.pdf');
     }
 
 }

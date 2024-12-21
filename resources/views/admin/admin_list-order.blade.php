@@ -3,7 +3,41 @@
 @section('title', 'Daftar pesanan - DMCO')
 
 @section('content')
+    <style>
+        /* Modal styling */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
 
+        .modal img {
+            max-width: 100%;
+            /* Gambar mengisi lebar layar */
+            max-height: 100%;
+            /* Gambar mengisi tinggi layar */
+            object-fit: contain;
+            /* Menjaga rasio gambar */
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-9">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-[#3FA3FF]">Pesanan</h1>
@@ -22,7 +56,11 @@
                 @if ($orders->payment_status !== 'unpaid')
                     <div class="flex flex-col md:flex-row items-center justify-between pb-4 mb-4 border-gray-300 relative">
                         <div class="flex items-center">
-                            <img src="#" class="w-[7rem] h-[7rem] rounded-md object-cover mr-4" />
+                            <a href="javascript:void(0)"
+                                onclick="openModal('{{ asset('uploads/mockups/' . $orders->mockupImage) }}')">
+                                <img src="{{ asset('uploads/mockups/' . $orders->mockupImage) }}"
+                                    class="w-[7rem] h-[7rem] rounded-md object-contain mr-4 cursor-pointer" />
+                            </a>
                             <div>
                                 <h2 class="font-semibold text-xl">{{ $orders->product_name }}</h2>
                                 <p>Milik : {{ $orders->name }}</p>
@@ -89,8 +127,7 @@
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Masukkan Nomor Resi</h3>
                     <div class="mt-2">
-                        <input type="text" id="resiInput" placeholder="Nomor Resi"
-                            class="w-full border rounded p-2">
+                        <input type="text" id="resiInput" placeholder="Nomor Resi" class="w-full border rounded p-2">
                         <input type="hidden" id="orderIdInput">
                     </div>
                 </div>
@@ -108,46 +145,72 @@
         </div>
     </div>
 
+    <!-- Modal untuk image display -->
+    <div id="imageModal" class="modal">
+        <span id="closeModal" class="close">&times;</span>
+        <img id="modalImage" src="" alt="Gambar Besar" />
+    </div>
+
     <script>
+        function openModal(imageSrc) {
+            var modal = document.getElementById("imageModal");
+            var modalImage = document.getElementById("modalImage");
+            modal.style.display = "flex";
+            modalImage.src = imageSrc;
+        }
+
+        document.getElementById("closeModal").onclick = function() {
+            var modal = document.getElementById("imageModal");
+            modal.style.display = "none"; // Hide modal
+        }
+
+
+        window.onclick = function(event) {
+            var modal = document.getElementById("imageModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
         function toggleDropdown(button) {
             const dropdown = button.nextElementSibling;
             dropdown.classList.toggle('hidden');
         }
-    
+
         function toggleResiModal(orderId) {
             // Membuka modal dan mengatur nilai id pesanan
             document.getElementById('resiModal').classList.remove('hidden');
             document.getElementById('orderIdInput').value = orderId;
         }
-    
+
         function closeResiModal() {
             // Menutup modal
             document.getElementById('resiModal').classList.add('hidden');
         }
-    
+
         function submitResi() {
             const orderId = document.getElementById('orderIdInput').value; // ID Pesanan
-            const resi = document.getElementById('resiInput').value;       // Nomor Resi
+            const resi = document.getElementById('resiInput').value; // Nomor Resi
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // CSRF Token
-    
+
             // Validasi input resi
             if (!resi.trim()) {
                 alert('Nomor resi tidak boleh kosong!');
                 return;
             }
-    
+
             // Kirim permintaan POST dengan fetch
             fetch(`/admin/list-order/${orderId}/update-status`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': token,
-                },
-                body: JSON.stringify({
-                    status: 'shipped',  // Status dikirim
-                    receipt: resi      // Nomor resi
-                }),
-            })
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token,
+                    },
+                    body: JSON.stringify({
+                        status: 'shipped', // Status dikirim
+                        receipt: resi // Nomor resi
+                    }),
+                })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -162,19 +225,21 @@
                     alert('Terjadi kesalahan saat menyimpan nomor resi.');
                 });
         }
-    
+
         function ubahStatusPesanan(orderId, status) {
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    
+
             // Kirim permintaan POST untuk mengubah status
             fetch(`/admin/list-order/${orderId}/update-status`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': token,
-                },
-                body: JSON.stringify({ status: status }),
-            })
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token,
+                    },
+                    body: JSON.stringify({
+                        status: status
+                    }),
+                })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -190,6 +255,8 @@
                 });
         }
     </script>
-    
+
+
+
 
 @endsection

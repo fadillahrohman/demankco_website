@@ -49,7 +49,6 @@
 
 @push('fabric_scripts')
   <script>
-
     let canvas;
 
     document.addEventListener("DOMContentLoaded", function() {

@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-    <!-- Import AOS CSS -->
+    {{-- AOS CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
     {{-- LOTTIE FILES --}}
@@ -25,6 +25,9 @@
 
     {{-- ALPINE JS --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.7/dist/cdn.min.js"></script>
+
+     {{-- FAVICON --}}
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon">
 </head>
 
 <body class="bg-white font-poppins">
@@ -51,7 +54,7 @@
 
     @yield('mid-scripts')
 
-    
+
     <!-- Import AOS JS -->
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>

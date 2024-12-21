@@ -28,6 +28,7 @@ class Order extends Model
         'weight',
         'province_destination',
         'city_destination',
+        'mockupImage'
     ];
 
     protected static function boot()

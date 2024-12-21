@@ -16,6 +16,9 @@
         rel="stylesheet">
     {{-- FONT AWESOME --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+     {{-- FAVICON --}}
+     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon">
 </head>
 
 <body class="bg-white font-poppins">

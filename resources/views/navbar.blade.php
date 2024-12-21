@@ -2,13 +2,18 @@
 <nav class="py-6">
     <div class="container mx-auto px-4">
         <div class="items-center justify-between">
-            <h1 class="text-4xl font-bold tracking-wider text-center mb-6">
-                DEMANKCO
-            </h1>
+            <div class="text-4xl font-bold tracking-wider text-center mb-6">
+                <h1>DEMANKCO</h1>
+                @auth
+                    <span class="text-xl text-gray-600"><i class="fa-regular fa-user"></i> {{ Auth::user()->name }}</span>
+                @endauth
+            </div>
+
             <!-- Bars Button (Mobile Only) -->
             <button id="hamburger-menu" class="lg:hidden p-2 text-gray-700 hover:text-gray-900 transition">
                 <i class="fa-solid fa-bars" style="font-size: 30px"></i>
             </button>
+
         </div>
         <div id="nav-container" class="hidden lg:flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <!-- Spacer for alignment (desktop) -->
@@ -29,6 +34,7 @@
             </div>
             <div class="mt-4 lg:mt-0">
                 @auth
+
                     <form action="{{ route('logout') }}" method="GET">
                         @csrf
                         <button type="submit"

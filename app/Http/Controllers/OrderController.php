@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Order_item;
+use File;
 use Illuminate\Http\Request;
 use App\Models\Catalog;
 use App\Models\Order;
@@ -9,6 +10,7 @@ use App\Models\City;
 use App\Models\Province;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
 use Illuminate\Support\Facades\Log;
+use Storage;
 class OrderController extends Controller
 {
     /**
@@ -106,17 +108,36 @@ class OrderController extends Controller
                 'sizes.*' => 'integer|min:0',
                 'total_price' => 'required|numeric',
                 'type' => 'required|string|exists:catalogs,type',
+                'mockupImage' => 'required'
             ]);
-
+    
             $userEmail = auth()->user()->email;
             $userId = auth()->user()->id;
-
+    
+            if (strpos($request->mockupImage, 'data:image') === 0) {
+                $image_parts = explode(";base64,", $request->mockupImage);
+                $image_type_aux = explode("image/", $image_parts[0]);
+                $image_type = $image_type_aux[1];
+                $image_base64 = base64_decode($image_parts[1]);
+                $fileName = 'mockup_' . time() . '.' . $image_type;
+                
+                // Simpan file ke folder public/uploads/mockups/
+                $path = public_path('uploads/mockups');
+                if (!File::isDirectory($path)) {
+                    File::makeDirectory($path, 0777, true, true);
+                }
+                
+                file_put_contents(public_path('uploads/mockups/'.$fileName), $image_base64);
+                
+                $mockupPath = $fileName;  
+            } else {
+                $mockupPath = $request->mockupImage;
+            }
+    
             // Dapatkan nama produk dari tabel catalogs berdasarkan pilihan pengguna
             $catalog = Catalog::where('type', $validated['type'])->firstOrFail();
             $productName = $catalog->name;
-
-
-
+            
             // Simpan data pesanan (Order)
             $order = Order::create([
                 'product_name' => $productName,
@@ -134,8 +155,9 @@ class OrderController extends Controller
                 'weight' => array_sum(array_map(fn($qty) => $qty * 170, $validated['sizes'])),
                 'province_destination' => $validated['province_destination'],
                 'city_destination' => $validated['city_destination'],
+                'mockupImage' => $mockupPath,
             ]);
-
+    
             // Simpan Order Items (detail pesanan) dari data order yang baru saja dibuat
             Order_item::create([
                 'order_id' => $order->id,
@@ -143,7 +165,7 @@ class OrderController extends Controller
                 'price' => $order->total_price,
                 'quantity' => $order->number_of_orders,
             ]);
-
+    
             // Redirect ke halaman sukses dengan membawa ID pesanan
             return redirect()->route('orders.success', ['order' => $order->id])
                 ->with('success', 'Pesanan berhasil dibuat!');
