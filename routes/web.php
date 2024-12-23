@@ -12,29 +12,17 @@ use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\Customer\ListOrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\MockupController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Password;
 
 Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
-
-// Tes mockup
-Route::get('/fabric', function () {
-    return view('fabric');
-})->name('fabric');
-
-// Tes checkout
-Route::get('/checkout', function () {
-    return view('orders.checkout');
-})->name('checkout');
-
-// Tes checkout
-Route::get('/order', function () {
-    return view('orders.order');
-})->name('order');
 
 // ADMIN AUTH
 Route::get('/admin/login', [AdminLoginController::class, 'login'])->name('login');
@@ -65,26 +53,23 @@ Route::middleware('auth:admin')->controller(AdminCatalogController::class)->grou
     Route::delete('/admin/catalog/{catalog}', 'destroy')->name('admin.catalogs.destroy');
 });
 
-
 // Mockup
 Route::get('/mockup/t-shirt', [MockupController::class, 'mockupTshirt'])->name('mockT-shirt');
 Route::get('/mockup/crewneck', [MockupController::class, 'mockupCrewneck'])->name('mockCrewneck');
 Route::get('/mockup/hoodie', [MockupController::class, 'mockupHoodie'])->name('mockHoodie');
 
-// Route::middleware('auth:user')->controller(OrderController::class)->group(function () {
-//     Route::get('/order/t-shirt', 'orderTshirt')->name('orderTshirt'); 
-//     Route::get('/order/crewneck','orderCrewneck')->name('orderCrewneck'); 
-//     Route::get('/order/hoodie','orderHoodie')->name('orderHoodie'); 
-// });
-
-// Route::get('/order/t-shirt', [OrderController::class, 'orderTshirt'])->name('orderTshirt'); 
-// Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck'); 
-// Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie'); 
+// USER MIDDLEWARE
 Route::middleware('auth')->group(function () {
+    // USER ORDER
     Route::get('/order/t-shirt', [OrderController::class, 'orderTshirt'])->name('orderTshirt');
     Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck');
     Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie');
     Route::get('/order/detail/{id}', [OrderController::class, 'orderDetail'])->name('orderDetail');
+
+    // USER MOCKUP
+    Route::get('/mockup/t-shirt', [MockupController::class, 'mockupTshirt'])->name('mockT-shirt');
+    Route::get('/mockup/crewneck', [MockupController::class, 'mockupCrewneck'])->name('mockCrewneck');
+    Route::get('/mockup/hoodie', [MockupController::class, 'mockupHoodie'])->name('mockHoodie');
 
     // USER ORDER & CHECK SHIPPING
     Route::post('/order/t-shirt', [OrderController::class, 'check_ongkir']);
@@ -110,13 +95,19 @@ Route::get('/verify-otp/{email}', [RegisterController::class, 'showVerifyOtp'])-
 Route::post('/verify-otp', [RegisterController::class, 'verifyOtp'])->name('verify.process');
 Route::post('/resend-otp', [RegisterController::class, 'resendOtp'])->name('resend.otp');
 
+// USER FORGOT PASSWORD BLENGER
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    ->name('loginlupa');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+    ->name('password.email');
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])
+    ->name('password.update');
+
+
 // USER Route Catalog
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalogs.list');
-
-// Mockup save state test
-Route::post('/mockup/save', [MockupController::class, 'saveMockup'])->name('mockup.save')->middleware('auth');
-Route::get('/mockup/load', [MockupController::class, 'loadMockup'])->name('mockup.load')->middleware('auth');
-
 
 Route::get('/list/orders', [ListOrderController::class, 'index'])->name('customer.orders.index');
 Route::get('/detail/orders/{order}', [ListOrderController::class, 'show'])->name('customer.orders.show');

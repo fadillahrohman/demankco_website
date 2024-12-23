@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="left mb-2 flex min-h-6">
-  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-    <h1 class="mb-4 text-3xl font-semibold text-[#3FA3FF]">Mockup</h1>
-    <p class="mb-8 text-gray-600">Buat Mockupmu di sini</p>
+  <div class="mx-3 align-items-left max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <h1 class="text-left mb-4 text-3xl font-semibold text-[#3FA3FF]">Mockup</h1>
+    <p class="justify-items-left mb-8 text-gray-600">Buat Mockupmu di sini</p>
   </div>
 </div>
 
@@ -36,7 +36,7 @@
 
   <div id="tengah" class="justify-items-start relative z-0 rounded-lg bg-green-200 pt-6 shadow-lg" data-aos="fade-up" data-aos-duration="800">
     <div id="propertiObj" class="hidden duration-600 absolute z-10 left-0 h-auto w-auto justify-items-center rounded-lg bg-slate-50 text-lg text-slate-700 outline outline-1 outline-slate-300 transition hover:shadow-lg">
-      <p>Properti Obek</p>
+      <p>Properti Objek</p>
 
     </div>
     <canvas id="canvas-bg" width="1098" height="720" class="">canvas</canvas>
