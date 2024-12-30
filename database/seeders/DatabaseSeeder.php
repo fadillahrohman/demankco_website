@@ -13,12 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        
+        // Tambah akun Admin
+        $this->call([
+            AdminsAccountSeeder::class,
+        ]);
 
-// Menghapus semua data dari tabel
-    DB::table('orders')->truncate();
+        // Menghapus semua data dari tabel
+        DB::table('orders')->truncate();
 
-        
+
         // User::factory(10)->create();
 
         // User::truncate();

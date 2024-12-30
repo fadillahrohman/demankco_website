@@ -137,7 +137,15 @@ class OrderController extends Controller
             // Dapatkan nama produk dari tabel catalogs berdasarkan pilihan pengguna
             $catalog = Catalog::where('type', $validated['type'])->firstOrFail();
             $productName = $catalog->name;
+    
+            // Hitung jumlah total item yang dipesan
+            $totalOrdered = array_sum($validated['sizes']);
             
+            // Cek dan kurangi stok produk yang sesuai
+            if ($catalog->stock < $totalOrdered) {
+                return redirect()->back()->with('error', 'Stok tidak cukup untuk pesanan Anda.');
+            }
+    
             // Simpan data pesanan (Order)
             $order = Order::create([
                 'product_name' => $productName,
@@ -147,7 +155,7 @@ class OrderController extends Controller
                 'email' => $userEmail,
                 'user_id' => $userId,
                 'phone_number' => $validated['phone_number'],
-                'number_of_orders' => array_sum($validated['sizes']),
+                'number_of_orders' => $totalOrdered,
                 'list_size' => json_encode($validated['sizes']),
                 'total_price' => $validated['total_price'],
                 'address' => $validated['address'],
@@ -157,6 +165,10 @@ class OrderController extends Controller
                 'city_destination' => $validated['city_destination'],
                 'mockupImage' => $mockupPath,
             ]);
+    
+            // Kurangi stok produk yang dipesan
+            $catalog->stock -= $totalOrdered;
+            $catalog->save();
     
             // Simpan Order Items (detail pesanan) dari data order yang baru saja dibuat
             Order_item::create([
@@ -174,6 +186,4 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat pesanan.');
         }
     }
-
-    
 }

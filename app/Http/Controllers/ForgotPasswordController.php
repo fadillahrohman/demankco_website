@@ -12,7 +12,7 @@ class ForgotPasswordController extends Controller
 
     public function showLinkRequestForm()
     {
-        return view('loginlupa');
+        return view('forgot-password');
     }
 
     public function sendResetLinkEmail(Request $request)

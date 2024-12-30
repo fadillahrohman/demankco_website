@@ -13,22 +13,29 @@
                 <div class="mb-6">
                     <h2 class="text-lg font-bold mb-4" data-aos="fade-up" data-aos-duration="1000">Preview Desain</h2>
                     <div class="flex justify-center" data-aos="fade-up" data-aos-duration="1300">
-                        <img id="mockupPreview" src="" alt="Preview Mockup" class="w-3/4 rounded-lg shadow-md bg-green-300 outline outline-1 outline-slate-200">
+                        <img id="mockupPreview" src="" alt="Preview Mockup"
+                            class="w-3/4 rounded-lg shadow-md bg-green-300 outline outline-1 outline-slate-200">
                     </div>
                 </div>
-                <div class="bg-gray-50 p-4 sm:p-6 rounded-lg border">
+                <div class="bg-gray-50 p-4 sm:p-6 rounded-lg border relative">
+                    <a href="/images/sizechart_hoodie.png" download="sizechart_tshirt.png"
+                    class="absolute top-2 right-2 bg-[#3FA3FF] text-white font-semibold px-3 py-2 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300"
+                        id="openModalButton">
+                        <i class="fa-solid fa-cloud-arrow-down text-xl"></i> Size Chart
+                    </a>
                     <h2 class="text-lg font-bold mb-4">Ukuran</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
                         <div>
                             <h3 class="font-semibold text-gray-700 mb-2">Hoodie</h3>
                             <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-4">
-                                @foreach (['M', 'L', 'XL', 'XXL'] as $size)
+                                @foreach (['S', 'M', 'L', 'XL', 'XXL'] as $size)
                                     <div class="flex flex-col items-center">
                                         <span class="text-xs sm:text-sm font-medium">{{ $size }}</span>
                                         <input type="number" name="sizes[{{ $size }}]" value="0"
-                                            min="0"
+                                            min="0" max="999"
                                             class="size-input w-12 sm:w-16 h-8 sm:h-10 border rounded-md text-center text-xs sm:text-base focus:outline-none focus:ring focus:ring-blue-300"
                                             data-weight="170" />
+
                                     </div>
                                 @endforeach
                             </div>
@@ -142,6 +149,9 @@
                         <h4 class="font-bold text-[#3FA3FF]">Rp <span class="font-bold text-[#3FA3FF]"
                                 id="total-price">0</span></h4>
                     </div>
+                    <div class="text-left text-gray-500 mt-4">
+                        <p class="text-[12px] text-blue-500"><i>* Harga termasuk PPN 12%</i></p>
+                    </div>
                     <hr>
                     <div class="flex justify-end mt-5">
                         <button type="submit"
@@ -158,16 +168,22 @@
 
 {{-- ================= JAVASCRIPT ORDER & CEK ONGKIR ================ --}}
 <script>
-
-
     document.addEventListener("DOMContentLoaded", function() {
-
         // Load mockup dari localStorage
         const mockupImage = localStorage.getItem('mockupImage');
         if (mockupImage) {
             document.getElementById('mockupImage').value = mockupImage;
             document.getElementById('mockupPreview').src = mockupImage;
         }
+
+        document.querySelectorAll('.size-input').forEach(input => {
+            input.addEventListener('input', function() {
+                // size input tidak lebih dari 3 digit
+                if (this.value.length > 3) {
+                    this.value = this.value.slice(0, 3);
+                }
+            });
+        });
 
         const provinceDropdown = document.getElementById("province_destination");
         const cityDropdown = document.getElementById("city_destination");
@@ -190,7 +206,6 @@
         if (hargaSablonElement) {
             hargaSablonElement.textContent = `Rp ${hargaSablon.toLocaleString()}`;
         }
-        
 
         function calculateTotalWeight() {
             let totalWeight = 0;
@@ -202,19 +217,51 @@
             return totalWeight;
         }
 
-        // Fungsi untuk memperbarui harga total dengan ongkir
+        function calculateTotalItems() {
+            let totalItems = 0;
+            sizeInputs.forEach(input => {
+                totalItems += parseInt(input.value) || 0;
+            });
+            return totalItems;
+        }
+
+        function calculateTotalWeight() {
+            let totalWeight = 0;
+            sizeInputs.forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                totalWeight += quantity * defaultWeightPerSize;
+            });
+            weightDisplay.textContent = totalWeight;
+            return totalWeight;
+        }
+
+        // untuk menghitung total harga 
         function updateTotalPrice(ongkirPrice) {
-            const totalWeight = calculateTotalWeight();
-            const totalPrice = productTotal + hargaSablon + ongkirPrice;
+            const totalItems = calculateTotalItems();
+            // Hitung harga per item (harga produk + sablon)
+            const pricePerItem = productTotal + hargaSablon;
+            // Hitung total harga untuk semua barang ditambah ongkos kirim
+            const totalPrice = (pricePerItem * totalItems) + ongkirPrice;
+
             totalPriceElement.textContent = totalPrice.toLocaleString();
 
-            // Update input tersembunyi total harga
+            // Update hidden input total price
             const totalPriceInput = document.getElementById("total-price-input");
             totalPriceInput.value = totalPrice;
         }
 
+        // Add input event listeners to recalculate price when quantities change
         sizeInputs.forEach(input => {
-            input.addEventListener('input', calculateTotalWeight);
+            input.addEventListener('input', () => {
+                calculateTotalWeight();
+                // Get current shipping cost from selected radio button if any
+                const selectedShipping = document.querySelector(
+                    'input[name="shipping_option"]:checked');
+                const currentOngkir = selectedShipping ?
+                    parseInt(selectedShipping.closest('li').querySelector('label').textContent
+                        .match(/Rp\. (\d+)/)[1]) : 0;
+                updateTotalPrice(currentOngkir);
+            });
         });
 
         // Fetch cities when province is selected
@@ -328,5 +375,4 @@
         // Hapus gambar mockup dari localStorage saat halaman terload semua
         localStorage.removeItem('mockupImage');
     });
-
 </script>

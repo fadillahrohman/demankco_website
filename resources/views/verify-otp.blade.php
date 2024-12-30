@@ -31,7 +31,7 @@
                 remainingTime--;
             }, 1000);
         }
-        // Tombol kirim Email ulang (aktif)
+
         window.onload = () => {
             startCountdown(60, "resendButton"); // 1 menit = 60 detik
         };
@@ -54,8 +54,8 @@
         </div>
     @endif
     <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="flex w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
-            <div class="w-1/2 p-12 flex flex-col">
+        <div class="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col items-center">
                 <h2 class="text-4xl font-normal text-blue-400 text-center mb-6">
                     Verifikasi Email
                 </h2>
@@ -65,14 +65,14 @@
                     <div class="flex justify-center w-full">
                         <dotlottie-player
                             src="https://lottie.host/991fe643-bdb2-4df5-9261-5f95e5ad34ed/iQdOE3jgtb.lottie"
-                            background="transparent" speed="1" style="width: 200px; height: 200px" loop
+                            background="transparent" speed="1" style="width: 150px; height: 150px" loop
                             autoplay></dotlottie-player>
                     </div>
-                    <p class="text-center text-gray-600 mb-4">
+                    <p class="text-center text-gray-600 mb-4 text-sm md:text-base">
                         Silakan verifikasi email dengan Kode OTP <br>
                         Cek Email Kamu
                     </p>
-
+                    
                     <div class="w-full">
                         <div class="relative mb-4">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
@@ -101,7 +101,7 @@
                     </button>
                 </form>
             </div>
-            <div class="w-1/2">
+            <div class="w-full md:w-1/2 mt-8 md:mt-0">
                 <img src="/images/dmco.png" alt="DMCO" class="w-full h-full object-cover" />
             </div>
         </div>

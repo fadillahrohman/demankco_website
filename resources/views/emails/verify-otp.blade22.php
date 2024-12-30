@@ -11,9 +11,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-
     <!-- FONT AWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body style="margin: 0; padding: 0; font-family: poppins, sans-serif; background-color: #f4f4f4;">
@@ -24,7 +23,7 @@
                 <div style="text-align: center; margin-bottom: 30px;">
                     <!-- {{-- <img src="/images/ww.png" alt="Logo"
                         style="width: 60px; height: 60px; border-radius: 50%;"> --}} -->
-                        <h2 style="color:#60a5fa; background-color:black; border-radius: 15px; padding: 10px;">DEMANKCO</h2>
+                    <h2 style="color:#60a5fa; background-color:black; border-radius: 15px; padding: 10px;">DEMANCKO</h2>
                 </div>
                 <div style="text-align: center;">
                     <h1 style="color: #60a5fa; font-size: 24px; margin: 0 0 20px 0;">Verifikasi Email</h1>
@@ -52,7 +51,7 @@
         <tr>
             <td style="background-color: #f8f9fa; padding: 20px 30px; border-radius: 0 0 8px 8px;">
                 <p style="color: #999999; font-size: 12px; text-align: center; margin: 0;">
-                  Ini adalah pesan otomatis, mohon jangan membalas email ini.
+                    Ini adalah pesan otomatis, mohon jangan membalas email ini.
                 </p>
             </td>
         </tr>

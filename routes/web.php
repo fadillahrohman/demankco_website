@@ -20,7 +20,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\MockupController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Password;
+
 
 Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -53,7 +53,7 @@ Route::middleware('auth:admin')->controller(AdminCatalogController::class)->grou
     Route::delete('/admin/catalog/{catalog}', 'destroy')->name('admin.catalogs.destroy');
 });
 
-// Mockup
+  // USER MOCKUP
 Route::get('/mockup/t-shirt', [MockupController::class, 'mockupTshirt'])->name('mockT-shirt');
 Route::get('/mockup/crewneck', [MockupController::class, 'mockupCrewneck'])->name('mockCrewneck');
 Route::get('/mockup/hoodie', [MockupController::class, 'mockupHoodie'])->name('mockHoodie');
@@ -65,11 +65,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/crewneck', [OrderController::class, 'orderCrewneck'])->name('orderCrewneck');
     Route::get('/order/hoodie', [OrderController::class, 'orderHoodie'])->name('orderHoodie');
     Route::get('/order/detail/{id}', [OrderController::class, 'orderDetail'])->name('orderDetail');
-
-    // USER MOCKUP
-    Route::get('/mockup/t-shirt', [MockupController::class, 'mockupTshirt'])->name('mockT-shirt');
-    Route::get('/mockup/crewneck', [MockupController::class, 'mockupCrewneck'])->name('mockCrewneck');
-    Route::get('/mockup/hoodie', [MockupController::class, 'mockupHoodie'])->name('mockHoodie');
 
     // USER ORDER & CHECK SHIPPING
     Route::post('/order/t-shirt', [OrderController::class, 'check_ongkir']);
@@ -97,7 +92,7 @@ Route::post('/resend-otp', [RegisterController::class, 'resendOtp'])->name('rese
 
 // USER FORGOT PASSWORD BLENGER
 Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])
-    ->name('loginlupa');
+    ->name('forgotpassword');
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])
     ->name('password.email');
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])
@@ -106,7 +101,7 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])
     ->name('password.update');
 
 
-// USER Route Catalog
+// USER ROUTE CATALOG
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalogs.list');
 
 Route::get('/list/orders', [ListOrderController::class, 'index'])->name('customer.orders.index');
@@ -115,4 +110,4 @@ Route::get('/orders/success', function() {
     return view('orders.success'); // Mengarahkan langsung ke view success - sementara han
 })->name('orders.success');
 Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback'])
-    ->withoutMiddleware(['web', 'csrf']);
+    ->withoutMiddleware(['web', 'csrf']);   

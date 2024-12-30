@@ -128,7 +128,7 @@ class MidtransService
         return $order->items()->get()->map(function ($item) {
             return [
                 'id' => $item->id,
-                'price' => $item->price,
+                'price' => intval(round($item->price / $item->quantity)),
                 'quantity' => $item->quantity,
                 'name' => $item->product_name,
             ];

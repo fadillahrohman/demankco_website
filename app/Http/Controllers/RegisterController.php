@@ -25,7 +25,7 @@ class RegisterController extends Controller
             'password' => 'required|regex:/^.{8,}$/|confirmed',
         ], [
             'email.unique' => 'Email telah digunakan atau terdaftar.',
-            'phone_number.regex' => 'Nomor Telepon harus diawali dengan angka 8 dan minimal 11 digit.',
+            'phone_number.regex' => 'Nomor Telepon harus diawali dengan angka 8 dan minimal 10 digit.',
             'password.regex' => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi Password tidak cocok.',
         ]);
