@@ -150,12 +150,12 @@
                         </tbody>
                     </table>
                     <div class="mt-6">
-                        <a href="{{ route('customer.orders.index') }}"
+                        <a href="{{ route('admin.list-orders') }}"
                             class="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-500 transition duration-300">
                             <i class="fa-solid fa-backward"></i> Kembali
                         </a>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
