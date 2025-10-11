@@ -20,9 +20,13 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\MockupController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PuterController;
 
 
 Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+// tes putter
+Route::get('/puter/testing', [PuterController::class, 'testing']);
 
 // ADMIN AUTH
 Route::get('/admin/login', [AdminLoginController::class, 'login'])->name('login');

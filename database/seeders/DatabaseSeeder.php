@@ -13,13 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Tambah akun Admin
+        // Tambah akun Admin dan user
         $this->call([
-            AdminsAccountSeeder::class,
+            // AdminsAccountSeeder::class,
+            UserAccountSeeder::class,
         ]);
 
         // Menghapus semua data dari tabel
-        DB::table('orders')->truncate();
+        // DB::table('orders')->truncate();
 
 
         // User::factory(10)->create();
@@ -31,6 +32,6 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call(LocationsSeeder::class);
+        // $this->call(LocationsSeeder::class);
     }
 }

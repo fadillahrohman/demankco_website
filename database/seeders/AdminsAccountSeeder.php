@@ -13,12 +13,12 @@ class AdminsAccountSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('admins_account')->insert([
-            'name' => 'radengunawan',
-            'email' => 'radengunawan@admin.id',
-            'password' => Hash::make('singduepabean'),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // DB::table('admins_account')->insert([
+        //     'name' => 'radengunawan',
+        //     'email' => 'radengunawan@admin.id',
+        //     'password' => Hash::make('singduepabean'),
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        // ]);
     }
 }
