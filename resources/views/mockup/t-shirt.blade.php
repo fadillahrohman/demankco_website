@@ -3,14 +3,14 @@
 @section('title', 'Mockup - DMCO')
 
 @section('content')
-    <div class="left mb-2 flex min-h-6">
-        <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="align-start mb-2 flex min-h-6">
+        <div class="max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
             <h1 class="mb-4 text-3xl font-semibold text-[#3FA3FF]">Mockup</h1>
             <p class="mb-8 text-gray-600">Buat Mockup kamu di sini</p>
         </div>
     </div>
 
-    <div class="h-50 mb-2 flex w-fit grid-cols-2 gap-x-1 justify-self-center rounded-lg bg-white p-3 shadow-sm outline outline-1 outline-slate-200"
+    <div class="h-50 mb-2 flex grid-cols-2 gap-x-1 justify-self-center rounded-lg bg-red-600 p-3 shadow-sm outline outline-1 outline-slate-200"
         data-aos="fade-up" data-aos-duration="100">
         <div id="kiri"
             class="grid-rows-auto h-fit w-fit justify-items-center space-y-2 rounded-lg bg-white p-2 shadow-lg outline outline-1 outline-slate-100 hover:divide-solid"
@@ -47,14 +47,14 @@
             <div id="price" class="hidden max-w-sm text-lg font-bold text-green-500">Rp. 150,000</div>
         </div>
 
-        <div id="tengah" class="justify-items-start relative z-0 rounded-lg bg-green-200 pt-6 shadow-lg"
+        <div id="tengah" class="justify-items-start relative z-0 rounded-lg bg-green-200 pt-6 shadow-lg w-full"
             data-aos="fade-up" data-aos-duration="800">
             <div id="propertiObj"
                 class="hidden duration-600 absolute z-10 left-0 h-auto w-auto justify-items-center rounded-lg bg-slate-50 text-lg text-slate-700 outline outline-1 outline-slate-300 transition hover:shadow-lg">
                 <p>Properti Objek</p>
 
             </div>
-            <canvas id="canvas-bg" width="1098" height="720" class="">canvas</canvas>
+                <canvas id="canvas-bg" class="">canvas</canvas>
         </div>
     </div>
     <div class="pt-10"></div>
@@ -63,16 +63,131 @@
 @push('fabric_scripts')
     <script>
         let canvas;
-        document.addEventListener("DOMContentLoaded", function() {
-            fabric.Image.fromURL("{{ asset('images/mockup-tshirt.png') }}", function(img) {
-                canvas = new fabric.Canvas("canvas-bg", {
-                    scaleToHeight: 720,
-                    scaleToWidth: 1098,
-                });
+        let bgImageRef = null;
+        let currentCanvasWidth = 0;
+        let currentCanvasHeight = 0;
 
-                // Set the initial background image
+        document.addEventListener("DOMContentLoaded", function() {
+            const canvasEl = document.getElementById('canvas-bg');
+            const container = document.getElementById('tengah');
+
+            const aspectRatio = 720 / 1098;
+
+            function calculateCanvasSize() {
+                const containerStyle = window.getComputedStyle(container);
+                // get padding
+                const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
+                const paddingRight = parseFloat(containerStyle.paddingRight) || 0;
+                let availableWidth = Math.max(0, container.clientWidth - paddingLeft - paddingRight);
+
+                const winW = window.innerWidth;
+                let targetWidth;
+                if (winW >= 1280) { // xl
+                    targetWidth = Math.min(availableWidth, 1098);
+                } else if (winW >= 1024) { // lg
+                    targetWidth = Math.min(availableWidth, 980);
+                } else if (winW >= 768) { // md
+                    targetWidth = Math.min(availableWidth, 720);
+                } else if (winW >= 640) { // sm
+                    targetWidth = Math.min(availableWidth, 540);
+                } else {
+                    targetWidth = Math.min(availableWidth, 183);
+                }
+
+                const minWidth = 366;
+                const maxWidth = 1098;
+                if (targetWidth < minWidth) targetWidth = minWidth;
+                if (targetWidth > maxWidth) targetWidth = maxWidth;
+
+                const targetHeight = Math.round(targetWidth * aspectRatio);
+                return { width: Math.round(targetWidth), height: targetHeight };
+            }
+
+            function initCanvas() {
+                const size = calculateCanvasSize();
+                currentCanvasWidth = size.width;
+                currentCanvasHeight = size.height;
+
+                canvasEl.width = currentCanvasWidth;
+                canvasEl.height = currentCanvasHeight;
+                canvasEl.style.width = currentCanvasWidth + 'px';
+                canvasEl.style.height = currentCanvasHeight + 'px';
+
+                canvas = new fabric.Canvas('canvas-bg', {
+                    backgroundColor: null,
+                    selection: true,
+                    preserveObjectStacking: true
+                });
+            }
+
+            initCanvas();
+
+            // Load background mockup
+            fabric.Image.fromURL("{{ asset('images/mockup-tshirt.png') }}", function(img) {
                 img.filters = [];
+
+                bgImageRef = img;
+
+                const scaleX = currentCanvasWidth / img.width;
+                const scaleY = currentCanvasHeight / img.height;
+                const scale = Math.max(scaleX, scaleY);
+                img.scale(scale);
+                img.set({ left: (currentCanvasWidth - img.getScaledWidth()) / 2, top: (currentCanvasHeight - img.getScaledHeight()) / 2, selectable: false, evented: false });
                 canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+
+                function resizeCanvas() {
+                    const newSize = calculateCanvasSize();
+                    const newW = newSize.width;
+                    const newH = newSize.height;
+
+                    if (newW === currentCanvasWidth && newH === currentCanvasHeight) return;
+
+                    const scaleX = newW / currentCanvasWidth;
+                    const scaleY = newH / currentCanvasHeight;
+                    const scale = Math.min(scaleX, scaleY);
+
+                    canvasEl.width = newW;
+                    canvasEl.height = newH;
+                    canvasEl.style.width = newW + 'px';
+                    canvasEl.style.height = newH + 'px';
+
+                    // scale all objects on canvas
+                    canvas.getObjects().forEach(function(obj) {
+                        // skip background image (it's handled separately)
+                        if (obj === bgImageRef) return;
+                        obj.scaleX = (obj.scaleX || 1) * scaleX;
+                        obj.scaleY = (obj.scaleY || 1) * scaleY;
+                        obj.left = obj.left * scaleX;
+                        obj.top = obj.top * scaleY;
+                        obj.setCoords();
+                    });
+
+                    // rescale background image to cover new canvas size
+                    if (bgImageRef) {
+                        const img = bgImageRef;
+                        const sX = newW / img.width;
+                        const sY = newH / img.height;
+                        const s = Math.max(sX, sY);
+                        img.scale(s);
+                        img.set({ left: (newW - img.getScaledWidth()) / 2, top: (newH - img.getScaledHeight()) / 2 });
+                        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                    } else {
+                        canvas.renderAll();
+                    }
+
+                    // update current size
+                    currentCanvasWidth = newW;
+                    currentCanvasHeight = newH;
+                }
+
+                // Debounced resize listener
+                let resizeTimer = null;
+                window.addEventListener('resize', function() {
+                    if (resizeTimer) clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function() {
+                        resizeCanvas();
+                    }, 150);
+                });
 
                 // Add color picker control to the propertiObj div
                 const colorPickerContainer = document.createElement('div');
@@ -569,6 +684,7 @@
                 }
             }
         }
+        
     </script>
 
     <script>

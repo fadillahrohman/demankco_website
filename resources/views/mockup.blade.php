@@ -3,7 +3,7 @@
 @section('title', 'Mockup - DMCO')
 
 @section('content')
-<div class="flex left mb-2 min-h-6">
+<div class="flex-auto mb-2 min-h-6">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <h1 class="text-3xl font-semibold mb-4 text-[#3FA3FF]">Mockup</h1>
     <p class="text-gray-600 mb-8">Buat Mockupmu di sini</p>
