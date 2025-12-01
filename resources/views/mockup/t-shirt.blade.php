@@ -753,5 +753,5 @@
                 window.location.href = "{{ route('orderTshirt') }}";
             }
         });
-    </script>
+</script>
 @endpush
